@@ -4,11 +4,9 @@ import Hero from "../components/Hero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {
   caseStudies,
-  homeStats,
   processSteps,
   servicePages,
   siteConfig,
-  toolPages,
 } from "../data/site";
 
 const posts = (await getCollection("blog"))
@@ -54,50 +52,22 @@ const homeSchema = [
       style="border-color: var(--color-border);"
     >
       <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Positioning</h2>
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Featured Projects</h2>
         <p class="text-sm text-muted mt-2">
-          The site needs one clear message first: hire the SEO specialist, not
-          just the website builder.
+          Selected work that shows SEO thinking, execution, and cleaner
+          structure across different types of projects.
         </p>
       </div>
 
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {homeStats.map((item) => (
-          <article class="card">
-            <p class="eyebrow">{item.label}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {item.value}
-            </h3>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div
-      class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24"
-      style="border-color: var(--color-border);"
-    >
-      <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Services</h2>
-        <p class="text-sm text-muted mt-2">
-          Split the offer by how clients actually search so each service page
-          can carry tighter intent.
-        </p>
-      </div>
-
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {servicePages.map((service) => (
+      <div class="md:col-span-2 flat-panel-grid grid-cols-1 md:grid-cols-2">
+        {caseStudies.map((study) => (
           <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/services/${service.slug}/`}
+            class="flat-panel"
+            href={`/case-studies/${study.slug}/`}
           >
-            <p class="eyebrow">{service.shortTitle}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {service.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{service.summary}</p>
+            <p class="flat-panel__kicker">{study.shortTitle}</p>
+            <h3 class="flat-panel__title">{study.title}</h3>
+            <p class="flat-panel__copy">{study.summary}</p>
           </a>
         ))}
       </div>
@@ -137,53 +107,22 @@ const homeSchema = [
       style="border-color: var(--color-border);"
     >
       <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Case Studies</h2>
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Services</h2>
         <p class="text-sm text-muted mt-2">
-          Niche-specific proof reads better than one generic portfolio wall.
+          Split the offer by how clients actually search so each service page
+          can carry tighter intent.
         </p>
       </div>
 
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {caseStudies.map((study) => (
+      <div class="md:col-span-2 flat-panel-grid grid-cols-1 md:grid-cols-2">
+        {servicePages.map((service) => (
           <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/case-studies/${study.slug}/`}
+            class="flat-panel"
+            href={`/services/${service.slug}/`}
           >
-            <p class="eyebrow">{study.shortTitle}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {study.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{study.summary}</p>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div
-      class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24"
-      style="border-color: var(--color-border);"
-    >
-      <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Tools</h2>
-        <p class="text-sm text-muted mt-2">
-          Lightweight SEO utilities belong in the portfolio because they show
-          practical product thinking, not just design.
-        </p>
-      </div>
-
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-y-8 gap-x-8">
-        {toolPages.map((tool) => (
-          <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/tools/${tool.slug}/`}
-          >
-            <p class="eyebrow">{tool.shortTitle}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {tool.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{tool.summary}</p>
+            <p class="flat-panel__kicker">{service.shortTitle}</p>
+            <h3 class="flat-panel__title">{service.title}</h3>
+            <p class="flat-panel__copy">{service.summary}</p>
           </a>
         ))}
       </div>

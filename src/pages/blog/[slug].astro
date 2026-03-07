@@ -72,12 +72,7 @@ const schema = [
         {post.data.tags.length > 0 && (
           <ul class="mt-2 mb-0 flex flex-wrap gap-2 p-0 list-none text-sm text-muted">
             {post.data.tags.map((tag) => (
-              <li
-                class="inline-flex items-center gap-2 rounded-full border px-3 py-1"
-                style="border-color: var(--color-border);"
-              >
-                {tag}
-              </li>
+              <li class="box-tag">{tag}</li>
             ))}
           </ul>
         )}

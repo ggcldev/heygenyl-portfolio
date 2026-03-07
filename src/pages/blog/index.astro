@@ -58,12 +58,7 @@ const schema = [
           {featured.data.tags.length > 0 && (
             <div class="flex flex-wrap gap-2 pt-4 text-sm text-muted">
               {featured.data.tags.map((tag) => (
-                <span
-                  class="inline-flex items-center gap-2 rounded-full border px-3 py-1"
-                  style="border-color: var(--color-border);"
-                >
-                  {tag}
-                </span>
+                <span class="box-tag">{tag}</span>
               ))}
             </div>
           )}

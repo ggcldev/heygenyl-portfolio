@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-	--color-ink: #000000;
+	--color-ink: #1E1E1E;
 	--color-muted: color-mix(in oklab, var(--color-ink) 72%, transparent);
 	--color-paper: #ffffff;
 	--color-surface: #ffffff;
@@ -109,27 +109,26 @@
 		gap: 0.4rem;
 		padding: 0.45rem 0.7rem;
 		border: 1px solid var(--color-border);
-		border-radius: 999px;
+		border-radius: 0;
 		font-size: 0.72rem;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		background: color-mix(in oklab, var(--color-surface) 94%, transparent);
+		background: transparent;
 		cursor: pointer;
-		transition: border-color 120ms ease, background-color 120ms ease;
+		transition: border-color 120ms ease;
 	}
 
 	.theme-toggle:hover {
 		border-color: color-mix(in oklab, var(--color-ink) 28%, transparent);
-		background: color-mix(in oklab, var(--color-ink) 6%, var(--color-surface));
 	}
 
 	.theme-toggle__dot {
 		display: inline-block;
 		width: 10px;
 		height: 10px;
-		border-radius: 999px;
+		border-radius: 0;
 		border: 1px solid var(--color-ink);
-		background: var(--color-surface);
+		background: transparent;
 	}
 
 	.site-shell {
@@ -198,28 +197,28 @@
 		justify-content: center;
 		gap: 0.35rem;
 		padding: 0.65rem 1.1rem;
-		border-radius: 999px;
+		border-radius: 0;
 		border: 1px solid var(--color-border);
 		font-weight: 600;
 		font-size: 0.75rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+		background: transparent;
+		color: var(--color-ink);
 		transition:
-			background-color 150ms ease,
 			color 150ms ease,
 			border-color 150ms ease,
 			transform 150ms ease;
 	}
 
 	.button.primary {
-		background: var(--color-ink);
-		color: var(--color-surface);
-		border-color: var(--color-ink);
+		background: transparent;
+		color: var(--color-ink);
+		border-color: color-mix(in oklab, var(--color-ink) 26%, transparent);
 	}
 
 	.button.secondary {
-		background: color-mix(in oklab, var(--color-ink) 6%, var(--color-surface));
+		background: transparent;
 		color: var(--color-ink);
 	}
 
@@ -234,6 +233,53 @@
 		background: var(--color-surface);
 		border-radius: var(--radius-card);
 		padding: 1.25rem;
+	}
+
+	.flat-panel {
+		border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
+		background: transparent;
+		border-radius: 0;
+		padding: 1.4rem;
+		min-height: 100%;
+		display: grid;
+		gap: 0.75rem;
+		transition: border-color 150ms ease;
+	}
+
+	.flat-panel:hover {
+		border-color: color-mix(in oklab, var(--color-ink) 28%, transparent);
+	}
+
+	.flat-panel__kicker {
+		margin: 0;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.flat-panel__title {
+		margin: 0;
+		font-size: clamp(1rem, 1.4vw, 1.15rem);
+		line-height: 1.15;
+		text-transform: uppercase;
+	}
+
+	.flat-panel__copy {
+		margin: 0;
+		font-size: 0.98rem;
+		color: var(--color-muted);
+	}
+
+	.flat-panel-grid {
+		display: grid;
+		gap: 0;
+	}
+
+	.flat-panel-grid > .flat-panel {
+		margin-left: -1px;
+		margin-top: -1px;
 	}
 
 	.post-card {
@@ -272,6 +318,32 @@
 		margin: 0 auto;
 		padding-left: calc(var(--grid-cell) / 2);
 		padding-right: calc(var(--grid-cell) / 2);
+	}
+
+	.hero-shell {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding-top: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.hero-shell__content {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.hero-grid-background {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		opacity: 0.9;
 	}
 
 	.post-hero-image img {
@@ -397,27 +469,37 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0.28rem 0.7rem;
-		border-radius: 999px;
+		border-radius: 0;
 		border: 1px solid var(--color-border);
 		font-size: 0.7rem;
 		font-weight: 700;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
+		background: transparent;
 	}
 
 	.status-pill.good {
-		background: color-mix(in oklab, #0a8f55 12%, var(--color-surface));
 		color: #0a8f55;
 	}
 
 	.status-pill.warn {
-		background: color-mix(in oklab, #b76c00 12%, var(--color-surface));
 		color: #b76c00;
 	}
 
 	.status-pill.bad {
-		background: color-mix(in oklab, #b42318 12%, var(--color-surface));
 		color: #b42318;
+	}
+
+	.box-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0;
+		background: transparent;
+		padding: 0.42rem 0.7rem;
+		font-size: 0.78rem;
+		line-height: 1;
 	}
 
 	.prose-shell {
