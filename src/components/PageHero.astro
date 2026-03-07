@@ -1,0 +1,70 @@
+---
+interface Action {
+  label: string;
+  href: string;
+  variant?: "primary" | "secondary";
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  compact?: boolean;
+  chips?: string[];
+  actions?: Action[];
+  noteTitle?: string;
+  noteCopy?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  intro,
+  compact = false,
+  chips = [],
+  actions = [],
+  noteTitle,
+  noteCopy,
+} = Astro.props;
+---
+
+<section class="page-block animate-rise">
+  <div class="page-hero page-hero--split">
+    <div class="section">
+      <span class="eyebrow">{eyebrow}</span>
+      <h1 class:list={["page-title", compact && "compact"]}>{title}</h1>
+      <p class="page-intro">{intro}</p>
+
+      {actions.length > 0 && (
+        <div class="hero-actions">
+          {actions.map((action) => (
+            <a
+              href={action.href}
+              class:list={[
+                "button",
+                action.variant === "secondary" ? "secondary" : "primary",
+              ]}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {chips.length > 0 && (
+        <div class="chip-list">
+          {chips.map((chip) => (
+            <span class="chip">{chip}</span>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {(noteTitle || noteCopy) && (
+      <aside class="hero-note">
+        {noteTitle && <strong>{noteTitle}</strong>}
+        {noteCopy && <p>{noteCopy}</p>}
+      </aside>
+    )}
+  </div>
+</section>

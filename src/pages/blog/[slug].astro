@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from "astro:content";
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { siteConfig } from "../../data/site";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const readingMinutes = Math.max(
+  1,
+  Math.ceil(post.body.split(/\s+/).filter(Boolean).length / 220),
+);
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.pubDate.toISOString(),
+    dateModified: (post.data.updatedDate || post.data.pubDate).toISOString(),
+    author: {
+      "@type": "Person",
+      name: siteConfig.name,
+    },
+    publisher: {
+      "@type": "Person",
+      name: siteConfig.name,
+    },
+    url: new URL(`/blog/${post.id}/`, siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout
+  title={`${post.data.title} | Hey Genyl`}
+  description={post.data.description}
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Blog post"
+    title={post.data.title}
+    intro={post.data.description}
+    compact
+    chips={post.data.tags}
+    actions={[
+      { label: "Back to blog", href: "/blog/" },
+      { label: "Contact", href: "/contact/", variant: "secondary" },
+    ]}
+    noteTitle="Reading time"
+    noteCopy={`${readingMinutes} minute read`}
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="article-meta">
+      <span>
+        Published{" "}
+        {post.data.pubDate.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })}
+      </span>
+      <span>{readingMinutes} minute read</span>
+    </div>
+  </section>
+
+  <section class="page-block animate-rise">
+    <article class="blog-prose prose prose-stone max-w-none">
+      <Content />
+    </article>
+  </section>
+</BaseLayout>

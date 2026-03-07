@@ -1,0 +1,45 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { caseStudies, siteConfig } from "../../data/site";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "SEO case studies",
+    url: new URL("/case-studies/", siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout
+  title="SEO Case Studies | Hey Genyl"
+  description="Case studies hub for local service SEO, law firm SEO, WordPress redesigns, and B2B enterprise search work."
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Case studies hub"
+    title="SEO case studies that can be specific without pretending every project looks the same."
+    intro="These pages are structured to show problem framing, implementation thinking, and business outcomes by niche. Replace the starter proof blocks with your real screenshots and metrics."
+    chips={["SEO case studies", "Niche-specific pages", "Portfolio-ready structure"]}
+    actions={[
+      { label: "Discuss your site", href: "/contact/" },
+      { label: "Open service hub", href: "/services/", variant: "secondary" },
+    ]}
+    noteTitle="Publishing note"
+    noteCopy="Keep the page names niche-specific. It helps both relevance and memorability."
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="cards">
+      {caseStudies.map((study) => (
+        <a class="card card-link" href={`/case-studies/${study.slug}/`}>
+          <p class="card-label">{study.shortTitle}</p>
+          <h3 class="card-title">{study.title}</h3>
+          <p class="card-copy">{study.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

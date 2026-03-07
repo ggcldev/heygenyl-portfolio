@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { siteConfig } from "../../data/site";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: `${siteConfig.name} Blog`,
+    url: new URL("/blog/", siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout title="SEO Blog | Hey Genyl" description="SEO blog hub for technical SEO, local SEO, WordPress, and implementation-focused search insights." schema={schema}>
+  <PageHero
+    eyebrow="Blog hub"
+    title="A blog that backs up the service pages instead of competing with them."
+    intro="Use the blog for search insight, implementation thinking, and commentary that strengthens your authority when clients or hiring managers check the portfolio."
+    chips={["Weekly publishing", "Internal-link support", "Search authority"]}
+    actions={[
+      { label: "Contact", href: "/contact/" },
+      { label: "Open services", href: "/services/", variant: "secondary" },
+    ]}
+    noteTitle="Content strategy"
+    noteCopy="Tie every blog topic to either a case study, a service page, or one of your tools."
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="cards">
+      {posts.map((post) => (
+        <a class="article-card" href={`/blog/${post.id}/`}>
+          <p class="card-label">
+            {post.data.pubDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </p>
+          <h3>{post.data.title}</h3>
+          <p>{post.data.excerpt}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

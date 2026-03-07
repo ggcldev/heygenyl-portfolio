@@ -1,0 +1,188 @@
+---
+import { getCollection } from "astro:content";
+import PageHero from "../components/PageHero.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  caseStudies,
+  homeStats,
+  processSteps,
+  servicePages,
+  siteConfig,
+  toolPages,
+} from "../data/site";
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const homeSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    areaServed: "Worldwide",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Bacolod City",
+      addressCountry: "PH",
+    },
+  },
+];
+---
+
+<BaseLayout
+  title="Freelance SEO Specialist | Hey Genyl"
+  description="Freelance SEO specialist and WordPress designer/developer building fast, search-first portfolio, service, and blog experiences."
+  schema={homeSchema}
+>
+  <PageHero
+    eyebrow="Homepage"
+    title="Freelance SEO specialist for service brands that need cleaner growth."
+    intro="This starter homepage is built to help you pitch SEO, WordPress design, development, case studies, and browser-based SEO tools from one static Astro site."
+    chips={[
+      "Astro 6 beta",
+      "Hostinger shared-hosting friendly",
+      "Blog-ready",
+      "Case-study ready",
+    ]}
+    actions={[
+      { label: "View services", href: "/services/" },
+      { label: "Explore tools", href: "/tools/", variant: "secondary" },
+    ]}
+    noteTitle="Built for your actual use case"
+    noteCopy="Fast static output for portfolio pages, weekly content publishing, and lightweight SEO tools without a VPS."
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Positioning</span>
+      <h2 class="section-title">Everything on the site supports one clear message: hire the SEO specialist, not just the website.</h2>
+    </div>
+
+    <div class="stats-grid">
+      {homeStats.map((item) => (
+        <article class="stat-card">
+          <p class="stat-label">{item.label}</p>
+          <h3 class="stat-value">{item.value}</h3>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Services</span>
+      <h2 class="section-title">Rankable service pages with clear offer segmentation.</h2>
+      <p class="section-copy">
+        The service architecture mirrors the way clients search: broad SEO support at the top,
+        then more specific entry points for local SEO, audits, technical work, and WordPress
+        implementation.
+      </p>
+    </div>
+
+    <div class="cards">
+      {servicePages.slice(0, 3).map((service) => (
+        <a class="card card-link" href={`/services/${service.slug}/`}>
+          <p class="card-label">{service.shortTitle}</p>
+          <h3 class="card-title">{service.title}</h3>
+          <p class="card-copy">{service.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Workflow</span>
+      <h2 class="section-title">A portfolio that can also function as a publishing system.</h2>
+    </div>
+
+    <div class="timeline">
+      {processSteps.map((step, index) => (
+        <article class="timeline-step">
+          <p class="card-label">Phase {index + 1}</p>
+          <h3>{step.title}</h3>
+          <p>{step.copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Case studies</span>
+      <h2 class="section-title">Use niche-specific pages instead of one generic portfolio list.</h2>
+      <p class="section-copy">
+        These routes are already named around the kinds of engagements you said you want to show:
+        local service businesses, legal SEO, and B2B enterprise work.
+      </p>
+    </div>
+
+    <div class="cards">
+      {caseStudies.slice(0, 3).map((study) => (
+        <a class="card card-link" href={`/case-studies/${study.slug}/`}>
+          <p class="card-label">{study.shortTitle}</p>
+          <h3 class="card-title">{study.title}</h3>
+          <p class="card-copy">{study.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Free tools</span>
+      <h2 class="section-title">Client-side SEO utilities that make sense on shared hosting.</h2>
+    </div>
+
+    <div class="cards">
+      {toolPages.map((tool) => (
+        <a class="card card-link" href={`/tools/${tool.slug}/`}>
+          <p class="card-label">{tool.shortTitle}</p>
+          <h3 class="card-title">{tool.title}</h3>
+          <p class="card-copy">{tool.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Latest blog posts</span>
+      <h2 class="section-title">Keep the site active with weekly SEO publishing.</h2>
+    </div>
+
+    <div class="cards">
+      {posts.map((post) => (
+        <a class="article-card" href={`/blog/${post.id}/`}>
+          <p class="card-label">
+            {post.data.pubDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </p>
+          <h3>{post.data.title}</h3>
+          <p>{post.data.excerpt}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block animate-rise">
+    <div class="cta-band">
+      <div>
+        <p class="eyebrow">Next move</p>
+        <h2 class="section-title">Connect the contact flow, swap in your real metrics, and this is ready for applications.</h2>
+        <p>
+          The structure is already aligned with your target keywords and the way you want to
+          present services, work, and tools.
+        </p>
+      </div>
+
+      <a class="button secondary" href="/contact/">Open contact page</a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,62 @@
+---
+import { caseStudies, servicePages, siteConfig, toolPages } from "../data/site";
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <section>
+      <p class="eyebrow">Built for applications and client outreach</p>
+      <h2 class="footer-title">
+        A static Astro portfolio with room for SEO tools, case studies, and weekly
+        publishing.
+      </h2>
+      <p class="footer-copy">
+        This starter is tuned for Hostinger shared hosting: static output, strong
+        metadata, lightweight pages, and a clean blog pipeline.
+      </p>
+    </section>
+
+    <section>
+      <h3>Services</h3>
+      <ul class="footer-list">
+        {servicePages.slice(0, 4).map((service) => (
+          <li>
+            <a href={`/services/${service.slug}/`}>{service.shortTitle}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h3>Case Studies</h3>
+      <ul class="footer-list">
+        {caseStudies.slice(0, 4).map((study) => (
+          <li>
+            <a href={`/case-studies/${study.slug}/`}>{study.shortTitle}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h3>Tools</h3>
+      <ul class="footer-list">
+        {toolPages.map((tool) => (
+          <li>
+            <a href={`/tools/${tool.slug}/`}>{tool.shortTitle}</a>
+          </li>
+        ))}
+      </ul>
+      <p class="footer-meta">
+        Contact: <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+      </p>
+    </section>
+  </div>
+
+  <div class="container footer-bar">
+    <p>
+      © {new Date().getFullYear()} {siteConfig.name}. {siteConfig.location}.
+    </p>
+    <p>Astro 6 beta starter for shared hosting deployment.</p>
+  </div>
+</footer>

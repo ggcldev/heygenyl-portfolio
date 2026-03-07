@@ -1,0 +1,149 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getToolBySlug } from "../../data/site";
+
+const tool = getToolBySlug("404-checker");
+---
+
+<BaseLayout title={tool.metaTitle} description={tool.metaDescription}>
+  <PageHero
+    eyebrow="Tool"
+    title={tool.title}
+    intro={tool.summary}
+    compact
+    chips={tool.chips}
+    actions={[
+      { label: "Check paths", href: "#path-list" },
+      { label: "Back to tools", href: "/tools/", variant: "secondary" },
+    ]}
+    noteTitle="Current limitation"
+    noteCopy={tool.note}
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="two-up">
+      <form class="tool-form" data-404-form>
+        <div class="field">
+          <label for="base-url">Base URL</label>
+          <input id="base-url" name="baseUrl" type="url" value="https://www.heygenyl.com" />
+        </div>
+
+        <div class="field">
+          <label for="path-list">URLs or paths</label>
+          <textarea id="path-list" name="paths">/
+/services/
+/services/seo-specialist/
+/blog/
+/missing-page/</textarea>
+        </div>
+
+        <p class="hint">
+          Same-origin URLs work best in the browser. Cross-domain checks may be blocked by CORS,
+          which is why a production crawler should use a serverless endpoint.
+        </p>
+
+        <button class="button primary" type="submit">Run check</button>
+      </form>
+
+      <article class="tool-panel">
+        <p class="card-label">Results</p>
+        <h3>Path status table</h3>
+        <p class="card-copy">Use this as the front-end layer for a fuller crawler later. The UI and status states are already in place.</p>
+        <div class="result-table" data-404-results></div>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    const form = document.querySelector("[data-404-form]");
+    const output = document.querySelector("[data-404-results]");
+
+    const checkUrl = async (url) => {
+      try {
+        let response;
+        try {
+          response = await fetch(url, { method: "HEAD" });
+        } catch {
+          response = await fetch(url, { method: "GET" });
+        }
+
+        return {
+          url,
+          status: response.status,
+          label: response.ok ? "OK" : "Issue",
+          tone: response.ok ? "good" : response.status === 404 ? "bad" : "warn",
+        };
+      } catch {
+        return {
+          url,
+          status: "Blocked",
+          label: "CORS / browser limit",
+          tone: "warn",
+        };
+      }
+    };
+
+    const renderRows = (rows) => {
+      if (!(output instanceof HTMLElement)) return;
+      output.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows
+              .map(
+                (row) => `
+                  <tr>
+                    <td>${row.url}</td>
+                    <td>${row.status}</td>
+                    <td><span class="status-pill ${row.tone}">${row.label}</span></td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `;
+    };
+
+    if (form instanceof HTMLFormElement) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const baseUrl = String(data.get("baseUrl") || "").trim();
+        const rawPaths = String(data.get("paths") || "");
+
+        const paths = rawPaths
+          .split("\n")
+          .map((value) => value.trim())
+          .filter(Boolean);
+
+        renderRows(
+          paths.map((value) => ({
+            url: value,
+            status: "Pending",
+            label: "Checking",
+            tone: "warn",
+          })),
+        );
+
+        const rows = await Promise.all(
+          paths.map((value) => {
+            const resolved = /^https?:\/\//i.test(value)
+              ? value
+              : new URL(value, baseUrl).toString();
+            return checkUrl(resolved);
+          }),
+        );
+
+        renderRows(rows);
+      });
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,8 @@
+---
+import ServiceTemplate from "../../components/ServiceTemplate.astro";
+import { getServiceBySlug } from "../../data/site";
+
+const service = getServiceBySlug("seo-audits");
+---
+
+<ServiceTemplate service={service} />

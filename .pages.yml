@@ -1,0 +1,54 @@
+media:
+  - name: uploads
+    label: Uploads
+    input: public/uploads
+    output: ../uploads
+    categories: [image, document]
+
+content:
+  - name: blog
+    label: Blog
+    type: collection
+    path: src/content/blog
+    filename: "{year}-{month}-{day}-{primary}.md"
+    format: yaml-frontmatter
+    subfolders: false
+    view:
+      fields: [title, pubDate]
+      primary: title
+      sort: [pubDate, title]
+      default:
+        search: ""
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: excerpt
+        label: Excerpt
+        type: text
+        required: true
+      - name: pubDate
+        label: Publish date
+        type: date
+        required: true
+      - name: updatedDate
+        label: Updated date
+        type: date
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: body
+        label: Content
+        type: rich-text
+
+settings:
+  content:
+    merge: true

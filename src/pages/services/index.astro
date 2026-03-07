@@ -1,0 +1,45 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { servicePages, siteConfig } from "../../data/site";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "SEO and WordPress services",
+    url: new URL("/services/", siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout
+  title="SEO and WordPress Services | Hey Genyl"
+  description="SEO and WordPress services hub covering freelance SEO support, local SEO, technical SEO, audits, design, and development."
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Services hub"
+    title="SEO and WordPress services built around how clients actually search."
+    intro="This hub acts as the parent page for the six core offers in the site. Each child page is written to support a tighter commercial phrase and stronger internal linking."
+    chips={["SEO and WordPress services", "Commercial-intent pages", "Shared-hosting friendly"]}
+    actions={[
+      { label: "Open contact page", href: "/contact/" },
+      { label: "See case studies", href: "/case-studies/", variant: "secondary" },
+    ]}
+    noteTitle="Architecture note"
+    noteCopy="Keep this page broad. Let the child pages do the tighter keyword targeting."
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="cards">
+      {servicePages.map((service) => (
+        <a class="card card-link" href={`/services/${service.slug}/`}>
+          <p class="card-label">{service.shortTitle}</p>
+          <h3 class="card-title">{service.title}</h3>
+          <p class="card-copy">{service.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

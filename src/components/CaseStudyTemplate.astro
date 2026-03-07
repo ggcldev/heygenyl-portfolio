@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteConfig, type CaseStudyPage } from "../data/site";
+import PageHero from "./PageHero.astro";
+
+interface Props {
+  study: CaseStudyPage;
+}
+
+const { study } = Astro.props;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: study.title,
+    description: study.metaDescription,
+    author: {
+      "@type": "Person",
+      name: siteConfig.name,
+    },
+    url: new URL(`/case-studies/${study.slug}/`, siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout title={study.metaTitle} description={study.metaDescription} schema={schema}>
+  <PageHero
+    eyebrow="Case study"
+    title={study.title}
+    intro={study.summary}
+    compact
+    chips={study.chips}
+    actions={[
+      { label: "Discuss your site", href: "/contact/" },
+      { label: "Related service", href: study.serviceHref, variant: "secondary" },
+    ]}
+    noteTitle="Use real metrics before launch"
+    noteCopy={study.note}
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Snapshot</span>
+      <h2 class="section-title">Lead with the signals a hiring manager or client cares about first.</h2>
+    </div>
+
+    <div class="stats-grid">
+      {study.snapshot.map((item) => (
+        <article class="stat-card">
+          <p class="stat-label">{item.label}</p>
+          <h3 class="stat-value">{item.value}</h3>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="split-panel">
+      <article class="info-panel">
+        <p class="card-label">Challenge</p>
+        <h3>{study.challengeTitle}</h3>
+        <ul class="list-checks">
+          {study.challenge.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="info-panel">
+        <p class="card-label">Strategy</p>
+        <h3>{study.strategyTitle}</h3>
+        <ul class="list-checks">
+          {study.strategy.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Proof points to add</span>
+      <h2 class="section-title">Keep this section directional until you are ready to publish exact numbers.</h2>
+      <p class="section-copy">
+        This avoids inflated claims while still showing how you think, what you fixed, and what
+        kind of business outcome the work was built to support.
+      </p>
+    </div>
+
+    <div class="cards">
+      {study.proofPoints.map((item) => (
+        <article class="card">
+          <p class="card-label">Proof point</p>
+          <h3 class="card-title">{item.title}</h3>
+          <p class="card-copy">{item.copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block animate-rise">
+    <div class="cta-band">
+      <div>
+        <p class="eyebrow">Portfolio flow</p>
+        <h2 class="section-title">Pair every case study with a service page and one supporting blog post.</h2>
+        <p>
+          That internal link structure helps this portfolio function both as a sales asset and a
+          genuine SEO site.
+        </p>
+      </div>
+
+      <a class="button secondary" href={study.serviceHref}>View related service</a>
+    </div>
+  </section>
+</BaseLayout>

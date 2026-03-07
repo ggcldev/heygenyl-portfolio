@@ -1,0 +1,144 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getToolBySlug } from "../../data/site";
+
+const tool = getToolBySlug("schema-generator");
+---
+
+<BaseLayout title={tool.metaTitle} description={tool.metaDescription}>
+  <PageHero
+    eyebrow="Tool"
+    title={tool.title}
+    intro={tool.summary}
+    compact
+    chips={tool.chips}
+    actions={[
+      { label: "All tools", href: "/tools/" },
+      { label: "Contact", href: "/contact/", variant: "secondary" },
+    ]}
+    noteTitle="Shared-hosting safe"
+    noteCopy={tool.note}
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="two-up">
+      <form class="tool-form" data-schema-form>
+        <div class="field">
+          <label for="schema-type">Schema type</label>
+          <select id="schema-type" name="schemaType">
+            <option value="ProfessionalService">ProfessionalService</option>
+            <option value="LocalBusiness">LocalBusiness</option>
+            <option value="FAQPage">FAQPage</option>
+            <option value="Article">Article</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="business-name">Name</label>
+          <input id="business-name" name="name" type="text" value="Hey Genyl" />
+        </div>
+
+        <div class="field">
+          <label for="business-url">Website URL</label>
+          <input id="business-url" name="url" type="url" value="https://www.heygenyl.com" />
+        </div>
+
+        <div class="field">
+          <label for="business-location">Location</label>
+          <input id="business-location" name="locality" type="text" value="Bacolod City, Philippines" />
+        </div>
+
+        <div class="field">
+          <label for="business-description">Description</label>
+          <textarea id="business-description" name="description">SEO specialist and WordPress designer/developer for service businesses and B2B brands.</textarea>
+        </div>
+
+        <button class="button primary" type="submit">Generate schema</button>
+      </form>
+
+      <article class="tool-panel">
+        <p class="card-label">Generated JSON-LD</p>
+        <h3>Copy-ready markup</h3>
+        <p class="card-copy">Edit the fields on the left and copy the JSON-LD below into your page template or CMS field.</p>
+        <pre class="tool-output" data-schema-output></pre>
+        <div class="hero-actions">
+          <button class="button secondary" type="button" data-copy-schema>Copy schema</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    const form = document.querySelector("[data-schema-form]");
+    const output = document.querySelector("[data-schema-output]");
+    const copyButton = document.querySelector("[data-copy-schema]");
+
+    const buildSchema = (data) => {
+      const base = {
+        "@context": "https://schema.org",
+        "@type": data.schemaType,
+        name: data.name,
+        url: data.url,
+        description: data.description,
+      };
+
+      if (data.schemaType === "ProfessionalService" || data.schemaType === "LocalBusiness") {
+        base.address = {
+          "@type": "PostalAddress",
+          addressLocality: data.locality,
+          addressCountry: "PH",
+        };
+      }
+
+      if (data.schemaType === "Article") {
+        base.author = {
+          "@type": "Person",
+          name: data.name,
+        };
+      }
+
+      if (data.schemaType === "FAQPage") {
+        base.mainEntity = [
+          {
+            "@type": "Question",
+            name: "What does this tool generate?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "It generates a starter FAQPage JSON-LD block you can customize.",
+            },
+          },
+        ];
+      }
+
+      return base;
+    };
+
+    const syncOutput = () => {
+      if (!(form instanceof HTMLFormElement) || !(output instanceof HTMLElement)) return;
+      const values = Object.fromEntries(new FormData(form).entries());
+      output.textContent = JSON.stringify(buildSchema(values), null, 2);
+    };
+
+    if (form instanceof HTMLFormElement) {
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        syncOutput();
+      });
+
+      form.addEventListener("input", syncOutput);
+      syncOutput();
+    }
+
+    if (copyButton instanceof HTMLButtonElement) {
+      copyButton.addEventListener("click", async () => {
+        if (!(output instanceof HTMLElement)) return;
+        await navigator.clipboard.writeText(output.textContent || "");
+        copyButton.textContent = "Copied";
+        setTimeout(() => {
+          copyButton.textContent = "Copy schema";
+        }, 1400);
+      });
+    }
+  </script>
+</BaseLayout>

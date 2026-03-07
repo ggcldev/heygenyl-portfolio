@@ -1,0 +1,65 @@
+---
+import "../styles/global.css";
+import JsonLd from "./JsonLd.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  schema?: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const {
+  title,
+  description,
+  ogImage = "/og-default.svg",
+  noIndex = false,
+  schema = [],
+} = Astro.props;
+
+const siteName = "Hey Genyl";
+const baseUrl = Astro.site ?? new URL("https://www.heygenyl.com");
+const canonicalURL = new URL(Astro.url.pathname, baseUrl);
+const imageURL = new URL(ogImage, baseUrl);
+const robots = noIndex
+  ? "noindex, nofollow"
+  : "index, follow, max-image-preview:large";
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#22473a" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+<link rel="canonical" href={canonicalURL.toString()} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${siteName} Blog`}
+  href={new URL("/rss.xml", baseUrl).toString()}
+/>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
+
+<meta property="og:site_name" content={siteName} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL.toString()} />
+<meta property="og:image" content={imageURL.toString()} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL.toString()} />
+
+<JsonLd data={schema} />

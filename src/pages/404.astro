@@ -1,0 +1,20 @@
+---
+import PageHero from "../components/PageHero.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page Not Found | Hey Genyl" description="The page you requested could not be found." noIndex>
+  <PageHero
+    eyebrow="404"
+    title="This page is not here anymore."
+    intro="Use this route to catch broken links cleanly and route people back to the pages that matter."
+    compact
+    chips={["Custom 404", "SEO-safe", "Static site"]}
+    actions={[
+      { label: "Go home", href: "/" },
+      { label: "Browse services", href: "/services/", variant: "secondary" },
+    ]}
+    noteTitle="Tip"
+    noteCopy="Once the site is live, pair this page with regular broken-link checks in Search Console and your preferred crawler."
+  />
+</BaseLayout>

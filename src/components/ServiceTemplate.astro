@@ -1,0 +1,139 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteConfig, type ServicePage } from "../data/site";
+import PageHero from "./PageHero.astro";
+
+interface Props {
+  service: ServicePage;
+}
+
+const { service } = Astro.props;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.shortTitle,
+    serviceType: service.shortTitle,
+    description: service.metaDescription,
+    areaServed: "Worldwide",
+    provider: {
+      "@type": "Person",
+      name: siteConfig.name,
+    },
+    url: new URL(`/services/${service.slug}/`, siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout title={service.metaTitle} description={service.metaDescription} schema={schema}>
+  <PageHero
+    eyebrow="Service page"
+    title={service.title}
+    intro={service.summary}
+    compact
+    chips={service.chips}
+    actions={[
+      { label: "Start a project", href: "/contact/" },
+      { label: "See case studies", href: "/case-studies/", variant: "secondary" },
+    ]}
+    noteTitle="Use this page to rank for the exact service phrase"
+    noteCopy={service.note}
+  />
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">What I handle</span>
+      <h2 class="section-title">Execution, prioritization, and the handoff your site actually needs.</h2>
+      <p class="section-copy">
+        Each engagement is built around implementation clarity. That means fewer vague SEO
+        recommendations and more work that is ready for writers, designers, developers, or you.
+      </p>
+    </div>
+
+    <div class="cards">
+      {service.deliverables.map((item) => (
+        <article class="card">
+          <p class="card-label">Included</p>
+          <h3 class="card-title">{item.title}</h3>
+          <p class="card-copy">{item.copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Best fit</span>
+      <h2 class="section-title">The kinds of projects where this service moves fastest.</h2>
+    </div>
+
+    <div class="split-panel">
+      <article class="info-panel">
+        <h3>Ideal if you need</h3>
+        <ul class="list-checks">
+          {service.idealFor.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="info-panel">
+        <h3>Likely outcomes</h3>
+        <ul class="list-checks">
+          {service.outcomes.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">Process</span>
+      <h2 class="section-title">A simple delivery sequence with less guesswork.</h2>
+    </div>
+
+    <div class="timeline">
+      {service.process.map((step, index) => (
+        <article class="timeline-step">
+          <p class="card-label">Step {index + 1}</p>
+          <h3>{step.title}</h3>
+          <p>{step.copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block section animate-rise">
+    <div class="section-header">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="section-title">Pre-sales questions this page should answer.</h2>
+    </div>
+
+    <div class="faq-list">
+      {service.faq.map((item) => (
+        <article class="faq-item">
+          <h3>{item.question}</h3>
+          <p>{item.answer}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-block animate-rise">
+    <div class="cta-band">
+      <div>
+        <p class="eyebrow">Ready when you are</p>
+        <h2 class="section-title">Need this service page to turn into a real offer?</h2>
+        <p>
+          Replace the placeholder metrics with your live proof, adjust the niche language, and
+          connect the CTA to your preferred intake workflow.
+        </p>
+      </div>
+
+      <a class="button secondary" href="/contact/">Book a project intro</a>
+    </div>
+  </section>
+</BaseLayout>
