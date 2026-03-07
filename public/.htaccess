@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Force the canonical domain: https://heygenyl.com
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.heygenyl\.com$ [NC]
+RewriteRule ^ https://heygenyl.com%{REQUEST_URI} [L,R=301]

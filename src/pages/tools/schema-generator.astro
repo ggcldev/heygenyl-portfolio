@@ -21,51 +21,86 @@ const tool = getToolBySlug("schema-generator");
     noteCopy={tool.note}
   />
 
-  <section class="page-block section animate-rise">
-    <div class="two-up">
-      <form class="tool-form" data-schema-form>
-        <div class="field">
-          <label for="schema-type">Schema type</label>
-          <select id="schema-type" name="schemaType">
-            <option value="ProfessionalService">ProfessionalService</option>
-            <option value="LocalBusiness">LocalBusiness</option>
-            <option value="FAQPage">FAQPage</option>
-            <option value="Article">Article</option>
-          </select>
-        </div>
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+      <div class="md:sticky md:top-24 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Build schema</h2>
+        <p class="text-sm text-muted mt-2">
+          Everything here runs in the browser, so it works cleanly on static
+          hosting.
+        </p>
+      </div>
 
-        <div class="field">
-          <label for="business-name">Name</label>
-          <input id="business-name" name="name" type="text" value="Hey Genyl" />
-        </div>
+      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        <form class="form-surface grid gap-5" data-schema-form>
+          <div class="field-group">
+            <label for="schema-type">Schema type</label>
+            <select id="schema-type" name="schemaType" class="field-control">
+              <option value="ProfessionalService">ProfessionalService</option>
+              <option value="LocalBusiness">LocalBusiness</option>
+              <option value="FAQPage">FAQPage</option>
+              <option value="Article">Article</option>
+            </select>
+          </div>
 
-        <div class="field">
-          <label for="business-url">Website URL</label>
-          <input id="business-url" name="url" type="url" value="https://www.heygenyl.com" />
-        </div>
+          <div class="field-group">
+            <label for="business-name">Name</label>
+            <input
+              id="business-name"
+              name="name"
+              type="text"
+              class="field-control"
+              value="Hey Genyl"
+            />
+          </div>
 
-        <div class="field">
-          <label for="business-location">Location</label>
-          <input id="business-location" name="locality" type="text" value="Bacolod City, Philippines" />
-        </div>
+          <div class="field-group">
+            <label for="business-url">Website URL</label>
+            <input
+              id="business-url"
+              name="url"
+              type="url"
+              class="field-control"
+              value="https://heygenyl.com"
+            />
+          </div>
 
-        <div class="field">
-          <label for="business-description">Description</label>
-          <textarea id="business-description" name="description">SEO specialist and WordPress designer/developer for service businesses and B2B brands.</textarea>
-        </div>
+          <div class="field-group">
+            <label for="business-location">Location</label>
+            <input
+              id="business-location"
+              name="locality"
+              type="text"
+              class="field-control"
+              value="Bacolod City, Philippines"
+            />
+          </div>
 
-        <button class="button primary" type="submit">Generate schema</button>
-      </form>
+          <div class="field-group">
+            <label for="business-description">Description</label>
+            <textarea id="business-description" name="description" class="field-control">SEO specialist and WordPress designer/developer for service businesses and B2B brands.</textarea>
+          </div>
 
-      <article class="tool-panel">
-        <p class="card-label">Generated JSON-LD</p>
-        <h3>Copy-ready markup</h3>
-        <p class="card-copy">Edit the fields on the left and copy the JSON-LD below into your page template or CMS field.</p>
-        <pre class="tool-output" data-schema-output></pre>
-        <div class="hero-actions">
-          <button class="button secondary" type="button" data-copy-schema>Copy schema</button>
-        </div>
-      </article>
+          <div class="page-nav">
+            <button class="button primary" type="submit">Generate schema</button>
+          </div>
+        </form>
+
+        <article class="card grid gap-4 self-start">
+          <p class="eyebrow">Generated JSON-LD</p>
+          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">Copy-ready markup</h3>
+          <p class="text-sm 2xl:text-lg text-muted">
+            Edit the fields on the left and copy the JSON-LD below into your
+            page template or CMS field.
+          </p>
+          <pre class="tool-output" data-schema-output></pre>
+          <div class="page-nav">
+            <button class="button secondary" type="button" data-copy-schema>
+              Copy schema
+            </button>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 

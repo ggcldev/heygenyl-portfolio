@@ -19,7 +19,7 @@ const {
 } = Astro.props;
 
 const siteName = "Hey Genyl";
-const baseUrl = Astro.site ?? new URL("https://www.heygenyl.com");
+const baseUrl = Astro.site ?? new URL("https://heygenyl.com");
 const canonicalURL = new URL(Astro.url.pathname, baseUrl);
 const imageURL = new URL(ogImage, baseUrl);
 const robots = noIndex
@@ -46,7 +46,7 @@ const robots = noIndex
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap"
+  href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap"
   rel="stylesheet"
 />
 

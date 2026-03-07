@@ -3,7 +3,7 @@ export const siteConfig = {
   title: "Freelance SEO Specialist and WordPress Designer/Developer",
   description:
     "SEO specialist and WordPress designer/developer building lean, search-first websites for local service brands and B2B teams.",
-  url: "https://www.heygenyl.com",
+  url: "https://heygenyl.com",
   email: "hello@heygenyl.com",
   location: "Bacolod City, Philippines",
 };

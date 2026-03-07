@@ -1,4 +1,6 @@
 ---
+import { withBase } from "../utils/slugify";
+
 interface Action {
   label: string;
   href: string;
@@ -28,43 +30,35 @@ const {
 } = Astro.props;
 ---
 
-<section class="page-block animate-rise">
-  <div class="page-hero page-hero--split">
-    <div class="section">
-      <span class="eyebrow">{eyebrow}</span>
-      <h1 class:list={["page-title", compact && "compact"]}>{title}</h1>
-      <p class="page-intro">{intro}</p>
+<section class="content-shell">
+  <div class="hero">
+    <span class="eyebrow">{eyebrow}</span>
+    <h1 style={compact ? "max-width: 16ch;" : undefined}>{title}</h1>
+    <p>{intro}</p>
 
-      {actions.length > 0 && (
-        <div class="hero-actions">
-          {actions.map((action) => (
-            <a
-              href={action.href}
-              class:list={[
-                "button",
-                action.variant === "secondary" ? "secondary" : "primary",
-              ]}
-            >
-              {action.label}
-            </a>
-          ))}
-        </div>
-      )}
+    {chips.length > 0 && <p class="post-meta">{chips.join(" / ")}</p>}
 
-      {chips.length > 0 && (
-        <div class="chip-list">
-          {chips.map((chip) => (
-            <span class="chip">{chip}</span>
-          ))}
-        </div>
-      )}
-    </div>
+    {actions.length > 0 && (
+      <div class="page-nav">
+        {actions.map((action) => (
+          <a
+            href={withBase(action.href)}
+            class:list={[
+              "button",
+              action.variant === "secondary" ? "secondary" : "primary",
+            ]}
+          >
+            {action.label}
+          </a>
+        ))}
+      </div>
+    )}
 
     {(noteTitle || noteCopy) && (
-      <aside class="hero-note">
-        {noteTitle && <strong>{noteTitle}</strong>}
-        {noteCopy && <p>{noteCopy}</p>}
-      </aside>
+      <p class="post-meta">
+        {noteTitle && <strong style="color: var(--color-ink)">{noteTitle}:</strong>}{" "}
+        {noteCopy}
+      </p>
     )}
   </div>
 </section>

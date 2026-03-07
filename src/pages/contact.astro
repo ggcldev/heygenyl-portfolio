@@ -31,60 +31,96 @@ const schema = [
     noteCopy={`Update ${siteConfig.email} if your final domain email changes.`}
   />
 
-  <section class="page-block section animate-rise">
-    <div class="contact-grid">
-      <article class="info-panel">
-        <p class="card-label">What to include</p>
-        <h3>Make it easy for the right clients to self-qualify.</h3>
-        <ul class="list-checks">
-          <li>What kind of site or business you are working on</li>
-          <li>Which service page made them reach out</li>
-          <li>Whether they need strategy, implementation, or both</li>
-          <li>Any timing or launch deadline that affects priorities</li>
-        </ul>
-      </article>
-
-      <form class="contact-form" data-contact-form data-contact-email={siteConfig.email}>
-        <div class="field">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" placeholder="Your name" required />
-        </div>
-
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" required />
-        </div>
-
-        <div class="field">
-          <label for="service">Service needed</label>
-          <select id="service" name="service">
-            <option>Freelance SEO specialist</option>
-            <option>Local SEO consultant</option>
-            <option>Technical SEO specialist</option>
-            <option>SEO audit service</option>
-            <option>WordPress website designer</option>
-            <option>WordPress developer for hire</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="message">Project details</label>
-          <textarea
-            id="message"
-            name="message"
-            placeholder="Tell me about the site, what is not working, and what kind of support you need."
-            required
-          />
-        </div>
-
-        <p class="hint">
-          On submit, this form opens your default mail client with the details pre-filled. Replace
-          it later with FormSubmit, Basin, or your preferred endpoint if you want browser-based
-          submissions.
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+      <div class="md:sticky md:top-24 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Project intake</h2>
+        <p class="text-sm text-muted mt-2">
+          Keep the first message specific enough that the right clients can
+          self-qualify.
         </p>
+      </div>
 
-        <button class="button primary" type="submit">Draft email inquiry</button>
-      </form>
+      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        <article class="card">
+          <p class="eyebrow">What to include</p>
+          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+            Make it easy for the right clients to self-qualify.
+          </h3>
+          <ul class="m-0 mt-4 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+            <li>What kind of site or business you are working on</li>
+            <li>Which service page made them reach out</li>
+            <li>Whether they need strategy, implementation, or both</li>
+            <li>Any timing or launch deadline that affects priorities</li>
+          </ul>
+        </article>
+
+        <form
+          class="form-surface grid gap-5"
+          data-contact-form
+          data-contact-email={siteConfig.email}
+        >
+          <div class="field-group">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              class="field-control"
+              placeholder="Your name"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="field-control"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="service">Service needed</label>
+            <select id="service" name="service" class="field-control">
+              <option>Freelance SEO specialist</option>
+              <option>Local SEO consultant</option>
+              <option>Technical SEO specialist</option>
+              <option>SEO audit service</option>
+              <option>WordPress website designer</option>
+              <option>WordPress developer for hire</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="message">Project details</label>
+            <textarea
+              id="message"
+              name="message"
+              class="field-control"
+              placeholder="Tell me about the site, what is not working, and what kind of support you need."
+              required
+            />
+          </div>
+
+          <p class="muted-note">
+            On submit, this form opens your default mail client with the details
+            pre-filled. Replace it later with FormSubmit, Basin, or your
+            preferred endpoint if you want browser-based submissions.
+          </p>
+
+          <div class="page-nav">
+            <button class="button primary" type="submit">Draft email inquiry</button>
+            <a class="button secondary" href={`mailto:${siteConfig.email}`}>
+              Email directly
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 

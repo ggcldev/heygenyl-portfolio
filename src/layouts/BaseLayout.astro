@@ -27,12 +27,10 @@ const { title, description, ogImage, noIndex = false, schema = [] } =
     />
   </head>
   <body>
-    <div class="site-shell">
-      <Header />
-      <main class="site-main">
-        <slot />
-      </main>
-      <Footer />
-    </div>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>

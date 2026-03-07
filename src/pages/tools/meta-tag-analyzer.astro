@@ -7,10 +7,10 @@ const tool = getToolBySlug("meta-tag-analyzer");
 
 const sampleMarkup = `<title>Freelance SEO Specialist | Hey Genyl</title>
 <meta name="description" content="Freelance SEO specialist and WordPress designer/developer for service businesses and B2B brands." />
-<link rel="canonical" href="https://www.heygenyl.com/" />
+<link rel="canonical" href="https://heygenyl.com/" />
 <meta property="og:title" content="Freelance SEO Specialist | Hey Genyl" />
 <meta property="og:description" content="Freelance SEO specialist and WordPress designer/developer." />
-<meta property="og:image" content="https://www.heygenyl.com/og-default.svg" />
+<meta property="og:image" content="https://heygenyl.com/og-default.svg" />
 <meta name="twitter:card" content="summary_large_image" />`;
 ---
 
@@ -29,25 +29,42 @@ const sampleMarkup = `<title>Freelance SEO Specialist | Hey Genyl</title>
     noteCopy={tool.note}
   />
 
-  <section class="page-block section animate-rise">
-    <div class="two-up">
-      <div class="tool-form">
-        <div class="field">
-          <label for="meta-input">Paste HTML head markup</label>
-          <textarea id="meta-input" data-meta-input>{sampleMarkup}</textarea>
-        </div>
-
-        <button class="button primary" type="button" data-run-meta-analysis>
-          Run analysis
-        </button>
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+      <div class="md:sticky md:top-24 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Analyze markup</h2>
+        <p class="text-sm text-muted mt-2">
+          Paste a page head or HTML snippet and review the core metadata
+          coverage in one pass.
+        </p>
       </div>
 
-      <article class="tool-panel">
-        <p class="card-label">Analysis</p>
-        <h3>Coverage and length review</h3>
-        <p class="card-copy">The checker looks for title, description, canonical, robots, Open Graph, and Twitter essentials.</p>
-        <div class="result-table" data-meta-results></div>
-      </article>
+      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        <div class="form-surface grid gap-5">
+          <div class="field-group">
+            <label for="meta-input">Paste HTML head markup</label>
+            <textarea id="meta-input" class="field-control" data-meta-input>{sampleMarkup}</textarea>
+          </div>
+
+          <div class="page-nav">
+            <button class="button primary" type="button" data-run-meta-analysis>
+              Run analysis
+            </button>
+          </div>
+        </div>
+
+        <article class="card grid gap-4 self-start">
+          <p class="eyebrow">Analysis</p>
+          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+            Coverage and length review
+          </h3>
+          <p class="text-sm 2xl:text-lg text-muted">
+            The checker looks for title, description, canonical, robots, Open
+            Graph, and Twitter essentials.
+          </p>
+          <div class="result-table" data-meta-results></div>
+        </article>
+      </div>
     </div>
   </section>
 

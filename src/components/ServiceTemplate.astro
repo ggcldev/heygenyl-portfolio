@@ -41,99 +41,89 @@ const schema = [
     noteCopy={service.note}
   />
 
-  <section class="page-block section animate-rise">
-    <div class="section-header">
-      <span class="eyebrow">What I handle</span>
-      <h2 class="section-title">Execution, prioritization, and the handoff your site actually needs.</h2>
-      <p class="section-copy">
-        Each engagement is built around implementation clarity. That means fewer vague SEO
-        recommendations and more work that is ready for writers, designers, developers, or you.
-      </p>
-    </div>
-
-    <div class="cards">
-      {service.deliverables.map((item) => (
-        <article class="card">
-          <p class="card-label">Included</p>
-          <h3 class="card-title">{item.title}</h3>
-          <p class="card-copy">{item.copy}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="page-block section animate-rise">
-    <div class="section-header">
-      <span class="eyebrow">Best fit</span>
-      <h2 class="section-title">The kinds of projects where this service moves fastest.</h2>
-    </div>
-
-    <div class="split-panel">
-      <article class="info-panel">
-        <h3>Ideal if you need</h3>
-        <ul class="list-checks">
-          {service.idealFor.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-      </article>
-
-      <article class="info-panel">
-        <h3>Likely outcomes</h3>
-        <ul class="list-checks">
-          {service.outcomes.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section class="page-block section animate-rise">
-    <div class="section-header">
-      <span class="eyebrow">Process</span>
-      <h2 class="section-title">A simple delivery sequence with less guesswork.</h2>
-    </div>
-
-    <div class="timeline">
-      {service.process.map((step, index) => (
-        <article class="timeline-step">
-          <p class="card-label">Step {index + 1}</p>
-          <h3>{step.title}</h3>
-          <p>{step.copy}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="page-block section animate-rise">
-    <div class="section-header">
-      <span class="eyebrow">FAQ</span>
-      <h2 class="section-title">Pre-sales questions this page should answer.</h2>
-    </div>
-
-    <div class="faq-list">
-      {service.faq.map((item) => (
-        <article class="faq-item">
-          <h3>{item.question}</h3>
-          <p>{item.answer}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="page-block animate-rise">
-    <div class="cta-band">
-      <div>
-        <p class="eyebrow">Ready when you are</p>
-        <h2 class="section-title">Need this service page to turn into a real offer?</h2>
-        <p>
-          Replace the placeholder metrics with your live proof, adjust the niche language, and
-          connect the CTA to your preferred intake workflow.
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">What I handle</h2>
+        <p class="text-sm text-muted mt-2">
+          Execution, prioritization, and the handoff your site actually needs.
         </p>
       </div>
 
-      <a class="button secondary" href="/contact/">Book a project intro</a>
+      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        {service.deliverables.map((item) => (
+          <article class="card">
+            <p class="eyebrow">{item.title}</p>
+            <p class="text-sm 2xl:text-lg text-muted">{item.copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Best fit</h2>
+      </div>
+
+      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        <article class="card">
+          <p class="eyebrow">Ideal if you need</p>
+          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+            {service.idealFor.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">Likely outcomes</p>
+          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+            {service.outcomes.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Process</h2>
+      </div>
+
+      <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
+        {service.process.map((step, index) => (
+          <article class="card">
+            <p class="eyebrow">Step {index + 1}</p>
+            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{step.title}</h3>
+            <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">FAQ</h2>
+      </div>
+
+      <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
+        {service.faq.map((item) => (
+          <article class="card">
+            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{item.question}</h3>
+            <p class="text-sm 2xl:text-lg text-muted mt-2">{item.answer}</p>
+          </article>
+        ))}
+        <div class="page-nav">
+          <a class="button primary" href="/contact/">Book a project intro</a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

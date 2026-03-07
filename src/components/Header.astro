@@ -1,54 +1,111 @@
 ---
+import HeaderLink from "./HeaderLink.astro";
+import ThemeToggle from "./ThemeToggle.astro";
 import { toolPages } from "../data/site";
-
-const currentPath = Astro.url.pathname;
-
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/services/", label: "Services" },
-  { href: "/case-studies/", label: "Case Studies" },
-  { href: "/blog/", label: "Blog" },
-  { href: "/contact/", label: "Contact" },
-];
-
-const isActive = (href: string) =>
-  href === "/"
-    ? currentPath === "/"
-    : currentPath === href || currentPath.startsWith(href);
 ---
 
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark">HG</span>
-      <span>
-        <strong>Hey Genyl</strong>
-        <small>SEO + WordPress</small>
-      </span>
+  <nav class="h-full w-full flex items-center justify-between">
+    <a
+      href="/"
+      class="text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
+    >
+      Hey Genyl
     </a>
 
-    <nav class="main-nav" aria-label="Primary">
-      {navItems.map((item) => (
-        <a href={item.href} class:list={[isActive(item.href) && "is-active"]}>
-          {item.label}
-        </a>
-      ))}
+    <button
+      id="nav-toggle"
+      aria-label="Toggle navigation"
+      aria-pressed="false"
+      class="md:hidden text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
+    >
+      Menu
+    </button>
 
-      <details class="nav-dropdown">
-        <summary class:list={[currentPath.startsWith("/tools/") && "is-active"]}>
-          Tools
-        </summary>
-        <div class="dropdown-panel">
-          <a href="/tools/">All SEO tools</a>
-          {toolPages.map((tool) => (
-            <a href={`/tools/${tool.slug}/`}>{tool.shortTitle}</a>
-          ))}
-        </div>
-      </details>
-    </nav>
+    <div
+      class="hidden md:flex items-center gap-2 text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
+    >
+      <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/services/">Services</HeaderLink>
+      <HeaderLink href="/case-studies/">Case Studies</HeaderLink>
+      <HeaderLink href="/blog/">Blog</HeaderLink>
+      <HeaderLink href="/tools/">Tools</HeaderLink>
+      <HeaderLink href="/contact/">Contact</HeaderLink>
+      <ThemeToggle class="text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" />
+    </div>
 
-    <a class="button primary header-cta" href="/contact/">
-      Hire an SEO specialist
-    </a>
-  </div>
+    <div
+      id="mobile-nav"
+      role="dialog"
+      aria-label="Mobile navigation"
+      aria-hidden="true"
+      style="display:none;"
+      class="fixed inset-0 z-[1000] p-8 overflow-auto bg-[var(--color-paper)] text-[var(--color-ink)]"
+    >
+      <button
+        id="mobile-close"
+        aria-label="Close navigation"
+        style="position:absolute;right:1rem;top:1rem;"
+        class="text-xs 2xl:text-lg font-bold uppercase"
+      >
+        Close
+      </button>
+      <div class="flex flex-col gap-2 items-start text-xs 2xl:text-lg hover:text-base-500 font-bold uppercase">
+        <HeaderLink href="/">Home</HeaderLink>
+        <HeaderLink href="/services/">Services</HeaderLink>
+        <HeaderLink href="/case-studies/">Case Studies</HeaderLink>
+        <HeaderLink href="/blog/">Blog</HeaderLink>
+        <HeaderLink href="/tools/">Tools</HeaderLink>
+        {toolPages.map((tool) => (
+          <a class="pl-4 text-muted" href={`/tools/${tool.slug}/`}>
+            {tool.shortTitle}
+          </a>
+        ))}
+        <HeaderLink href="/contact/">Contact</HeaderLink>
+        <ThemeToggle class="text-xs 2xl:text-lg hover:text-base-500 font-bold uppercase" />
+      </div>
+    </div>
+  </nav>
 </header>
+
+<script is:inline>
+	const navButton = document.getElementById("nav-toggle");
+	const mobileNav = document.getElementById("mobile-nav");
+	const mobileClose = document.getElementById("mobile-close");
+	const navElement = document.querySelector("nav");
+
+	const applyNav = (state) => {
+		const isOpen = state === "open";
+		document.documentElement.dataset.nav = isOpen ? "open" : "closed";
+		if (navButton) navButton.setAttribute("aria-pressed", isOpen ? "true" : "false");
+
+		if (mobileNav) {
+			mobileNav.style.display = isOpen ? "block" : "none";
+			mobileNav.setAttribute("aria-hidden", isOpen ? "false" : "true");
+			if (!isOpen && navButton instanceof HTMLElement) navButton.focus();
+		}
+	};
+
+	const closeNav = () => applyNav("closed");
+	const toggleNav = () =>
+		applyNav(document.documentElement.dataset.nav === "open" ? "closed" : "open");
+
+	applyNav("closed");
+
+	if (navButton) navButton.addEventListener("click", toggleNav);
+	if (mobileClose) mobileClose.addEventListener("click", closeNav);
+
+	window.addEventListener("keydown", (event) => {
+		if (event.key === "Escape" && document.documentElement.dataset.nav === "open") {
+			closeNav();
+		}
+	});
+
+	if (navElement) {
+		navElement.addEventListener("click", (event) => {
+			const target = event.target;
+			if (!(target instanceof Element)) return;
+			if (target.closest("a")) closeNav();
+		});
+	}
+</script>
