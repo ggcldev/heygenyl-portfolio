@@ -5,7 +5,7 @@ export const siteConfig = {
     "SEO specialist and WordPress designer/developer building lean, search-first websites for local service brands and B2B teams.",
   url: "https://heygenyl.com",
   email: "hello@heygenyl.com",
-  location: "Bacolod City, Philippines",
+  location: "Philippines",
 };
 
 export const homeStats = [
@@ -105,13 +105,13 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "local-seo",
-    shortTitle: "Local SEO consultant",
-    title: "Local SEO Consultant",
-    metaTitle: "Local SEO Consultant | Hey Genyl",
+    shortTitle: "Local SEO specialist",
+    title: "Local SEO Specialist",
+    metaTitle: "Local SEO Specialist | Hey Genyl",
     metaDescription:
-      "Local SEO consulting for service-area businesses that need stronger map visibility, better service pages, and more qualified local leads.",
+      "Local SEO specialist support for service-area businesses that need stronger map visibility, cleaner service pages, and more qualified local leads.",
     summary:
-      "A local SEO page should speak directly to service businesses that need cleaner service-area targeting, GBP support, and pages that convert local intent.",
+      "A local SEO specialist page should speak directly to service businesses that need cleaner service-area targeting, GBP support, and pages that convert local intent.",
     chips: ["GBP support", "Service areas", "Local landing pages"],
     note:
       "Use this page to connect your local SEO offer with niche case studies such as plumbing, detailing, gutters, and law.",
@@ -316,17 +316,17 @@ export const servicePages: ServicePage[] = [
     ],
   },
   {
-    slug: "wordpress-development",
-    shortTitle: "WordPress developer for hire",
-    title: "WordPress Developer for Hire",
-    metaTitle: "WordPress Developer for Hire | Hey Genyl",
+    slug: "wordpress-seo-expert",
+    shortTitle: "WordPress SEO expert",
+    title: "WordPress SEO Expert",
+    metaTitle: "WordPress SEO Expert | Hey Genyl",
     metaDescription:
-      "WordPress development for SEO-focused service websites, landing pages, template cleanup, and implementation support.",
+      "WordPress SEO expert support for search-focused service websites, technical fixes, template cleanup, and conversion-aware page implementation.",
     summary:
-      "This page bridges implementation. It is for clients who need the SEO plan translated into actual page builds, template edits, and site updates inside WordPress.",
-    chips: ["Template implementation", "Theme cleanup", "Page builds"],
+      "This page bridges strategy and implementation for clients who need search-focused WordPress updates that improve rankings, UX, and lead generation.",
+    chips: ["WordPress SEO", "Template implementation", "Page builds"],
     note:
-      "This service works well as the implementation layer beneath your audit, redesign, or content strategy pages.",
+      "Use this page when clients need one person who can connect SEO direction with real WordPress implementation.",
     deliverables: [
       {
         title: "Template adjustments",
@@ -370,6 +370,16 @@ export const servicePages: ServicePage[] = [
   },
 ];
 
+export const activeServiceSlugSet = new Set([
+  "seo-specialist",
+  "local-seo",
+  "wordpress-seo-expert",
+]);
+
+export const activeServicePages = servicePages.filter((service) =>
+  activeServiceSlugSet.has(service.slug),
+);
+
 export type CaseStudyPage = {
   slug: string;
   shortTitle: string;
@@ -390,63 +400,63 @@ export type CaseStudyPage = {
 
 export const caseStudies: CaseStudyPage[] = [
   {
-    slug: "gutter-company-seo",
-    shortTitle: "Gutter company SEO",
-    title: "Gutter Company SEO Case Study",
-    metaTitle: "Gutter Company SEO Case Study | Hey Genyl",
+    slug: "desert-it-solutions-msp",
+    shortTitle: "Desert IT Solutions MSP",
+    title: "Desert IT Solutions MSP Case Study",
+    metaTitle: "Desert IT Solutions MSP Case Study | Hey Genyl",
     metaDescription:
-      "Starter gutter company SEO case study structure for service pages, location targeting, and lead-focused content improvements.",
+      "Desert I.T. Solutions MSP case study covering SEO positioning, service-page structure, and lead-quality improvements for a Las Vegas managed IT provider.",
     summary:
-      "A home-service case study format built for service-area intent, city-specific demand, and high-friction local conversion journeys.",
+      "Desert I.T. Solutions is a Las Vegas-based managed IT company that helps businesses stay ahead of IT issues through proactive system monitoring, vulnerability management, and ongoing technical support. Their managed services model keeps client environments secure, stable, and ready to scale.",
     note:
-      "Swap in the client name, before-and-after screenshots, and actual lead metrics before publishing this page live.",
-    chips: ["Home services", "Local SEO", "Service-area pages"],
+      "Client-sensitive metrics are anonymized for now. Replace with exact rank, traffic, and lead-quality numbers before publishing publicly.",
+    chips: ["B2B services", "Managed IT", "SEO strategy"],
     snapshot: [
-      { label: "Primary focus", value: "Service + city intent" },
-      { label: "Main fix", value: "Cleaner page overlap" },
-      { label: "Best proof", value: "Calls and form quality" },
-      { label: "Support page", value: "Local SEO consultant" },
+      { label: "Primary focus", value: "Managed IT intent mapping" },
+      { label: "Main fix", value: "Service-page architecture" },
+      { label: "Best proof", value: "Qualified consultation leads" },
+      { label: "Support page", value: "SEO specialist" },
     ],
-    challengeTitle: "The site looked broad, but the search intent was hyper-local.",
+    challengeTitle: "The offer was strong, but the search positioning was too broad.",
     challenge: [
-      "Multiple gutter services were competing for the same city-modified keywords",
-      "Trust signals existed, but they were buried below generic copy blocks",
-      "Location targeting relied too heavily on shallow content variations",
+      "Core managed IT services and support content overlapped on the same page targets",
+      "High-value differentiators were buried too low in the content hierarchy",
+      "Pages captured visibility but did not clearly pre-qualify the right-fit buyer",
     ],
-    strategyTitle: "Make the offer local, specific, and easier to convert.",
+    strategyTitle: "Reframe pages around intent, trust, and commercial clarity.",
     strategy: [
-      "Separate core services from city intent instead of mixing both on every page",
-      "Rewrite proof and CTA sections closer to the top of the layout",
-      "Strengthen internal links between the homepage, service pages, and local entry points",
+      "Split managed services, cybersecurity, and support offerings into clearer page clusters",
+      "Move proof, process clarity, and CTA messaging higher on key landing pages",
+      "Tighten internal linking across service, industry, and conversion pages",
     ],
     proofPoints: [
       {
-        title: "Organic lead quality",
+        title: "Lead quality improvement",
         copy:
-          "Show how quote requests or calls became more aligned with the right service areas after the page architecture was tightened.",
+          "After the restructuring, more inquiries matched ideal managed-service profiles instead of generic support requests.",
       },
       {
-        title: "Service page visibility",
+        title: "Service visibility gains",
         copy:
-          "Highlight movement across the most important service phrases instead of broad ranking screenshots with low business value.",
+          "Priority service pages improved alignment for commercial managed IT and cybersecurity terms.",
       },
       {
-        title: "Crawl clarity",
+        title: "Stronger conversion path",
         copy:
-          "Document how redundant pages were removed or consolidated so search engines had a cleaner understanding of the offer.",
+          "Navigation and internal-link flows reduced friction between first click and consultation intent.",
       },
     ],
-    serviceHref: "/services/local-seo/",
+    serviceHref: "/services/seo-specialist/",
   },
   {
-    slug: "auto-detailing-seo",
-    shortTitle: "Auto detailing SEO",
-    title: "Auto Detailing SEO Case Study",
-    metaTitle: "Auto Detailing SEO Case Study | Hey Genyl",
+    slug: "the-works-auto-center-car-detailing",
+    shortTitle: "Car Detailing",
+    title: "The Works Auto Center Case Study",
+    metaTitle: "The Works Auto Center Case Study | Hey Genyl",
     metaDescription:
       "Starter auto detailing SEO case study structure focused on service intent, packages, local visibility, and stronger conversion paths.",
     summary:
-      "Auto detailing sites usually need tighter package positioning, better service page hierarchy, and stronger proof placement to convert search traffic.",
+      "The Works Auto Center is a veteran-owned auto detailing and body shop in Albany, NY, offering everything from paint protection film and ceramic coatings to full body repair and insurance-approved bodywork.",
     note:
       "If this becomes a public case study, add the service package names, city targets, and the exact pages that improved.",
     chips: ["Local service brand", "Package positioning", "Lead-gen UX"],
@@ -454,7 +464,7 @@ export const caseStudies: CaseStudyPage[] = [
       { label: "Primary focus", value: "Package clarity" },
       { label: "Main fix", value: "Offer-to-page alignment" },
       { label: "Best proof", value: "Booking intent" },
-      { label: "Support page", value: "WordPress website designer" },
+      { label: "Support page", value: "WordPress SEO expert" },
     ],
     challengeTitle: "The site had demand, but the offer structure made comparison harder than it should be.",
     challenge: [
@@ -485,13 +495,13 @@ export const caseStudies: CaseStudyPage[] = [
           "Use scroll depth, clicks, or inquiry quality if you track them. Those metrics fit this niche better than impressions alone.",
       },
     ],
-    serviceHref: "/services/wordpress-design/",
+    serviceHref: "/services/wordpress-seo-expert/",
   },
   {
-    slug: "law-firm-seo",
-    shortTitle: "Law firm SEO",
-    title: "Law Firm SEO Case Study",
-    metaTitle: "Law Firm SEO Case Study | Hey Genyl",
+    slug: "everything-probate-legal-firm",
+    shortTitle: "Legal Firm",
+    title: "Everything Probate Case Study",
+    metaTitle: "Everything Probate Case Study | Hey Genyl",
     metaDescription:
       "Starter law firm SEO case study structure for practice-area pages, authority signals, and local + service intent separation.",
     summary:
@@ -503,7 +513,7 @@ export const caseStudies: CaseStudyPage[] = [
       { label: "Primary focus", value: "Practice intent" },
       { label: "Main fix", value: "Authority placement" },
       { label: "Best proof", value: "Consultation quality" },
-      { label: "Support page", value: "SEO audit service" },
+      { label: "Support page", value: "Freelance SEO specialist" },
     ],
     challengeTitle: "The site needed more than rankings. It needed search intent to map cleanly to trust.",
     challenge: [
@@ -532,104 +542,6 @@ export const caseStudies: CaseStudyPage[] = [
         title: "Trust engagement",
         copy:
           "Use supporting behavior such as attorney bio views, FAQ interaction, or form progression if you have it.",
-      },
-    ],
-    serviceHref: "/services/seo-audits/",
-  },
-  {
-    slug: "plumbing-hvac-seo",
-    shortTitle: "Plumbing and HVAC SEO",
-    title: "Plumbing and HVAC SEO Case Study",
-    metaTitle: "Plumbing and HVAC SEO Case Study | Hey Genyl",
-    metaDescription:
-      "Starter plumbing and HVAC SEO case study structure for multi-service local businesses, emergency pages, and service-area architecture.",
-    summary:
-      "Plumbing and HVAC sites usually combine multiple urgent services, broad location targeting, and seasonal demand. That makes structure everything.",
-    note:
-      "This page is strongest when you can show how emergency service intent was separated from broader service pages.",
-    chips: ["Emergency intent", "Multi-service local", "Location structure"],
-    snapshot: [
-      { label: "Primary focus", value: "Emergency + core services" },
-      { label: "Main fix", value: "Intent separation" },
-      { label: "Best proof", value: "Call-driven pages" },
-      { label: "Support page", value: "Technical SEO specialist" },
-    ],
-    challengeTitle: "Too many services were sharing page space, and urgent intent was getting diluted.",
-    challenge: [
-      "Emergency pages, city pages, and general services were competing against each other",
-      "Template repetition made pages harder to differentiate",
-      "Internal links did not reflect the urgency or value of certain service paths",
-    ],
-    strategyTitle: "Separate urgency, service depth, and geography cleanly.",
-    strategy: [
-      "Clarify which pages should capture emergency intent versus research intent",
-      "Reduce template duplication and strengthen service-level differentiation",
-      "Direct internal authority toward pages that handle the most urgent or profitable traffic",
-    ],
-    proofPoints: [
-      {
-        title: "Call-path visibility",
-        copy:
-          "Document whether phone-focused pages became easier to find and better aligned with urgent queries.",
-      },
-      {
-        title: "Template cleanup",
-        copy:
-          "Show how duplicate headings, metadata logic, or repeated sections were improved across service templates.",
-      },
-      {
-        title: "Service-page focus",
-        copy:
-          "Include the pages that stopped cannibalizing each other after the architecture was reworked.",
-      },
-    ],
-    serviceHref: "/services/technical-seo/",
-  },
-  {
-    slug: "b2b-enterprise-seo",
-    shortTitle: "B2B enterprise SEO",
-    title: "B2B Enterprise SEO Case Study",
-    metaTitle: "B2B Enterprise SEO Case Study | Hey Genyl",
-    metaDescription:
-      "Starter B2B enterprise SEO case study structure for technical audits, content ecosystems, stakeholder handoffs, and complex website governance.",
-    summary:
-      "Use this page for enterprise or industrial work where the value comes from better governance, technical clarity, and page architecture that supports long sales cycles.",
-    note:
-      "This page is a strong place to reference energy, industrial, or manufacturing experience once you are ready to publish the exact account names.",
-    chips: ["B2B SEO", "Enterprise workflows", "Technical governance"],
-    snapshot: [
-      { label: "Primary focus", value: "Complex site governance" },
-      { label: "Main fix", value: "Cross-team clarity" },
-      { label: "Best proof", value: "Roadmap adoption" },
-      { label: "Support page", value: "Freelance SEO specialist" },
-    ],
-    challengeTitle: "The issue was not only traffic. It was coordination across large sites and long review cycles.",
-    challenge: [
-      "Multiple stakeholders influenced templates, publishing, and technical changes",
-      "Important content opportunities were slowed by unclear ownership",
-      "Technical findings had to translate into realistic implementation workstreams",
-    ],
-    strategyTitle: "Turn SEO from a report into a system the team can use.",
-    strategy: [
-      "Organize the roadmap by implementation owner instead of issue type alone",
-      "Connect technical fixes to content opportunities and page priorities",
-      "Build documentation that developers, writers, and managers could act on without re-translation",
-    ],
-    proofPoints: [
-      {
-        title: "Implementation adoption",
-        copy:
-          "Show how recommendations moved into sprint planning, content production, or template updates across teams.",
-      },
-      {
-        title: "Technical focus",
-        copy:
-          "Use examples of crawl, indexation, or template logic improvements that made enterprise pages easier to scale.",
-      },
-      {
-        title: "Commercial relevance",
-        copy:
-          "Tie the work back to visibility around core solution pages, not just informational traffic.",
       },
     ],
     serviceHref: "/services/seo-specialist/",

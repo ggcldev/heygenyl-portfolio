@@ -1,7 +1,7 @@
 ---
 import PageHero from "../../components/PageHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { servicePages, siteConfig } from "../../data/site";
+import { activeServicePages, siteConfig } from "../../data/site";
 
 const schema = [
   {
@@ -15,20 +15,20 @@ const schema = [
 
 <BaseLayout
   title="SEO and WordPress Services | Hey Genyl"
-  description="SEO and WordPress services hub covering freelance SEO support, local SEO, technical SEO, audits, design, and development."
+  description="SEO and WordPress services hub covering freelance SEO specialist support, local SEO specialist work, and WordPress SEO expert implementation."
   schema={schema}
 >
   <PageHero
     eyebrow="Services hub"
     title="SEO and WordPress services built around how clients actually search."
-    intro="This hub acts as the parent page for the six core offers in the site. Each child page is written to support a tighter commercial phrase and stronger internal linking."
-    chips={["SEO and WordPress services", "Commercial-intent pages", "Shared-hosting friendly"]}
+    intro="This hub currently focuses on three core offers written for clear commercial intent: freelance SEO specialist, local SEO specialist, and WordPress SEO expert."
+    chips={["SEO and WordPress services", "3 active service pages", "Commercial-intent pages"]}
     actions={[
       { label: "Open contact page", href: "/contact/" },
       { label: "See case studies", href: "/case-studies/", variant: "secondary" },
     ]}
     noteTitle="Architecture note"
-    noteCopy="Keep this page broad. Let the child pages do the tighter keyword targeting."
+    noteCopy="Keep this page broad while the child pages carry the exact service phrases."
   />
 
   <section class="content-shell">
@@ -42,7 +42,7 @@ const schema = [
       </div>
 
       <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {servicePages.map((service) => (
+        {activeServicePages.map((service) => (
           <a
             class="card block transition duration-300 ease-in-out hover:-translate-y-1"
             href={`/services/${service.slug}/`}

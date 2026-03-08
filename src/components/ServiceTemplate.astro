@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { service } = Astro.props;
+const serviceUrl = new URL(`/services/${service.slug}/`, siteConfig.url).toString();
 
 const schema = [
   {
@@ -21,7 +22,31 @@ const schema = [
       "@type": "Person",
       name: siteConfig.name,
     },
-    url: new URL(`/services/${service.slug}/`, siteConfig.url).toString(),
+    url: serviceUrl,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: new URL("/", siteConfig.url).toString(),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Services",
+        item: new URL("/services/", siteConfig.url).toString(),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: service.shortTitle,
+        item: serviceUrl,
+      },
+    ],
   },
 ];
 ---

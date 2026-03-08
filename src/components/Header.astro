@@ -1,17 +1,25 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-import { toolPages } from "../data/site";
+import { activeServicePages } from "../data/site";
+
+const serviceNavLabelBySlug: Record<string, string> = {
+  "seo-specialist": "SEO",
+  "local-seo": "Local SEO",
+  "wordpress-seo-expert": "WordPress",
+};
 ---
 
 <header class="site-header">
-  <nav class="h-full w-full flex items-center justify-between">
+  <nav class="relative h-full w-full flex items-center justify-between">
     <a
       href="/"
       class="text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
     >
       Hey Genyl
     </a>
+
+    <ThemeToggle class="hidden md:inline-flex absolute left-1/2 -translate-x-1/2" />
 
     <button
       id="nav-toggle"
@@ -23,15 +31,26 @@ import { toolPages } from "../data/site";
     </button>
 
     <div
-      class="hidden md:flex items-center gap-2 text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
+      class="hidden md:flex items-center gap-3"
     >
-      <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/services/">Services</HeaderLink>
-      <HeaderLink href="/case-studies/">Case Studies</HeaderLink>
-      <HeaderLink href="/blog/">Blog</HeaderLink>
-      <HeaderLink href="/tools/">Tools</HeaderLink>
-      <HeaderLink href="/contact/">Contact</HeaderLink>
-      <ThemeToggle class="text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" />
+      <div class="nav-dropdown">
+        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/services/">Services</HeaderLink>
+        <div class="nav-dropdown-menu" aria-label="Services links">
+          {activeServicePages.map((service) => (
+            <HeaderLink
+              class="nav-dropdown-link"
+              activeClass="nav-dropdown-link-active"
+              href={`/services/${service.slug}/`}
+            >
+              {serviceNavLabelBySlug[service.slug] ?? service.shortTitle}
+            </HeaderLink>
+          ))}
+        </div>
+      </div>
+      <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
+      <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/blog/">Blog</HeaderLink>
+      <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/tools/">Tools</HeaderLink>
+      <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/contact/">Contact</HeaderLink>
     </div>
 
     <div
@@ -50,25 +69,59 @@ import { toolPages } from "../data/site";
       >
         Close
       </button>
-      <div class="flex flex-col gap-2 items-start text-xs 2xl:text-lg hover:text-base-500 font-bold uppercase">
-        <HeaderLink href="/">Home</HeaderLink>
-        <HeaderLink href="/services/">Services</HeaderLink>
-        <HeaderLink href="/case-studies/">Case Studies</HeaderLink>
-        <HeaderLink href="/blog/">Blog</HeaderLink>
-        <HeaderLink href="/tools/">Tools</HeaderLink>
-        {toolPages.map((tool) => (
-          <a class="pl-4 text-muted" href={`/tools/${tool.slug}/`}>
-            {tool.shortTitle}
+      <div class="flex flex-col gap-2 items-start">
+        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/services/">Services</HeaderLink>
+        {activeServicePages.map((service) => (
+          <a class="pl-4 text-muted hover:text-base-500 text-xs 2xl:text-lg font-bold uppercase" href={`/services/${service.slug}/`}>
+            {serviceNavLabelBySlug[service.slug] ?? service.shortTitle}
           </a>
         ))}
-        <HeaderLink href="/contact/">Contact</HeaderLink>
-        <ThemeToggle class="text-xs 2xl:text-lg hover:text-base-500 font-bold uppercase" />
+        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
+        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/blog/">Blog</HeaderLink>
+        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/tools/">Tools</HeaderLink>
+        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/contact/">Contact</HeaderLink>
+        <ThemeToggle />
       </div>
     </div>
   </nav>
 </header>
 
 <script is:inline>
+	const THEME_STORAGE_KEY = "theme";
+
+	const getPreferredTheme = () => {
+		try {
+			const stored = localStorage.getItem(THEME_STORAGE_KEY);
+			if (stored === "light" || stored === "dark") return stored;
+		} catch {
+			// Ignore storage access errors and fall through to media query.
+		}
+		return window.matchMedia("(prefers-color-scheme: dark)").matches
+			? "dark"
+			: "light";
+	};
+
+	const applyTheme = (theme) => {
+		document.documentElement.dataset.theme = theme;
+		const buttons = document.querySelectorAll("[data-theme-toggle]");
+		buttons.forEach((button) =>
+			button.setAttribute("aria-label", `Toggle theme (current: ${theme})`)
+		);
+	};
+
+	const toggleTheme = () => {
+		const current = document.documentElement.dataset.theme || getPreferredTheme();
+		const next = current === "dark" ? "light" : "dark";
+		try {
+			localStorage.setItem(THEME_STORAGE_KEY, next);
+		} catch {
+			// Ignore storage access errors.
+		}
+		applyTheme(next);
+	};
+
+	applyTheme(document.documentElement.dataset.theme || getPreferredTheme());
+
 	const navButton = document.getElementById("nav-toggle");
 	const mobileNav = document.getElementById("mobile-nav");
 	const mobileClose = document.getElementById("mobile-close");
@@ -99,6 +152,14 @@ import { toolPages } from "../data/site";
 		if (event.key === "Escape" && document.documentElement.dataset.nav === "open") {
 			closeNav();
 		}
+	});
+
+	document.addEventListener("click", (event) => {
+		const target = event.target;
+		if (!(target instanceof Element)) return;
+		if (!target.closest("[data-theme-toggle]")) return;
+		event.preventDefault();
+		toggleTheme();
 	});
 
 	if (navElement) {

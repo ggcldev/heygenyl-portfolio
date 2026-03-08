@@ -1,7 +1,7 @@
 ---
 import PageHero from "../../components/PageHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { siteConfig, toolPages } from "../../data/site";
+import { siteConfig } from "../../data/site";
 
 const schema = [
   {
@@ -15,45 +15,44 @@ const schema = [
 
 <BaseLayout
   title="Free SEO Tools | Hey Genyl"
-  description="Free SEO tools hub for a schema generator, meta tag analyzer, and starter 404 checker."
+  description="SEO tools page for upcoming utilities and future releases."
   schema={schema}
 >
   <PageHero
     eyebrow="Tools hub"
-    title="Free SEO tools that fit a static Astro stack."
-    intro="These tools are intentionally browser-first. Two of them run entirely client-side, while the 404 checker is designed as a starter interface that can grow into a serverless crawler later."
-    chips={["Free SEO tools", "Client-side utilities", "Serverless-ready 404 checker"]}
+    title="SEO tools are coming soon."
+    intro="I’m currently prioritizing service pages and case studies first. This section will be used for practical SEO utilities after the core site structure is finalized."
+    chips={["Tools in progress", "Service-first rollout", "SEO utility roadmap"]}
     actions={[
-      { label: "Open schema generator", href: "/tools/schema-generator/" },
-      { label: "Contact for custom tools", href: "/contact/", variant: "secondary" },
+      { label: "See services", href: "/services/" },
+      { label: "Contact", href: "/contact/", variant: "secondary" },
     ]}
-    noteTitle="Hosting note"
-    noteCopy="Schema and metadata tools work perfectly on shared hosting because they do not require server-side requests."
+    noteTitle="Status"
+    noteCopy="Tool pages are temporarily removed while the service pages are being built and deployed."
   />
 
   <section class="content-shell">
     <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
       <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">All tools</h2>
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Current focus</h2>
         <p class="text-sm text-muted mt-2">
-          Browser-first tools now, with room to add a serverless backend later
-          for crawling and deeper checks.
+          Services first, then tools. This keeps the launch scope cleaner and
+          helps you publish faster without half-finished utility pages.
         </p>
       </div>
 
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-y-8 gap-x-8">
-        {toolPages.map((tool) => (
-          <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/tools/${tool.slug}/`}
-          >
-            <p class="eyebrow">{tool.shortTitle}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {tool.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{tool.summary}</p>
-          </a>
-        ))}
+      <div class="md:col-span-2 grid grid-cols-1 gap-y-8">
+        <article class="card">
+          <p class="eyebrow">Planned utilities</p>
+          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+            Schema Generator, Meta Tag Analyzer, and 404 Checker
+          </h3>
+          <p class="text-sm 2xl:text-lg text-muted mt-2">
+            These tools are queued for the next build cycle. For now, this page
+            stays live as a placeholder to preserve the /tools route in your
+            site architecture.
+          </p>
+        </article>
       </div>
     </div>
   </section>

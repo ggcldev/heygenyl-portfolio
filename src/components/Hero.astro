@@ -32,14 +32,13 @@ const { title, description, actions = [], role, location } =
   </div>
 
   <div class="hero-shell__content">
-    <div class="grid gap-8 md:gap-10 pb-6 md:pb-10">
+    <div class="hero-headline-wrap grid gap-8 md:gap-10 pb-6 md:pb-10">
       <div class="flex flex-col lg:flex-row lg:justify-between items-start gap-8 md:gap-10">
-        <div
-          class="text-[18vw] sm:text-[14vw] md:text-[7rem] lg:text-[8rem] leading-[0.85] font-extrabold uppercase max-w-4xl"
-          aria-hidden="true"
+        <h1
+          class="text-[11vw] sm:text-[8vw] md:text-[4.8rem] lg:text-[5.2rem] leading-[0.9] font-extrabold tracking-normal max-w-5xl m-0"
         >
           {title}
-        </div>
+        </h1>
       </div>
     </div>
 
@@ -48,9 +47,7 @@ const { title, description, actions = [], role, location } =
         class="grid grid-cols-1 gap-4 md:grid-cols-3 border-b pb-8"
         style="border-color: var(--color-border);"
       >
-        <div>
-          {role && <h1 class="text-xs 2xl:text-lg font-bold uppercase">{role}</h1>}
-        </div>
+        <div>{role && <p class="text-xs 2xl:text-lg font-bold uppercase m-0">{role}</p>}</div>
 
         <div class="md:col-span-1">
           {description && <p class="text-sm 2xl:text-xl text-muted">{description}</p>}

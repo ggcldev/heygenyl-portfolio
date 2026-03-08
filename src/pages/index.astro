@@ -1,17 +1,75 @@
 ---
+import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 import Hero from "../components/Hero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
+import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-center/the-works-auto-center-img-1-desktop.webp";
+import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
 import {
+  activeServicePages,
   caseStudies,
-  processSteps,
-  servicePages,
   siteConfig,
 } from "../data/site";
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4);
+
+const featuredProjects = [
+  {
+    slug: "desert-it-solutions-msp",
+    asset: gutterFeaturedImage,
+    alt: "Desert IT Solutions MSP case study preview",
+    cardShortTitle: "MSP",
+    cardTitle: "Desert IT Solutions Case Study",
+    cardSummary:
+      "Desert I.T. Solutions is a Las Vegas-based managed IT company that helps businesses stay ahead of IT issues through proactive system monitoring, vulnerability management, and ongoing technical support. Their managed services model keeps clients' IT environments secure, functional, and equipped to scale with evolving technology demands.",
+  },
+  {
+    slug: "the-works-auto-center-car-detailing",
+    asset: worksAutoCenterFeaturedImage,
+    alt: "The Works Auto Center case study preview",
+  },
+  {
+    slug: "everything-probate-legal-firm",
+    asset: everythingProbateFeaturedImage,
+    alt: "Everything Probate case study preview",
+  },
+].map((item) => {
+  const study = caseStudies.find((entry) => entry.slug === item.slug);
+  if (!study) {
+    throw new Error(`Unknown featured case study slug: ${item.slug}`);
+  }
+  return { ...item, study };
+});
+
+const approachSteps = [
+  {
+    id: "research-compete",
+    title: "Research and Compete",
+    copy:
+      "I start with your competitors, not your website. I study who's winning in your market and reverse engineer exactly why.",
+  },
+  {
+    id: "audit-strategize",
+    title: "Audit and Strategize",
+    copy:
+      "I dig into your current site, find what's working, protect it, and build a clear keyword-driven roadmap around how your customers actually search.",
+  },
+  {
+    id: "build-optimize",
+    title: "Build and Optimize",
+    copy:
+      "Clean site structure, targeted pages, technical fixes, content, internal linking, GBP - everything executed in the right order.",
+  },
+  {
+    id: "track-report",
+    title: "Track and Report Honestly",
+    copy:
+      "I track what matters and report what's real. If something isn't working, I say so and we fix it.",
+  },
+];
 
 const homeSchema = [
   {
@@ -23,7 +81,7 @@ const homeSchema = [
     areaServed: "Worldwide",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Bacolod City",
+      addressLocality: "Philippines",
       addressCountry: "PH",
     },
   },
@@ -36,40 +94,80 @@ const homeSchema = [
   schema={homeSchema}
 >
   <Hero
-    title="Hey Genyl"
-    role="Freelance SEO specialist"
-    description="SEO specialist and WordPress designer/developer building lean, search-first websites for local service brands and B2B teams."
-    location={siteConfig.location}
+    title="Freelance SEO Specialist for Local Businesses and Agencies"
+    role="Genyl - SEO Specialist | WordPress SEO Expert"
+    description="Tired of watching competitors outrank you? I'm a freelance SEO specialist and WordPress SEO expert from the Philippines. I find the opportunities your market is missing and build strategies that drive real rankings, traffic, and growth for your business."
     actions={[
       { label: "View services", href: "/services/" },
       { label: "Contact", href: "/contact/" },
     ]}
   />
 
-  <section class="content-shell">
-    <div
-      class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24"
-      style="border-color: var(--color-border);"
-    >
-      <div class="md:sticky md:top-24 self-start">
+  <section
+    class="content-shell featured-projects-scroll"
+    data-featured-scroll
+    style={`--feature-count:${featuredProjects.length}; border-bottom: 1px solid var(--color-border);`}
+  >
+    <div class="featured-projects-shell py-24">
+      <div class="featured-projects-copy">
         <h2 class="text-sm 2xl:text-xl font-bold uppercase">Featured Projects</h2>
         <p class="text-sm text-muted mt-2">
-          Selected work that shows SEO thinking, execution, and cleaner
-          structure across different types of projects.
+          Three selected projects are highlighted here. The rest stay in the
+          dedicated case-studies page.
         </p>
+        <div class="page-nav mt-6">
+          <a class="button primary" href="/case-studies/">View all case studies</a>
+        </div>
       </div>
 
-      <div class="md:col-span-2 flat-panel-grid grid-cols-1 md:grid-cols-2">
-        {caseStudies.map((study) => (
-          <a
-            class="flat-panel"
-            href={`/case-studies/${study.slug}/`}
-          >
-            <p class="flat-panel__kicker">{study.shortTitle}</p>
-            <h3 class="flat-panel__title">{study.title}</h3>
-            <p class="flat-panel__copy">{study.summary}</p>
-          </a>
-        ))}
+      <div class="featured-projects-stage" data-featured-stage>
+        <div class="featured-projects-track" data-featured-track>
+          {featuredProjects.map((project, index) => (
+            <article class="featured-project-item">
+              <div class="featured-project-card">
+                <a
+                  class="featured-project-media"
+                  href={`/case-studies/${project.study.slug}/`}
+                >
+                  {project.asset ? (
+                    <Picture
+                      src={project.asset}
+                      alt={project.alt}
+                      formats={["avif", "webp"]}
+                      fallbackFormat="webp"
+                      widths={[640, 960, 1280, 1600]}
+                      sizes="(max-width: 767px) 88vw, (max-width: 1200px) 62vw, 960px"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      fetchpriority={index === 0 ? "high" : "auto"}
+                    />
+                  ) : (
+                    <img
+                      src={project.image}
+                      alt={project.alt}
+                      width="1600"
+                      height="900"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      fetchpriority={index === 0 ? "high" : "auto"}
+                    />
+                  )}
+                </a>
+              </div>
+              <div class="featured-project-content">
+                <p class="flat-panel__kicker">
+                  {project.cardShortTitle ?? project.study.shortTitle}
+                </p>
+                <h3 class="flat-panel__title">
+                  {project.cardTitle ?? project.study.title}
+                </h3>
+                <p class="flat-panel__copy">
+                  {project.cardSummary ?? project.study.summary}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -80,23 +178,78 @@ const homeSchema = [
       style="border-color: var(--color-border);"
     >
       <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Process</h2>
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">My Approach to SEO</h2>
         <p class="text-sm text-muted mt-2">
-          The portfolio is also your publishing system, so the workflow has to
-          stay clean.
+          Four focused steps from market research to honest reporting.
         </p>
       </div>
 
-      <div class="md:col-span-2 grid grid-cols-1 gap-y-8">
-        {processSteps.map((step, index) => (
-          <article class="card">
-            <p class="eyebrow">Step {index + 1}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {step.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
-          </article>
-        ))}
+      <div class="md:col-span-2">
+        <div class="approach-tabs" data-approach-tabs>
+          <div class="approach-tablist" role="tablist" aria-label="SEO process steps">
+            {approachSteps.map((step, index) => {
+              const tabId = `approach-tab-${step.id}`;
+              const panelId = `approach-panel-${step.id}`;
+              const isActive = index === 0;
+
+              return (
+                <>
+                  <button
+                    id={tabId}
+                    type="button"
+                    class="approach-tab"
+                    role="tab"
+                    aria-controls={panelId}
+                    aria-selected={isActive ? "true" : "false"}
+                    tabindex={isActive ? "0" : "-1"}
+                    data-tab-id={step.id}
+                    aria-label={`Step ${index + 1}: ${step.title}`}
+                  >
+                    <span class="approach-tab__step">Step {index + 1}</span>
+                  </button>
+                  {index < approachSteps.length - 1 && (
+                    <span class="approach-tab-separator" aria-hidden="true">
+                      <svg
+                        class="approach-tab-separator__icon"
+                        viewBox="0 0 10 16"
+                        width="10"
+                        height="16"
+                        focusable="false"
+                        aria-hidden="true"
+                      >
+                        <path d="M8 1L2 15" />
+                      </svg>
+                    </span>
+                  )}
+                </>
+              );
+            })}
+          </div>
+
+          <div class="approach-panels">
+            {approachSteps.map((step, index) => {
+              const tabId = `approach-tab-${step.id}`;
+              const panelId = `approach-panel-${step.id}`;
+              const isActive = index === 0;
+
+              return (
+                <article
+                  id={panelId}
+                  class="approach-panel"
+                  role="tabpanel"
+                  aria-labelledby={tabId}
+                  data-panel-id={step.id}
+                  hidden={!isActive}
+                >
+                  <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+                    {step.title}
+                  </h3>
+                  <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -115,7 +268,7 @@ const homeSchema = [
       </div>
 
       <div class="md:col-span-2 flat-panel-grid grid-cols-1 md:grid-cols-2">
-        {servicePages.map((service) => (
+        {activeServicePages.map((service) => (
           <a
             class="flat-panel"
             href={`/services/${service.slug}/`}
@@ -196,3 +349,275 @@ const homeSchema = [
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  const featuredSections = Array.from(
+    document.querySelectorAll("[data-featured-scroll]"),
+  );
+
+  if (featuredSections.length > 0) {
+    const desktopQuery = window.matchMedia("(min-width: 640px)");
+    const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const FEATURED_START_DELAY_NARROW_PX = 44;
+    const FEATURED_START_DELAY_DESKTOP_PX = 12;
+    const FEATURED_NARROW_BREAKPOINT = 900;
+    const FEATURED_END_HOLD_PX = 120;
+    let frameId = 0;
+
+    const canEnhance = () => desktopQuery.matches;
+
+    const resetItemAnimation = (track) => {
+      const items = track.querySelectorAll(".featured-project-item");
+      items.forEach((item) => {
+        if (!(item instanceof HTMLElement)) return;
+        item.style.opacity = "";
+        item.style.transform = "";
+      });
+    };
+
+    const updateItemAnimation = (track, progress) => {
+      const items = Array.from(track.querySelectorAll(".featured-project-item"));
+      if (items.length === 0 || reduceMotionQuery.matches) {
+        resetItemAnimation(track);
+        return;
+      }
+
+      const activePosition = progress * Math.max(items.length - 1, 1);
+
+      items.forEach((item, index) => {
+        if (!(item instanceof HTMLElement)) return;
+        const distance = Math.min(Math.abs(index - activePosition), 1.4);
+        const opacity = Math.max(1 - distance * 0.4, 0.44);
+        const yShift = distance * 14;
+        item.style.opacity = opacity.toFixed(3);
+        item.style.transform = `translate3d(0, ${yShift.toFixed(1)}px, 0)`;
+      });
+    };
+
+    const computeSectionMetrics = (section) => {
+      const stage = section.querySelector("[data-featured-stage]");
+      const track = section.querySelector("[data-featured-track]");
+      const shell = section.querySelector(".featured-projects-shell");
+      if (
+        !(stage instanceof HTMLElement) ||
+        !(track instanceof HTMLElement) ||
+        !(shell instanceof HTMLElement)
+      ) {
+        return;
+      }
+
+      const maxShift = Math.max(track.scrollWidth - stage.clientWidth, 0);
+      const stageOffset = shell.offsetTop + stage.offsetTop;
+      const stageBlockHeight = stageOffset + stage.offsetHeight;
+      const naturalHeight = section.scrollHeight;
+      const requiredHeight = Math.ceil(
+        stageBlockHeight + maxShift + FEATURED_END_HOLD_PX,
+      );
+      const finalHeight = Math.max(naturalHeight, requiredHeight);
+      const scrollDistance = Math.max(
+        finalHeight - stageBlockHeight - FEATURED_END_HOLD_PX,
+        1,
+      );
+      const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+      const stickTop = Number.parseFloat(window.getComputedStyle(stage).top) || 0;
+      const scrollStart = sectionTop + stageOffset - stickTop;
+      const scrollEnd = scrollStart + scrollDistance;
+
+      section.style.minHeight = `${finalHeight}px`;
+      shell.style.minHeight = `${finalHeight}px`;
+      section.dataset.featuredScrollDistance = String(scrollDistance);
+      section.dataset.featuredMaxShift = String(maxShift);
+      section.dataset.featuredScrollStart = String(scrollStart);
+      section.dataset.featuredScrollEnd = String(scrollEnd);
+      section.dataset.featuredStageOffset = String(stageOffset);
+    };
+
+    const updateSection = (section) => {
+      const stage = section.querySelector("[data-featured-stage]");
+      const track = section.querySelector("[data-featured-track]");
+      if (!(stage instanceof HTMLElement) || !(track instanceof HTMLElement)) return;
+
+      if (!section.classList.contains("is-enhanced")) {
+        track.style.transform = "";
+        resetItemAnimation(track);
+        section.style.minHeight = "";
+        const shell = section.querySelector(".featured-projects-shell");
+        if (shell instanceof HTMLElement) shell.style.minHeight = "";
+        return;
+      }
+
+      const scrollDistance = Number(section.dataset.featuredScrollDistance || "0");
+      const maxShift = Number(section.dataset.featuredMaxShift || "0");
+      const stageOffset = Number(section.dataset.featuredStageOffset || "0");
+      if (scrollDistance <= 0 || maxShift <= 0) {
+        track.style.transform = "";
+        resetItemAnimation(track);
+        return;
+      }
+
+      const sectionRect = section.getBoundingClientRect();
+      const stickTop = Number.parseFloat(window.getComputedStyle(stage).top) || 0;
+      const stickyEndBoundary = stickTop + stage.offsetHeight + 1;
+      const startDelay =
+        window.innerWidth <= FEATURED_NARROW_BREAKPOINT
+          ? FEATURED_START_DELAY_NARROW_PX
+          : FEATURED_START_DELAY_DESKTOP_PX;
+
+      let progress =
+        (stickTop - sectionRect.top - stageOffset - startDelay) / scrollDistance;
+      if (sectionRect.bottom <= stickyEndBoundary) {
+        progress = 1;
+      }
+      progress = Math.min(
+        Math.max(progress, 0),
+        1,
+      );
+      track.style.transform = `translate3d(${-maxShift * progress}px, 0, 0)`;
+      updateItemAnimation(track, progress);
+    };
+
+    const updateAll = () => {
+      frameId = 0;
+      featuredSections.forEach(updateSection);
+    };
+
+    const requestUpdate = () => {
+      if (frameId) return;
+      frameId = window.requestAnimationFrame(updateAll);
+    };
+
+    const applyMode = () => {
+      const enhanced = canEnhance();
+      featuredSections.forEach((section) => {
+        section.style.minHeight = "";
+        const shell = section.querySelector(".featured-projects-shell");
+        if (shell instanceof HTMLElement) shell.style.minHeight = "";
+        if (enhanced) {
+          section.classList.add("is-enhanced");
+          computeSectionMetrics(section);
+        } else {
+          section.classList.remove("is-enhanced");
+          const track = section.querySelector("[data-featured-track]");
+          if (track instanceof HTMLElement) {
+            track.style.transform = "";
+            resetItemAnimation(track);
+          }
+        }
+      });
+      requestUpdate();
+    };
+
+    applyMode();
+    window.addEventListener("load", applyMode);
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", applyMode);
+    desktopQuery.addEventListener("change", applyMode);
+    reduceMotionQuery.addEventListener("change", requestUpdate);
+
+    featuredSections.forEach((section) => {
+      const images = section.querySelectorAll("img");
+      images.forEach((img) => {
+        if (img.complete) return;
+        img.addEventListener("load", applyMode, { once: true });
+      });
+    });
+  }
+
+  const approachTabGroups = Array.from(
+    document.querySelectorAll("[data-approach-tabs]"),
+  );
+
+  approachTabGroups.forEach((group) => {
+    const tabs = Array.from(group.querySelectorAll("[role='tab']"));
+    const panels = Array.from(group.querySelectorAll("[role='tabpanel']"));
+    const panelShell = group.querySelector(".approach-panels");
+    if (tabs.length === 0 || panels.length === 0) return;
+    if (!(panelShell instanceof HTMLElement)) return;
+
+    const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const TRANSITION_MS = 300;
+    let transitionTimer = 0;
+
+    const clearPanelState = () => {
+      panels.forEach((panel) => {
+        panel.classList.remove("is-entering", "is-leaving");
+      });
+    };
+
+    const activateTab = (nextTab, withFocus = false) => {
+      const tabKey = nextTab.getAttribute("data-tab-id");
+      if (!tabKey) return;
+      const nextPanel = panels.find(
+        (panel) => panel.getAttribute("data-panel-id") === tabKey,
+      );
+      if (!(nextPanel instanceof HTMLElement)) return;
+      const currentPanel =
+        panels.find((panel) => !panel.hasAttribute("hidden")) ?? nextPanel;
+      const shouldAnimate =
+        !reduceMotionQuery.matches && currentPanel !== nextPanel;
+
+      if (transitionTimer) {
+        window.clearTimeout(transitionTimer);
+        transitionTimer = 0;
+      }
+
+      clearPanelState();
+      panelShell.classList.remove("is-animating");
+      panelShell.style.height = "";
+
+      tabs.forEach((tab) => {
+        const isActive = tab === nextTab;
+        tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        tab.setAttribute("tabindex", isActive ? "0" : "-1");
+      });
+
+      if (!shouldAnimate) {
+        panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
+      } else {
+        nextPanel.hidden = false;
+        const currentHeight = currentPanel.getBoundingClientRect().height;
+        const nextHeight = nextPanel.getBoundingClientRect().height;
+
+        panelShell.style.height = `${currentHeight}px`;
+        panelShell.classList.add("is-animating");
+        void panelShell.offsetHeight;
+        panelShell.style.height = `${nextHeight}px`;
+
+        currentPanel.classList.add("is-leaving");
+        nextPanel.classList.add("is-entering");
+
+        transitionTimer = window.setTimeout(() => {
+          panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
+          clearPanelState();
+          panelShell.classList.remove("is-animating");
+          panelShell.style.height = "";
+          transitionTimer = 0;
+        }, TRANSITION_MS);
+      }
+
+      if (withFocus && nextTab instanceof HTMLElement) {
+        nextTab.focus();
+      }
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        let nextIndex = index;
+
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = tabs.length - 1;
+        else return;
+
+        event.preventDefault();
+        activateTab(tabs[nextIndex], true);
+      });
+    });
+
+    const initialTab =
+      tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0];
+    activateTab(initialTab);
+  });
+</script>
