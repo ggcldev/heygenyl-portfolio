@@ -604,6 +604,25 @@
 
 	.featured-project-media {
 		display: block;
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.featured-project-media::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: #000;
+		opacity: 0.26;
+		pointer-events: none;
+		transition: opacity 220ms ease;
+		z-index: 1;
+	}
+
+	.featured-project-item:hover .featured-project-media::after,
+	.featured-project-item:focus-within .featured-project-media::after {
+		opacity: 0.12;
 	}
 
 	.featured-project-media picture {
