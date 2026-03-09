@@ -71,6 +71,21 @@ const approachSteps = [
   },
 ];
 
+const serviceCardTitleBySlug: Record<string, string> = {
+  "seo-specialist": "SEO",
+  "local-seo": "Local SEO",
+  "wordpress-seo-expert": "WordPress",
+};
+
+const serviceCardSummaryBySlug: Record<string, string> = {
+  "seo-specialist":
+    "Technical SEO, on-page optimization, and site audits that improve rankings and drive organic traffic to your website.",
+  "wordpress-seo-expert":
+    "Custom WordPress websites built for speed, search visibility, and conversions. Designed to rank from day one.",
+  "local-seo":
+    "GBP optimization, map pack rankings, and local search strategies that put your business in front of nearby customers.",
+};
+
 const homeSchema = [
   {
     "@context": "https://schema.org",
@@ -262,20 +277,25 @@ const homeSchema = [
       <div class="md:sticky md:top-24 self-start">
         <h2 class="text-sm 2xl:text-xl font-bold uppercase">Services</h2>
         <p class="text-sm text-muted mt-2">
-          Split the offer by how clients actually search so each service page
-          can carry tighter intent.
+          Get found on Google. Look good when they do.
         </p>
       </div>
 
-      <div class="md:col-span-2 flat-panel-grid grid-cols-1 md:grid-cols-2">
+      <div class="md:col-span-2 md:ml-auto md:w-[92%] lg:w-[88%] xl:w-[84%] services-feature-grid">
         {activeServicePages.map((service) => (
           <a
-            class="flat-panel"
+            class="flat-panel service-skew-card"
             href={`/services/${service.slug}/`}
           >
-            <p class="flat-panel__kicker">{service.shortTitle}</p>
-            <h3 class="flat-panel__title">{service.title}</h3>
-            <p class="flat-panel__copy">{service.summary}</p>
+            <div class="service-skew-card__inner">
+              <p class="flat-panel__kicker">{service.shortTitle}</p>
+              <h3 class="flat-panel__title">
+                {serviceCardTitleBySlug[service.slug] ?? service.title}
+              </h3>
+              <p class="flat-panel__copy">
+                {serviceCardSummaryBySlug[service.slug] ?? service.summary}
+              </p>
+            </div>
           </a>
         ))}
       </div>

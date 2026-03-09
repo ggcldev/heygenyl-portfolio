@@ -105,11 +105,11 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "local-seo",
-    shortTitle: "Local SEO specialist",
-    title: "Local SEO Specialist",
-    metaTitle: "Local SEO Specialist | Hey Genyl",
+    shortTitle: "Maps & GBP Specialist",
+    title: "Maps & GBP Specialist",
+    metaTitle: "Maps & GBP Specialist | Hey Genyl",
     metaDescription:
-      "Local SEO specialist support for service-area businesses that need stronger map visibility, cleaner service pages, and more qualified local leads.",
+      "Maps and GBP specialist support for service-area businesses that need stronger map visibility, cleaner service pages, and more qualified local leads.",
     summary:
       "A local SEO specialist page should speak directly to service businesses that need cleaner service-area targeting, GBP support, and pages that convert local intent.",
     chips: ["GBP support", "Service areas", "Local landing pages"],
