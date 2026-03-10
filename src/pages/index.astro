@@ -3,6 +3,7 @@ import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 import Hero from "../components/Hero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/home.css";
 import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
 import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-center/the-works-auto-center-img-1-desktop.webp";
 import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
@@ -84,6 +85,12 @@ const serviceCardSummaryBySlug: Record<string, string> = {
     "Custom WordPress websites built for speed, search visibility, and conversions. Designed to rank from day one.",
   "local-seo":
     "GBP optimization, map pack rankings, and local search strategies that put your business in front of nearby customers.",
+};
+
+const postPreviewImageById: Record<string, typeof gutterFeaturedImage> = {
+  "technical-seo-priorities-for-service-sites": gutterFeaturedImage,
+  "local-seo-page-structure-that-scales": everythingProbateFeaturedImage,
+  "wordpress-redesign-checklist-before-launch": worksAutoCenterFeaturedImage,
 };
 
 const homeSchema = [
@@ -358,34 +365,48 @@ const homeSchema = [
       style="border-color: var(--color-border);"
     >
       <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Blog</h2>
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Recent Posts</h2>
         <p class="text-sm text-muted mt-2">
-          Weekly publishing reinforces the service pages, case studies, and tool
-          pages instead of competing with them.
+          Insights and guides on SEO, WordPress, and Local SEO from hands-on
+          experience.
         </p>
       </div>
 
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {posts.map((post) => (
-          <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/blog/${post.id}/`}
-          >
-            <p class="eyebrow">
-              {post.data.pubDate.toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {post.data.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">
-              {post.data.excerpt}
-            </p>
-          </a>
-        ))}
+      <div class="md:col-span-2 md:ml-auto md:w-[92%] lg:w-[88%] xl:w-[84%]">
+        <div class="recent-posts-box">
+          {posts.map((post) => {
+            const previewImage = postPreviewImageById[post.id] ?? gutterFeaturedImage;
+            return (
+              <a class="recent-post-row" href={`/blog/${post.id}/`}>
+                <div class="recent-post-media">
+                  <Picture
+                    src={previewImage}
+                    alt={`${post.data.title} post cover`}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="webp"
+                    widths={[320, 480, 640]}
+                    sizes="(max-width: 639px) 100vw, (max-width: 1023px) 44vw, 360px"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="recent-post-content">
+                  <p class="recent-post-date">
+                    {post.data.pubDate
+                      .toLocaleDateString("en-US", {
+                        month: "short",
+                        year: "numeric",
+                      })
+                      .toUpperCase()}
+                  </p>
+                  <h3 class="recent-post-title">{post.data.title}</h3>
+                  <p class="recent-post-excerpt">{post.data.excerpt}</p>
+                  <span class="recent-post-cta">Read post</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
       </div>
     </div>
   </section>

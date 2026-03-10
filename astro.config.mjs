@@ -32,5 +32,12 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    css: {
+      transformer: "lightningcss",
+    },
+    build: {
+      cssMinify: "lightningcss",
+      target: "es2022",
+    },
   },
 });

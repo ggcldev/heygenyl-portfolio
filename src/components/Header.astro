@@ -126,6 +126,7 @@ const serviceNavLabelBySlug: Record<string, string> = {
 	const mobileNav = document.getElementById("mobile-nav");
 	const mobileClose = document.getElementById("mobile-close");
 	const navElement = document.querySelector("nav");
+	const siteHeader = document.querySelector(".site-header");
 
 	const applyNav = (state) => {
 		const isOpen = state === "open";
@@ -145,8 +146,26 @@ const serviceNavLabelBySlug: Record<string, string> = {
 
 	applyNav("closed");
 
+	const applyHeaderScrollState = () => {
+		if (!(siteHeader instanceof HTMLElement)) return;
+		siteHeader.classList.toggle("is-scrolled", window.scrollY > 12);
+	};
+
+	let headerScrollTicking = false;
+	const onHeaderScroll = () => {
+		if (headerScrollTicking) return;
+		headerScrollTicking = true;
+		window.requestAnimationFrame(() => {
+			applyHeaderScrollState();
+			headerScrollTicking = false;
+		});
+	};
+
+	applyHeaderScrollState();
+
 	if (navButton) navButton.addEventListener("click", toggleNav);
 	if (mobileClose) mobileClose.addEventListener("click", closeNav);
+	window.addEventListener("scroll", onHeaderScroll, { passive: true });
 
 	window.addEventListener("keydown", (event) => {
 		if (event.key === "Escape" && document.documentElement.dataset.nav === "open") {
