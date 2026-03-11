@@ -8,7 +8,6 @@ import "../styles/home.css";
 import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
 import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-center/the-works-auto-center-img-1-desktop.webp";
 import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
-import whySeoFeaturedImage from "../content/blog/Why SEO is Important for Business/Why SEO Is Important for Business.webp";
 import { getBlogPostSlug } from "../utils/blog";
 import {
   activeServicePages,
@@ -88,13 +87,6 @@ const serviceCardSummaryBySlug: Record<string, string> = {
     "Custom WordPress websites built for speed, search visibility, and conversions. Designed to rank from day one.",
   "local-seo":
     "GBP optimization, map pack rankings, and local search strategies that put your business in front of nearby customers.",
-};
-
-const postPreviewImageBySlug: Record<string, typeof gutterFeaturedImage> = {
-  "why-seo-is-important-for-business": whySeoFeaturedImage,
-  "technical-seo-priorities-for-service-sites": gutterFeaturedImage,
-  "local-seo-page-structure-that-scales": everythingProbateFeaturedImage,
-  "wordpress-redesign-checklist-before-launch": worksAutoCenterFeaturedImage,
 };
 
 const homeSchema = [
@@ -361,13 +353,13 @@ const homeSchema = [
         <div class="recent-posts-box">
           {posts.map((post) => {
             const postSlug = getBlogPostSlug(post);
-            const previewImage = postPreviewImageBySlug[postSlug] ?? gutterFeaturedImage;
+            const previewImage = post.data.image ?? gutterFeaturedImage;
             return (
               <a class="recent-post-row" href={`/blog/${postSlug}/`}>
                 <div class="recent-post-media">
                   <Picture
                     src={previewImage}
-                    alt={`${post.data.title} post cover`}
+                    alt={post.data.imageAlt ?? `${post.data.title} post cover`}
                     formats={["avif", "webp"]}
                     fallbackFormat="webp"
                     widths={[320, 480, 640]}

@@ -186,7 +186,7 @@ const schema = [
 ---
 
 <BaseLayout
-  title={`${post.data.title} | Hey Genyl`}
+  title={post.data.metaTitle ?? `${post.data.title} | Hey Genyl`}
   description={post.data.description}
   schema={schema}
 >
