@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { siteConfig } from "../../data/site";
@@ -7,7 +8,6 @@ import { getBlogPostSlug } from "../../utils/blog";
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const [featured, ...rest] = posts;
 
 const schema = [
   {
@@ -39,53 +39,39 @@ const schema = [
       </div>
     </section>
 
-    <section class="content-shell pb-12 space-y-8">
-      {featured && (
-        <div class="grid grid-cols-1">
-          <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/blog/${getBlogPostSlug(featured)}/`}
-          >
-            <p class="eyebrow">
-              {featured.data.pubDate.toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </p>
-            <h2 class="text-xl md:text-3xl font-bold uppercase m-0 mt-2">
-              {featured.data.title}
-            </h2>
-            <p class="text-base text-muted mt-3">{featured.data.description}</p>
-            {featured.data.tags.length > 0 && (
-              <div class="flex flex-wrap gap-2 pt-4 text-sm text-muted">
-                {featured.data.tags.map((tag) => (
-                  <span class="box-tag">{tag}</span>
-                ))}
+    <section class="content-shell pb-12">
+      {posts.length > 0 && (
+        <div class="blog-story-grid">
+          {posts.map((post) => (
+            <a class="blog-story-card" href={`/blog/${getBlogPostSlug(post)}/`}>
+              <figure class="blog-story-card__media">
+                {post.data.image ? (
+                  <Image
+                    src={post.data.image}
+                    alt={post.data.imageAlt ?? post.data.title}
+                    widths={[480, 720, 960]}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 480px"
+                    formats={["avif", "webp"]}
+                    quality={70}
+                    loading="lazy"
+                    decoding="async"
+                    class="blog-story-card__image"
+                  />
+                ) : (
+                  <div class="blog-story-card__placeholder" aria-hidden="true"></div>
+                )}
+              </figure>
+              <div class="blog-story-card__content">
+                <p class="eyebrow blog-story-card__date">
+                  {post.data.pubDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
+                <h2 class="blog-story-card__title">{post.data.title}</h2>
+                <p class="blog-story-card__excerpt">{post.data.excerpt}</p>
               </div>
-            )}
-          </a>
-        </div>
-      )}
-
-      {rest.length > 0 && (
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {rest.map((post) => (
-            <a
-              class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-              href={`/blog/${getBlogPostSlug(post)}/`}
-            >
-              <p class="eyebrow">
-                {post.data.pubDate.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0 mt-2">
-                {post.data.title}
-              </h3>
-              <p class="text-sm 2xl:text-lg text-muted mt-2">{post.data.excerpt}</p>
             </a>
           ))}
         </div>
