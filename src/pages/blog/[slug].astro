@@ -35,6 +35,8 @@ const readingMinutes = Math.max(
 );
 const tocSections = buildTocSections(post.body);
 const tocSize = "md";
+const homeUrl = new URL("/", siteConfig.url).toString();
+const blogUrl = new URL("/blog/", siteConfig.url).toString();
 const postUrl = new URL(`/blog/${postSlug}/`, siteConfig.url).toString();
 const authorId = new URL("#author", siteConfig.url).toString();
 const organizationId = new URL("#organization", siteConfig.url).toString();
@@ -140,6 +142,31 @@ const authorSchema = {
   ...(authorProfile.sameAs.length > 0 ? { sameAs: authorProfile.sameAs } : {}),
 };
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: homeUrl,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Blog",
+      item: blogUrl,
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: post.data.title,
+      item: postUrl,
+    },
+  ],
+};
+
 const schema = [
   organizationSchema,
   authorSchema,
@@ -166,6 +193,7 @@ const schema = [
     }),
     url: postUrl,
   },
+  breadcrumbSchema,
   ...(faqEntries.length > 0
     ? [
         {
