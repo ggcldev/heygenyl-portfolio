@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  name: string;
+  profileUrl: string;
+  role: string;
+  bio: string;
+  image: ImageMetadata;
+  imageAlt?: string;
+}
+
+const {
+  name,
+  profileUrl,
+  role,
+  bio,
+  image,
+  imageAlt = `${name} profile photo`,
+} = Astro.props;
+---
+
+<section class="blog-author-card" aria-label="Author profile">
+  <Image
+    class="blog-author-card__avatar"
+    src={image}
+    alt={imageAlt}
+    width={40}
+    height={40}
+    formats={["avif", "webp"]}
+    loading="lazy"
+    decoding="async"
+  />
+
+  <p class="blog-author-card__text">
+    <span class="blog-author-card__line">
+      <span class="blog-author-card__plus" aria-hidden="true">+</span>
+      <a
+        href={profileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="blog-author-card__name"
+      >
+        {name}
+      </a>
+      <span class="blog-author-card__role">is a {role}.</span>
+    </span>
+    <span class="blog-author-card__bio">{bio}</span>
+  </p>
+</section>

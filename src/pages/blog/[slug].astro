@@ -1,24 +1,148 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogAuthorCard from "../../components/BlogAuthorCard.astro";
+import PostToc from "../../components/PostToc.astro";
 import { siteConfig } from "../../data/site";
+import { buildTocSections } from "../../utils/toc";
+import { getBlogPostSlug } from "../../utils/blog";
+import authorHeadshot from "../../assets/author/genyl_gicalde_seo_specialist.webp";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const usedSlugs = new Set<string>();
+
+  return posts.map((post) => {
+    const postSlug = getBlogPostSlug(post);
+    if (usedSlugs.has(postSlug)) {
+      throw new Error(`Duplicate blog slug detected: "${postSlug}"`);
+    }
+    usedSlugs.add(postSlug);
+
+    return {
+      params: { slug: postSlug },
+      props: { post, postSlug },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, postSlug } = Astro.props;
 const { Content } = await render(post);
 const readingMinutes = Math.max(
   1,
   Math.ceil(post.body.split(/\s+/).filter(Boolean).length / 220),
 );
+const tocSections = buildTocSections(post.body);
+const tocSize = "md";
+const postUrl = new URL(`/blog/${postSlug}/`, siteConfig.url).toString();
+const authorId = new URL("#author", siteConfig.url).toString();
+const organizationId = new URL("#organization", siteConfig.url).toString();
+const authorImageUrl = new URL(authorHeadshot.src, siteConfig.url).toString();
+const authorProfile = {
+  name: "Genyl Gicalde",
+  profileUrl: "https://www.linkedin.com/in/genylgicalde/",
+  jobTitle: "SEO Specialist, Local SEO and WordPress SEO Expert",
+  description:
+    "Freelance SEO specialist with 3+ years of experience in local SEO, technical SEO, and WordPress development. Specializes in service-area businesses across home services, legal, medical, and B2B industries. Helps local businesses and agencies rank higher in Google Search and Google Maps through structured silo architecture and GBP optimization.",
+  shortDescription:
+    "Freelance SEO specialist helping service-area businesses and agencies rank higher in Google Search and Google Maps.",
+  imageAlt: "Genyl Gicalde, freelance SEO specialist and WordPress SEO expert",
+  sameAs: [
+    "https://www.linkedin.com/in/genylgicalde/",
+    "https://www.instagram.com/genylgicalde/",
+  ],
+  knowsAbout: [
+    "SEO",
+    "Local SEO",
+    "WordPress SEO",
+    "Technical SEO",
+    "Google Maps",
+    "Google Business Profile",
+    "Content Writing",
+  ],
+};
+
+const extractFaqEntries = (markdownBody: string) => {
+  const lines = markdownBody.split("\n");
+  const entries: Array<{ question: string; answer: string }> = [];
+  let inFaqSection = false;
+  let currentQuestion = "";
+  let answerBuffer: string[] = [];
+
+  const pushCurrent = () => {
+    if (!currentQuestion) return;
+    const answer = answerBuffer.join(" ").replace(/\s+/g, " ").trim();
+    if (!answer) return;
+    entries.push({ question: currentQuestion, answer });
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    if (/^##\s+Frequently Asked Questions\b/i.test(line)) {
+      inFaqSection = true;
+      continue;
+    }
+
+    if (!inFaqSection) continue;
+
+    if (/^##\s+/.test(line) && !/^##\s+Frequently Asked Questions\b/i.test(line)) {
+      break;
+    }
+
+    const questionMatch = /^###\s+(.+)$/.exec(line);
+    if (questionMatch) {
+      pushCurrent();
+      currentQuestion = questionMatch[1].trim();
+      answerBuffer = [];
+      continue;
+    }
+
+    if (/^###\s+/.test(line)) {
+      continue;
+    }
+
+    answerBuffer.push(line.replace(/^[-*]\s+/, ""));
+  }
+
+  pushCurrent();
+  return entries;
+};
+
+const faqEntries = extractFaqEntries(post.body);
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": organizationId,
+  name: "Hey Genyl",
+  url: siteConfig.url,
+};
+
+const authorSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": authorId,
+  name: authorProfile.name,
+  url: siteConfig.url,
+  image: authorImageUrl,
+  description: authorProfile.description,
+  jobTitle: authorProfile.jobTitle,
+  worksFor: {
+    "@id": organizationId,
+  },
+  knowsAbout: authorProfile.knowsAbout,
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "PH",
+  },
+  ...(authorProfile.sameAs.length > 0 ? { sameAs: authorProfile.sameAs } : {}),
+};
 
 const schema = [
+  organizationSchema,
+  authorSchema,
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -26,16 +150,38 @@ const schema = [
     description: post.data.description,
     datePublished: post.data.pubDate.toISOString(),
     dateModified: (post.data.updatedDate || post.data.pubDate).toISOString(),
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": postUrl,
+    },
     author: {
-      "@type": "Person",
-      name: siteConfig.name,
+      "@id": authorId,
     },
     publisher: {
-      "@type": "Person",
-      name: siteConfig.name,
+      "@id": organizationId,
     },
-    url: new URL(`/blog/${post.id}/`, siteConfig.url).toString(),
+    inLanguage: "en",
+    ...(post.data.image && {
+      image: new URL(post.data.image.src, siteConfig.url).toString(),
+    }),
+    url: postUrl,
   },
+  ...(faqEntries.length > 0
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqEntries.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.answer,
+            },
+          })),
+        },
+      ]
+    : []),
 ];
 ---
 
@@ -44,45 +190,71 @@ const schema = [
   description={post.data.description}
   schema={schema}
 >
-  <div class="content-shell flex-1 flex flex-col py-12 md:py-16 lg:py-20 space-y-16">
-    <article class="post-page max-w-4xl w-full mx-auto">
-      <header class="section-heading">
-        <p class="eyebrow">Journal</p>
-        <h1>{post.data.title}</h1>
-        <p class="post-meta">
-          Published{" "}
-          {post.data.pubDate.toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
-          {" · "}
-          {readingMinutes} minute read
-          {post.data.updatedDate && (
-            <>
-              {" · "}Updated{" "}
-              {post.data.updatedDate.toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </>
-          )}
-        </p>
-        {post.data.tags.length > 0 && (
-          <ul class="mt-2 mb-0 flex flex-wrap gap-2 p-0 list-none text-sm text-muted">
-            {post.data.tags.map((tag) => (
-              <li class="box-tag">{tag}</li>
-            ))}
-          </ul>
-        )}
-      </header>
+  <div class="blog-page-view content-shell flex-1 flex flex-col py-12 md:py-16 lg:py-20 space-y-16">
+    <div class={`post-layout post-layout--toc-${tocSize} max-w-7xl w-full mx-auto`}>
+      <PostToc sections={tocSections} size={tocSize} />
 
-      <section class="post-article">
-        <article class="prose prose-neutral prose-shell max-w-none">
-          <Content />
-        </article>
-      </section>
-    </article>
+      <article class="post-page max-w-4xl w-full mx-auto">
+        <header class="section-heading">
+          <p class="eyebrow">Journal</p>
+          <h1>{post.data.title}</h1>
+        <BlogAuthorCard
+          name={authorProfile.name}
+          profileUrl={authorProfile.profileUrl}
+          role={authorProfile.jobTitle}
+          bio={authorProfile.shortDescription}
+          image={authorHeadshot}
+          imageAlt={authorProfile.imageAlt}
+        />
+          <p class="post-meta">
+            Published{" "}
+            {post.data.pubDate.toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+            {" · "}
+            {readingMinutes} minute read
+            {post.data.updatedDate && (
+              <>
+                {" · "}Updated{" "}
+                {post.data.updatedDate.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </>
+            )}
+          </p>
+          {post.data.tags.length > 0 && (
+            <ul class="mt-2 mb-0 flex flex-wrap gap-2 p-0 list-none text-sm text-muted">
+              {post.data.tags.map((tag) => (
+                <li class="box-tag">{tag}</li>
+              ))}
+            </ul>
+          )}
+        </header>
+
+        {post.data.image && (
+          <figure class="post-hero-image m-0">
+            <Image
+              src={post.data.image}
+              alt={post.data.imageAlt ?? post.data.title}
+              widths={[768, 1024, 1440]}
+              sizes="(max-width: 767px) 100vw, (max-width: 1200px) 90vw, 1024px"
+              formats={["avif", "webp"]}
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+        )}
+
+        <section class="post-article">
+          <article class="prose prose-neutral prose-shell max-w-none">
+            <Content />
+          </article>
+        </section>
+      </article>
+    </div>
   </div>
 </BaseLayout>

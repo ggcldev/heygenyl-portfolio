@@ -20,6 +20,7 @@ const {
 
 const siteName = "Hey Genyl";
 const baseUrl = Astro.site ?? new URL("https://heygenyl.com");
+const isBlogRoute = Astro.url.pathname.startsWith("/blog");
 const toTrailingSlashPath = (pathname: string) => {
   if (pathname === "/") return pathname;
   if (pathname.endsWith("/")) return pathname;
@@ -80,6 +81,24 @@ const robots = noIndex
 <noscript>
   <link rel="stylesheet" href={fontStylesheetUrl} />
 </noscript>
+{
+  isBlogRoute && (
+    <>
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href="/fonts/inter/inter-latin-400-normal.woff2"
+      />
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href="/fonts/inter/inter-latin-700-normal.woff2"
+      />
+    </>
+  )
+}
 
 <meta property="og:site_name" content={siteName} />
 <meta property="og:type" content="website" />

@@ -277,6 +277,9 @@
 
 	.recent-post-cta {
 		margin-top: 0.2rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.38rem;
 		font-size: 0.72rem;
 		font-weight: 700;
 		letter-spacing: 0.13em;
@@ -284,6 +287,17 @@
 		color: color-mix(in oklab, var(--color-ink) 74%, transparent);
 		transition: transform 220ms ease, color 220ms ease;
 		width: fit-content;
+	}
+
+	.recent-post-row:focus-visible .recent-post-cta {
+		color: var(--color-ink);
+	}
+
+	.recent-post-row:focus-visible .recent-post-cta .service-skew-card__cta-icon-wrap {
+		background: color-mix(in oklab, white 96%, var(--color-paper) 4%);
+		box-shadow: inset 0 0 0 1px color-mix(in oklab, white 88%, transparent);
+		color: color-mix(in oklab, black 90%, transparent);
+		transform: translate3d(1.5px, -1.5px, 0);
 	}
 
 	@media (hover: hover) and (pointer: fine) {
@@ -298,6 +312,13 @@
 		.recent-post-row:hover .recent-post-cta {
 			transform: translateX(4px);
 			color: var(--color-ink);
+		}
+
+		.recent-post-row:hover .recent-post-cta .service-skew-card__cta-icon-wrap {
+			background: color-mix(in oklab, white 96%, var(--color-paper) 4%);
+			box-shadow: inset 0 0 0 1px color-mix(in oklab, white 88%, transparent);
+			color: color-mix(in oklab, black 90%, transparent);
+			transform: translate3d(1.5px, -1.5px, 0);
 		}
 	}
 

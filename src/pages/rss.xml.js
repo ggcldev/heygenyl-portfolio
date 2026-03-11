@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import { siteConfig } from "../data/site";
+import { getBlogPostSlug } from "../utils/blog";
 
 const escapeXml = (value = "") =>
   value
@@ -16,7 +17,7 @@ export async function GET() {
 
   const items = posts
     .map((post) => {
-      const link = new URL(`/blog/${post.id}/`, siteConfig.url).toString();
+      const link = new URL(`/blog/${getBlogPostSlug(post)}/`, siteConfig.url).toString();
       return `
         <item>
           <title>${escapeXml(post.data.title)}</title>

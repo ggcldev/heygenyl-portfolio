@@ -1,0 +1,134 @@
+---
+import type { TocSection } from "../utils/toc";
+
+type TocSize = "sm" | "md" | "lg";
+
+interface Props {
+  sections: TocSection[];
+  label?: string;
+  size?: TocSize;
+}
+
+const { sections, label = "On this page", size = "md" } = Astro.props;
+const safeSize = (["sm", "md", "lg"] as const).includes(size) ? size : "md";
+const idPrefix =
+  Astro.url.pathname.replace(/[^\w-]+/g, "-").replace(/^-|-$/g, "") || "page";
+---
+
+{
+  sections.length > 0 && (
+    <aside class={`post-toc post-toc--${safeSize}`} aria-label="Table of contents" data-post-toc>
+      <p class="eyebrow">{label}</p>
+      <nav>
+        <ol class="post-toc-sections">
+          {sections.map((section) => (
+            <li class="post-toc-section" data-toc-section>
+              <div class="post-toc-section-head">
+                <a class="post-toc-section-link" href={`#${section.id}`}>
+                  {section.title}
+                </a>
+                {section.children.length > 0 && (
+                  <button
+                    class="post-toc-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-label={`Expand ${section.title}`}
+                    aria-controls={`toc-panel-${idPrefix}-${section.id}`}
+                    data-toc-toggle
+                  >
+                    <svg viewBox="0 0 20 20" fill="none" focusable="false" aria-hidden="true">
+                      <path d="M7 4L13 10L7 16" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
+              {section.children.length > 0 && (
+                <div
+                  id={`toc-panel-${idPrefix}-${section.id}`}
+                  class="post-toc-subwrap"
+                  data-toc-panel
+                >
+                  <ol class="post-toc-sublist">
+                    {section.children.map((child) => (
+                      <li class="post-toc-subitem">
+                        <a href={`#${child.id}`}>{child.title}</a>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </aside>
+  )
+}
+
+<script is:inline>
+  const tocRoots = document.querySelectorAll("[data-post-toc]:not([data-toc-ready])");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const closeSection = (section) => {
+    section.classList.remove("is-open");
+    const toggle = section.querySelector("[data-toc-toggle]");
+    const panel = section.querySelector("[data-toc-panel]");
+    if (toggle instanceof HTMLButtonElement) {
+      toggle.setAttribute("aria-expanded", "false");
+    }
+    if (panel instanceof HTMLElement) {
+      panel.classList.remove("is-open");
+    }
+  };
+
+  const openSection = (section) => {
+    section.classList.add("is-open");
+    const toggle = section.querySelector("[data-toc-toggle]");
+    const panel = section.querySelector("[data-toc-panel]");
+    if (toggle instanceof HTMLButtonElement) {
+      toggle.setAttribute("aria-expanded", "true");
+    }
+    if (panel instanceof HTMLElement) {
+      panel.classList.add("is-open");
+    }
+  };
+
+  tocRoots.forEach((root) => {
+    root.setAttribute("data-toc-ready", "true");
+    const sections = Array.from(root.querySelectorAll("[data-toc-section]"));
+
+    sections.forEach((section) => {
+      const toggle = section.querySelector("[data-toc-toggle]");
+      if (!(toggle instanceof HTMLButtonElement)) return;
+
+      toggle.addEventListener("click", () => {
+        const shouldOpen = !section.classList.contains("is-open");
+        sections.forEach((item) => {
+          if (item !== section) closeSection(item);
+        });
+        if (shouldOpen) {
+          openSection(section);
+        } else {
+          closeSection(section);
+        }
+      });
+    });
+
+    const tocLinks = Array.from(root.querySelectorAll('a[href^="#"]'));
+    tocLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href");
+        if (!href || href.length < 2) return;
+        const target = document.getElementById(decodeURIComponent(href.slice(1)));
+        if (!(target instanceof HTMLElement)) return;
+
+        event.preventDefault();
+        target.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      });
+    });
+  });
+</script>

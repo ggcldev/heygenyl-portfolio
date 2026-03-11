@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { siteConfig } from "../../data/site";
+import { getBlogPostSlug } from "../../utils/blog";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -23,70 +24,72 @@ const schema = [
   description="SEO blog hub for technical SEO, local SEO, WordPress, and implementation-focused search insights."
   schema={schema}
 >
-  <section class="content-shell py-12 md:py-16 lg:py-20">
-    <div
-      class="section-heading max-w-3xl border-b pb-8"
-      style="border-color: var(--color-border);"
-    >
-      <p class="eyebrow">Blog</p>
-      <h1>A blog that backs up the service pages instead of competing with them.</h1>
-      <p class="post-meta">
-        Weekly publishing for technical SEO, local SEO, WordPress, and the
-        implementation work behind rankings.
-      </p>
-    </div>
-  </section>
-
-  <section class="content-shell pb-12 space-y-8">
-    {featured && (
-      <div class="grid grid-cols-1">
-        <a
-          class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-          href={`/blog/${featured.id}/`}
-        >
-          <p class="eyebrow">
-            {featured.data.pubDate.toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </p>
-          <h2 class="text-xl md:text-3xl font-bold uppercase m-0 mt-2">
-            {featured.data.title}
-          </h2>
-          <p class="text-base text-muted mt-3">{featured.data.description}</p>
-          {featured.data.tags.length > 0 && (
-            <div class="flex flex-wrap gap-2 pt-4 text-sm text-muted">
-              {featured.data.tags.map((tag) => (
-                <span class="box-tag">{tag}</span>
-              ))}
-            </div>
-          )}
-        </a>
+  <div class="blog-page-view">
+    <section class="content-shell py-12 md:py-16 lg:py-20">
+      <div
+        class="section-heading max-w-3xl border-b pb-8"
+        style="border-color: var(--color-border);"
+      >
+        <p class="eyebrow">Blog</p>
+        <h1>A blog that backs up the service pages instead of competing with them.</h1>
+        <p class="post-meta">
+          Weekly publishing for technical SEO, local SEO, WordPress, and the
+          implementation work behind rankings.
+        </p>
       </div>
-    )}
+    </section>
 
-    {rest.length > 0 && (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-        {rest.map((post) => (
+    <section class="content-shell pb-12 space-y-8">
+      {featured && (
+        <div class="grid grid-cols-1">
           <a
             class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/blog/${post.id}/`}
+            href={`/blog/${getBlogPostSlug(featured)}/`}
           >
             <p class="eyebrow">
-              {post.data.pubDate.toLocaleDateString("en-US", {
-                month: "short",
+              {featured.data.pubDate.toLocaleDateString("en-US", {
+                month: "long",
                 day: "numeric",
                 year: "numeric",
               })}
             </p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0 mt-2">
-              {post.data.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{post.data.excerpt}</p>
+            <h2 class="text-xl md:text-3xl font-bold uppercase m-0 mt-2">
+              {featured.data.title}
+            </h2>
+            <p class="text-base text-muted mt-3">{featured.data.description}</p>
+            {featured.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 pt-4 text-sm text-muted">
+                {featured.data.tags.map((tag) => (
+                  <span class="box-tag">{tag}</span>
+                ))}
+              </div>
+            )}
           </a>
-        ))}
-      </div>
-    )}
-  </section>
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {rest.map((post) => (
+            <a
+              class="card block transition duration-300 ease-in-out hover:-translate-y-1"
+              href={`/blog/${getBlogPostSlug(post)}/`}
+            >
+              <p class="eyebrow">
+                {post.data.pubDate.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </p>
+              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0 mt-2">
+                {post.data.title}
+              </h3>
+              <p class="text-sm 2xl:text-lg text-muted mt-2">{post.data.excerpt}</p>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
 </BaseLayout>
