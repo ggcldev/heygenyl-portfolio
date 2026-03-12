@@ -1,0 +1,58 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { siteConfig } from "../../data/site";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Contact inquiry received",
+    url: new URL("/contact/thanks/", siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout
+  title="Inquiry Received | Hey Genyl"
+  description="Thank-you page for portfolio inquiries submitted through the contact form."
+  schema={schema}
+>
+  <PageHero
+    eyebrow="Inquiry received"
+    title="Thanks. Your project details are on the way."
+    intro="If the submission completed successfully, it has already been routed to your inbox. Use the links below if you want to add context or keep browsing."
+    chips={["Static-hosting friendly", "Browser-based submit", "Email fallback still available"]}
+    actions={[
+      { label: "Back to services", href: "/services/" },
+      { label: "Email directly", href: `mailto:${siteConfig.email}`, variant: "secondary" },
+    ]}
+    noteTitle="What happens next"
+    noteCopy="Reply windows depend on your inbox workflow. If you need to add screenshots or a longer brief, send a direct email and reference the inquiry you just submitted."
+  />
+
+  <section class="content-shell">
+    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+      <div class="md:sticky md:top-24 self-start">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Next steps</h2>
+        <p class="text-sm text-muted mt-2">
+          Keep the follow-up simple and focused so the next reply can move fast.
+        </p>
+      </div>
+
+      <div class="md:col-span-2">
+        <article class="card grid gap-4">
+          <p class="eyebrow">Recommended follow-up</p>
+          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+            Send extra detail only if it changes the scope.
+          </h3>
+          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+            <li>Add site URLs, deadlines, or screenshots if they were missing.</li>
+            <li>Mention whether you need strategy only, implementation, or both.</li>
+            <li>Include any hard launch dates that affect priority.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

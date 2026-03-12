@@ -8,7 +8,6 @@ const allowedServicePaths = new Set([
   "/services/local-seo/",
   "/services/wordpress-seo-expert/",
 ]);
-const allowedToolPaths = new Set(["/tools/"]);
 
 export default defineConfig({
   site: "https://heygenyl.com",
@@ -22,9 +21,6 @@ export default defineConfig({
           : page;
         if (path.startsWith("/services/")) {
           return allowedServicePaths.has(path);
-        }
-        if (path.startsWith("/tools/")) {
-          return allowedToolPaths.has(path);
         }
         return true;
       },

@@ -8,13 +8,6 @@ export const siteConfig = {
   location: "Philippines",
 };
 
-export const homeStats = [
-  { label: "Positioning", value: "Freelance SEO specialist" },
-  { label: "Hosting fit", value: "Shared-hosting friendly" },
-  { label: "Content engine", value: "Blog + case studies + tools" },
-  { label: "Build style", value: "Static Astro with fast delivery" },
-];
-
 export const processSteps = [
   {
     title: "Audit what already exists",
@@ -548,59 +541,6 @@ export const caseStudies: CaseStudyPage[] = [
   },
 ];
 
-export type ToolPage = {
-  slug: string;
-  shortTitle: string;
-  title: string;
-  metaTitle: string;
-  metaDescription: string;
-  summary: string;
-  chips: string[];
-  note: string;
-};
-
-export const toolPages: ToolPage[] = [
-  {
-    slug: "schema-generator",
-    shortTitle: "Schema generator",
-    title: "Free Schema Markup Generator",
-    metaTitle: "Free Schema Markup Generator | Hey Genyl",
-    metaDescription:
-      "Client-side schema markup generator for ProfessionalService, LocalBusiness, FAQ, and Article JSON-LD snippets.",
-    summary:
-      "A browser-based SEO tool that lets visitors build clean JSON-LD snippets without installing anything or sending data to a server.",
-    chips: ["Client-side tool", "JSON-LD output", "Copy-ready markup"],
-    note:
-      "This is the kind of lightweight utility that works perfectly on Hostinger shared hosting because all processing happens in the browser.",
-  },
-  {
-    slug: "meta-tag-analyzer",
-    shortTitle: "Meta tag analyzer",
-    title: "Meta Tag Analyzer",
-    metaTitle: "Meta Tag Analyzer | Hey Genyl",
-    metaDescription:
-      "Paste a head snippet or HTML document and review title, description, canonical, robots, Open Graph, and Twitter tag coverage.",
-    summary:
-      "A practical browser-based analyzer for pasted HTML. Useful for quick QA during audits, migrations, or page launches.",
-    chips: ["Pasted HTML review", "Length checks", "SEO QA"],
-    note:
-      "This tool is intentionally input-based so it works on static hosting without cross-origin fetch limitations.",
-  },
-  {
-    slug: "404-checker",
-    shortTitle: "404 checker",
-    title: "Website 404 Checker",
-    metaTitle: "Website 404 Checker | Hey Genyl",
-    metaDescription:
-      "Starter 404 checker interface for same-origin or CORS-enabled URLs, with a clear upgrade path to a serverless crawler.",
-    summary:
-      "A starter checker that demonstrates the UX and request flow. Same-origin checks work in the browser; cross-domain crawling needs a serverless backend.",
-    chips: ["Browser-based demo", "Same-origin ready", "Serverless upgrade path"],
-    note:
-      "This page helps you show product thinking now while leaving room for a proper crawler or worker endpoint later.",
-  },
-];
-
 export const getServiceBySlug = (slug: string) => {
   const service = servicePages.find((item) => item.slug === slug);
   if (!service) {
@@ -615,12 +555,4 @@ export const getCaseStudyBySlug = (slug: string) => {
     throw new Error(`Unknown case study slug: ${slug}`);
   }
   return study;
-};
-
-export const getToolBySlug = (slug: string) => {
-  const tool = toolPages.find((item) => item.slug === slug);
-  if (!tool) {
-    throw new Error(`Unknown tool slug: ${slug}`);
-  }
-  return tool;
 };

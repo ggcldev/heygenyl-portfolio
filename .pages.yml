@@ -10,13 +10,18 @@ content:
     label: Blog
     type: collection
     path: src/content/blog
-    filename: "{year}-{month}-{day}-{primary}.md"
+    filename: "{slug}.md"
     format: yaml-frontmatter
-    subfolders: false
+    subfolders: true
+    exclude:
+      - "**/.DS_Store"
+      - "**/*.docx"
     view:
-      fields: [title, pubDate]
+      fields: [title, slug, pubDate]
       primary: title
       sort: [pubDate, title]
+      search: [title, metaTitle, description, excerpt, tags]
+      layout: tree
       default:
         search: ""
         sort: pubDate
@@ -26,6 +31,15 @@ content:
         label: Title
         type: string
         required: true
+      - name: metaTitle
+        label: Meta title
+        type: string
+        description: Optional override for the browser title and social title.
+      - name: slug
+        label: Slug
+        type: string
+        required: true
+        description: File slug used in the URL and filename, for example `why-seo-is-important-for-business`.
       - name: description
         label: Description
         type: text
@@ -34,6 +48,13 @@ content:
         label: Excerpt
         type: text
         required: true
+      - name: image
+        label: Featured image path
+        type: string
+        description: Relative path from the post folder, for example `./cover.webp`.
+      - name: imageAlt
+        label: Featured image alt text
+        type: string
       - name: pubDate
         label: Publish date
         type: date
@@ -47,7 +68,9 @@ content:
         list: true
       - name: body
         label: Content
-        type: rich-text
+        type: code
+        options:
+          language: markdown
 
 settings:
   content:

@@ -10,8 +10,12 @@ const { href, class: className, activeClass = "text-ink underline", ...props } =
 	Astro.props;
 
 const pathname = Astro.url.pathname;
-const newhref = href ? withBase(href) : withBase("/");
-const isActive = href ? pathname === newhref || pathname === `${newhref}/` : false;
+const resolvedHref =
+	typeof href === "string" ? href : href instanceof URL ? href.toString() : undefined;
+const newhref = resolvedHref ? withBase(resolvedHref) : withBase("/");
+const isActive = resolvedHref
+	? pathname === newhref || pathname === `${newhref}/`
+	: false;
 ---
 
 <a href={newhref} class:list={[className, isActive && activeClass]} {...props}>

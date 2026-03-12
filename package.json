@@ -5,19 +5,27 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "check": "astro check",
+    "test": "vitest run",
+    "build": "npm run check && astro build",
     "preview": "astro preview",
     "perf:audit": "npx @lhci/cli autorun --config=./lighthouserc.json",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.0-beta.12",
-    "@astrojs/sitemap": "^3.6.1-beta.3",
+    "@astrojs/mdx": "5.0.0",
+    "@astrojs/sitemap": "3.7.1",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
-    "astro": "^6.0.0-beta.20",
+    "astro": "6.0.3",
     "sharp": "^0.34.3",
     "simple-icons": "^16.11.0",
     "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.7",
+    "jsdom": "^28.1.0",
+    "typescript": "5.9.3",
+    "vitest": "^4.0.18"
   }
 }

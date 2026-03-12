@@ -3,6 +3,26 @@ import PageHero from "../components/PageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteConfig } from "../data/site";
 
+const contactPath = "/contact/";
+const contactThanksPath = "/contact/thanks/";
+const contactPageUrl = new URL(contactPath, siteConfig.url).toString();
+const contactThanksUrl = new URL(contactThanksPath, siteConfig.url).toString();
+const contactFormProvider =
+  import.meta.env.PUBLIC_CONTACT_FORM_PROVIDER?.trim().toLowerCase() ||
+  "formsubmit";
+const configuredContactFormEndpoint =
+  import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() || "";
+const configuredContactFormAjaxEndpoint =
+  import.meta.env.PUBLIC_CONTACT_FORM_AJAX_ENDPOINT?.trim() || "";
+const usesFormSubmit = contactFormProvider === "formsubmit";
+const contactFormEndpoint = usesFormSubmit
+  ? configuredContactFormEndpoint || `https://formsubmit.co/${siteConfig.email}`
+  : configuredContactFormEndpoint;
+const contactFormAjaxEndpoint = usesFormSubmit
+  ? configuredContactFormAjaxEndpoint ||
+    `https://formsubmit.co/ajax/${siteConfig.email}`
+  : configuredContactFormAjaxEndpoint || configuredContactFormEndpoint;
+
 const schema = [
   {
     "@context": "https://schema.org",
@@ -21,14 +41,18 @@ const schema = [
   <PageHero
     eyebrow="Contact"
     title="Hire an SEO specialist without turning the first call into a discovery marathon."
-    intro="Use this page to funnel inquiries from Upwork, direct outreach, referrals, and portfolio traffic. The form currently opens an email draft so it works on static hosting."
-    chips={["Static-site friendly", "Email-first intake", "Easy to replace later"]}
+    intro="Use this page to funnel inquiries from Upwork, direct outreach, referrals, and portfolio traffic. The form now submits in the browser and still works on static hosting."
+    chips={["Static-hosting ready", "Browser-based intake", "Direct-email fallback"]}
     actions={[
       { label: "Email directly", href: `mailto:${siteConfig.email}` },
       { label: "View services", href: "/services/", variant: "secondary" },
     ]}
-    noteTitle="Replace before launch"
-    noteCopy={`Update ${siteConfig.email} if your final domain email changes.`}
+    noteTitle="Submission flow"
+    noteCopy={
+      usesFormSubmit
+        ? `This route uses FormSubmit by default. Update ${siteConfig.email} if your final inbox changes, and approve the first live submission email from FormSubmit before launch.`
+        : "This route is wired to your configured form endpoint. Verify the endpoint and thank-you redirect before launch."
+    }
   />
 
   <section class="content-shell">
@@ -57,9 +81,35 @@ const schema = [
 
         <form
           class="form-surface grid gap-5"
+          action={contactFormEndpoint}
+          method="POST"
           data-contact-form
-          data-contact-email={siteConfig.email}
+          data-contact-ajax-endpoint={contactFormAjaxEndpoint}
+          data-contact-success-url={contactThanksPath}
         >
+          {usesFormSubmit && (
+            <>
+              <input
+                type="hidden"
+                name="_subject"
+                value="New portfolio inquiry from heygenyl.com"
+              />
+              <input type="hidden" name="_next" value={contactThanksUrl} />
+              <input type="hidden" name="_url" value={contactPageUrl} />
+              <input type="hidden" name="_template" value="table" />
+              <div class="field-honeypot" aria-hidden="true">
+                <label for="_honey">Leave this field empty</label>
+                <input
+                  id="_honey"
+                  name="_honey"
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </div>
+            </>
+          )}
+
           <div class="field-group">
             <label for="name">Name</label>
             <input
@@ -108,13 +158,14 @@ const schema = [
           </div>
 
           <p class="muted-note">
-            On submit, this form opens your default mail client with the details
-            pre-filled. Replace it later with FormSubmit, Basin, or your
-            preferred endpoint if you want browser-based submissions.
+            Submissions are sent from the browser and redirect to an on-site
+            thank-you page. If the form fails, use the direct email link below.
           </p>
 
+          <p class="form-feedback" data-contact-feedback aria-live="polite" hidden></p>
+
           <div class="page-nav">
-            <button class="button primary" type="submit">Draft email inquiry</button>
+            <button class="button primary" type="submit">Send project inquiry</button>
             <a class="button secondary" href={`mailto:${siteConfig.email}`}>
               Email directly
             </a>
@@ -125,29 +176,6 @@ const schema = [
   </section>
 
   <script>
-    const form = document.querySelector("[data-contact-form]");
-
-    if (form instanceof HTMLFormElement) {
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const data = new FormData(form);
-        const contactEmail = form.dataset.contactEmail || "hello@heygenyl.com";
-        const name = String(data.get("name") || "");
-        const email = String(data.get("email") || "");
-        const service = String(data.get("service") || "");
-        const message = String(data.get("message") || "");
-
-        const subject = `New inquiry: ${service}`;
-        const body = [
-          `Name: ${name}`,
-          `Email: ${email}`,
-          `Service: ${service}`,
-          "",
-          message,
-        ].join("\n");
-
-        window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      });
-    }
+    import "../scripts/contact-form";
   </script>
 </BaseLayout>

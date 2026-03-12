@@ -7,8 +7,10 @@
       "url": [
         "http://127.0.0.1:4321/",
         "http://127.0.0.1:4321/services/",
+        "http://127.0.0.1:4321/services/seo-specialist/",
         "http://127.0.0.1:4321/case-studies/",
         "http://127.0.0.1:4321/blog/",
+        "http://127.0.0.1:4321/blog/how-often-should-you-conduct-an-seo-audit/",
         "http://127.0.0.1:4321/contact/"
       ],
       "numberOfRuns": 3

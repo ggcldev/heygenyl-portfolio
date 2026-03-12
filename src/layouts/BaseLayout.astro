@@ -7,24 +7,46 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  ogImageAlt?: string;
+  ogType?: "article" | "website";
+  locale?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
   noIndex?: boolean;
   schema?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title, description, ogImage, noIndex = false, schema = [] } =
-  Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  ogImageAlt,
+  ogType,
+  locale,
+  publishedTime,
+  modifiedTime,
+  noIndex = false,
+  schema = [],
+} = Astro.props;
+
+const headProps = {
+  title,
+  description,
+  noIndex,
+  schema,
+  ...(ogImage ? { ogImage } : {}),
+  ...(ogImageAlt ? { ogImageAlt } : {}),
+  ...(ogType ? { ogType } : {}),
+  ...(locale ? { locale } : {}),
+  ...(publishedTime ? { publishedTime } : {}),
+  ...(modifiedTime ? { modifiedTime } : {}),
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead
-      title={title}
-      description={description}
-      ogImage={ogImage}
-      noIndex={noIndex}
-      schema={schema}
-    />
+    <BaseHead {...headProps} />
   </head>
   <body>
     <Header />

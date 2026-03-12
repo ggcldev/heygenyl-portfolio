@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogAuthorCard from "../../components/BlogAuthorCard.astro";
@@ -28,16 +28,19 @@ export async function getStaticPaths() {
 }
 
 const { post, postSlug } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const postBody = post.body ?? "";
 const readingMinutes = Math.max(
   1,
-  Math.ceil(post.body.split(/\s+/).filter(Boolean).length / 220),
+  Math.ceil(postBody.split(/\s+/).filter(Boolean).length / 220),
 );
-const tocSections = buildTocSections(post.body);
+const tocSections = buildTocSections(headings);
 const tocSize = "md";
 const homeUrl = new URL("/", siteConfig.url).toString();
 const blogUrl = new URL("/blog/", siteConfig.url).toString();
 const postUrl = new URL(`/blog/${postSlug}/`, siteConfig.url).toString();
+const socialImage = post.data.image?.src ?? "/og-default.png";
+const socialImageAlt = post.data.imageAlt ?? post.data.title;
 const authorId = new URL("#author", siteConfig.url).toString();
 const organizationId = new URL("#organization", siteConfig.url).toString();
 const authorImageUrl = new URL(authorHeadshot.src, siteConfig.url).toString();
@@ -96,8 +99,10 @@ const extractFaqEntries = (markdownBody: string) => {
 
     const questionMatch = /^###\s+(.+)$/.exec(line);
     if (questionMatch) {
+      const questionTitle = questionMatch[1];
+      if (!questionTitle) continue;
       pushCurrent();
-      currentQuestion = questionMatch[1].trim();
+      currentQuestion = questionTitle.trim();
       answerBuffer = [];
       continue;
     }
@@ -113,7 +118,7 @@ const extractFaqEntries = (markdownBody: string) => {
   return entries;
 };
 
-const faqEntries = extractFaqEntries(post.body);
+const faqEntries = extractFaqEntries(postBody);
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -216,6 +221,11 @@ const schema = [
 <BaseLayout
   title={post.data.metaTitle ?? `${post.data.title} | Hey Genyl`}
   description={post.data.description}
+  ogImage={socialImage}
+  ogImageAlt={socialImageAlt}
+  ogType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  modifiedTime={(post.data.updatedDate || post.data.pubDate).toISOString()}
   schema={schema}
 >
   <div class="blog-page-view content-shell flex-1 flex flex-col py-12 md:py-16 lg:py-20 space-y-16">
@@ -265,12 +275,13 @@ const schema = [
 
         {post.data.image && (
           <figure class="post-hero-image m-0">
-            <Image
+            <Picture
               src={post.data.image}
               alt={post.data.imageAlt ?? post.data.title}
+              formats={["avif", "webp"]}
+              fallbackFormat="webp"
               widths={[768, 1024, 1440]}
               sizes="(max-width: 767px) 100vw, (max-width: 1200px) 90vw, 1024px"
-              formats={["avif", "webp"]}
               loading="eager"
               decoding="async"
             />

@@ -1,3 +1,5 @@
+import type { MarkdownHeading } from "astro";
+
 export type TocItem = {
   title: string;
   id: string;
@@ -7,33 +9,14 @@ export type TocSection = TocItem & {
   children: TocItem[];
 };
 
-const slugifyHeading = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-
-export const buildTocSections = (markdownBody: string): TocSection[] => {
-  const headingCounts = new Map<string, number>();
-  const tocEntries = markdownBody
-    .split("\n")
-    .map((line) => line.trim())
-    .map((line) => /^(##|###)\s+(.+)$/.exec(line))
-    .filter((match): match is RegExpExecArray => Boolean(match))
-    .map((match) => {
-      const level = match[1].length;
-      const title = match[2].trim();
-      const baseSlug = slugifyHeading(title);
-      const count = headingCounts.get(baseSlug) ?? 0;
-      headingCounts.set(baseSlug, count + 1);
-      return {
-        level,
-        title,
-        id: count === 0 ? baseSlug : `${baseSlug}-${count}`,
-      };
-    });
+export const buildTocSections = (headings: MarkdownHeading[]): TocSection[] => {
+  const tocEntries = headings
+    .filter((heading) => heading.depth === 2 || heading.depth === 3)
+    .map((heading) => ({
+      level: heading.depth,
+      title: heading.text,
+      id: heading.slug,
+    }));
 
   return tocEntries.reduce<TocSection[]>((sections, entry) => {
     if (entry.level === 2) {
@@ -42,7 +25,9 @@ export const buildTocSections = (markdownBody: string): TocSection[] => {
     }
 
     if (entry.level === 3 && sections.length > 0) {
-      sections[sections.length - 1].children.push({
+      const currentSection = sections.at(-1);
+      if (!currentSection) return sections;
+      currentSection.children.push({
         title: entry.title,
         id: entry.id,
       });

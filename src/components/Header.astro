@@ -24,7 +24,9 @@ const serviceNavLabelBySlug: Record<string, string> = {
     <button
       id="nav-toggle"
       aria-label="Toggle navigation"
-      aria-pressed="false"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+      aria-haspopup="dialog"
       class="site-header__menu-toggle md:hidden text-base-900 hover:text-base-500 font-bold uppercase"
     >
       Menu
@@ -56,8 +58,10 @@ const serviceNavLabelBySlug: Record<string, string> = {
       id="mobile-nav"
       role="dialog"
       aria-label="Mobile navigation"
+      aria-modal="true"
       aria-hidden="true"
-      style="display:none;"
+      tabindex="-1"
+      hidden
       class="mobile-nav fixed inset-0 z-[1000] p-8 overflow-auto bg-[var(--color-paper)] text-[var(--color-ink)]"
     >
       <button
@@ -84,106 +88,6 @@ const serviceNavLabelBySlug: Record<string, string> = {
   </nav>
 </header>
 
-<script is:inline>
-	const THEME_STORAGE_KEY = "theme";
-
-	const getPreferredTheme = () => {
-		try {
-			const stored = localStorage.getItem(THEME_STORAGE_KEY);
-			if (stored === "light" || stored === "dark") return stored;
-		} catch {
-			// Ignore storage access errors and fall through to media query.
-		}
-		return window.matchMedia("(prefers-color-scheme: dark)").matches
-			? "dark"
-			: "light";
-	};
-
-	const applyTheme = (theme) => {
-		document.documentElement.dataset.theme = theme;
-		const buttons = document.querySelectorAll("[data-theme-toggle]");
-		buttons.forEach((button) =>
-			button.setAttribute("aria-label", `Toggle theme (current: ${theme})`)
-		);
-	};
-
-	const toggleTheme = () => {
-		const current = document.documentElement.dataset.theme || getPreferredTheme();
-		const next = current === "dark" ? "light" : "dark";
-		try {
-			localStorage.setItem(THEME_STORAGE_KEY, next);
-		} catch {
-			// Ignore storage access errors.
-		}
-		applyTheme(next);
-	};
-
-	applyTheme(document.documentElement.dataset.theme || getPreferredTheme());
-
-	const navButton = document.getElementById("nav-toggle");
-	const mobileNav = document.getElementById("mobile-nav");
-	const mobileClose = document.getElementById("mobile-close");
-	const navElement = document.querySelector("nav");
-	const siteHeader = document.querySelector(".site-header");
-
-	const applyNav = (state) => {
-		const isOpen = state === "open";
-		document.documentElement.dataset.nav = isOpen ? "open" : "closed";
-		if (navButton) navButton.setAttribute("aria-pressed", isOpen ? "true" : "false");
-
-		if (mobileNav) {
-			mobileNav.style.display = isOpen ? "block" : "none";
-			mobileNav.setAttribute("aria-hidden", isOpen ? "false" : "true");
-			if (!isOpen && navButton instanceof HTMLElement) navButton.focus();
-		}
-	};
-
-	const closeNav = () => applyNav("closed");
-	const toggleNav = () =>
-		applyNav(document.documentElement.dataset.nav === "open" ? "closed" : "open");
-
-	applyNav("closed");
-
-	const applyHeaderScrollState = () => {
-		if (!(siteHeader instanceof HTMLElement)) return;
-		siteHeader.classList.toggle("is-scrolled", window.scrollY > 12);
-	};
-
-	let headerScrollTicking = false;
-	const onHeaderScroll = () => {
-		if (headerScrollTicking) return;
-		headerScrollTicking = true;
-		window.requestAnimationFrame(() => {
-			applyHeaderScrollState();
-			headerScrollTicking = false;
-		});
-	};
-
-	applyHeaderScrollState();
-
-	if (navButton) navButton.addEventListener("click", toggleNav);
-	if (mobileClose) mobileClose.addEventListener("click", closeNav);
-	window.addEventListener("scroll", onHeaderScroll, { passive: true });
-
-	window.addEventListener("keydown", (event) => {
-		if (event.key === "Escape" && document.documentElement.dataset.nav === "open") {
-			closeNav();
-		}
-	});
-
-	document.addEventListener("click", (event) => {
-		const target = event.target;
-		if (!(target instanceof Element)) return;
-		if (!target.closest("[data-theme-toggle]")) return;
-		event.preventDefault();
-		toggleTheme();
-	});
-
-	if (navElement) {
-		navElement.addEventListener("click", (event) => {
-			const target = event.target;
-			if (!(target instanceof Element)) return;
-			if (target.closest("a")) closeNav();
-		});
-	}
+<script>
+  import "../scripts/header";
 </script>

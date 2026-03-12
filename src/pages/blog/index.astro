@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { siteConfig } from "../../data/site";
@@ -45,12 +45,13 @@ const schema = [
             <a class="blog-story-card" href={`/blog/${getBlogPostSlug(post)}/`}>
               <figure class="blog-story-card__media">
                 {post.data.image ? (
-                  <Image
+                  <Picture
                     src={post.data.image}
                     alt={post.data.imageAlt ?? post.data.title}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="webp"
                     widths={[480, 720, 960]}
                     sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 480px"
-                    formats={["avif", "webp"]}
                     quality={70}
                     loading="lazy"
                     decoding="async"
