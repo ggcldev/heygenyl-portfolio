@@ -262,6 +262,13 @@
 			padding 260ms ease;
 	}
 
+	.site-header__inner {
+		width: min(100%, 1440px);
+		max-width: 1440px;
+		margin-inline: auto;
+		min-width: 0;
+	}
+
 	.site-header__brand,
 	.site-header__menu-toggle {
 		font-size: 0.75rem;
@@ -824,7 +831,7 @@
 	.hero-shell {
 		position: relative;
 		isolation: isolate;
-		overflow: hidden;
+		overflow: visible;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -858,7 +865,12 @@
 
 	.hero-grid-background {
 		position: absolute;
-		inset: 0;
+		inset-block: 0;
+		left: 50%;
+		width: 100vw;
+		min-width: 100vw;
+		max-width: none;
+		transform: translateX(-50%);
 		pointer-events: none;
 		opacity: 0.9;
 	}
