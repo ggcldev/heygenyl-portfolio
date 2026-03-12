@@ -1,10 +1,10 @@
 export const siteConfig = {
   name: "Hey Genyl",
-  title: "Freelance SEO Specialist and WordPress Designer/Developer",
+  title: "Freelance SEO Specialist & WordPress SEO Expert | Hey Genyl",
   description:
-    "SEO specialist and WordPress designer/developer building lean, search-first websites for local service brands and B2B teams.",
+    "Freelance SEO specialist, local SEO, and WordPress SEO expert helping local businesses rank higher, drive more traffic, and attract qualified leads. Let's talk.",
   url: "https://heygenyl.com",
-  email: "hello@heygenyl.com",
+  email: "hi@heygenyl.com",
   location: "Philippines",
 };
 

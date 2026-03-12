@@ -24,13 +24,13 @@ describe("contact form", () => {
     formData.set("message", "Need help with a local SEO launch.");
 
     const response = await submitContactForm(
-      "https://formsubmit.co/ajax/hello@heygenyl.com",
+      "https://formsubmit.co/ajax/hi@heygenyl.com",
       formData,
       fetchMock as typeof fetch,
     );
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://formsubmit.co/ajax/hello@heygenyl.com",
+      "https://formsubmit.co/ajax/hi@heygenyl.com",
       expect.objectContaining({
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ describe("contact form", () => {
 
     document.body.innerHTML = `
       <form
-        data-contact-ajax-endpoint="https://formsubmit.co/ajax/hello@heygenyl.com"
+        data-contact-ajax-endpoint="https://formsubmit.co/ajax/hi@heygenyl.com"
         data-contact-success-url="/contact/thanks/"
       >
         <input name="name" value="Ada Lovelace" />
@@ -71,7 +71,7 @@ describe("contact form", () => {
     await Promise.resolve();
 
     expect(submitForm).toHaveBeenCalledWith(
-      "https://formsubmit.co/ajax/hello@heygenyl.com",
+      "https://formsubmit.co/ajax/hi@heygenyl.com",
       expect.any(FormData),
     );
     expect(navigate).toHaveBeenCalledWith("/contact/thanks/");
@@ -82,7 +82,7 @@ describe("contact form", () => {
 
     document.body.innerHTML = `
       <form
-        data-contact-ajax-endpoint="https://formsubmit.co/ajax/hello@heygenyl.com"
+        data-contact-ajax-endpoint="https://formsubmit.co/ajax/hi@heygenyl.com"
         data-contact-success-url="/contact/thanks/"
       >
         <input name="name" value="Ada Lovelace" />

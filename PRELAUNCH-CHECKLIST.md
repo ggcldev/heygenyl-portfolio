@@ -4,7 +4,7 @@ Use this before uploading the site to Hostinger. These items are based on the cu
 
 ## 1. Brand and Contact
 
-- [ ] Replace the contact email in [src/data/site.ts](/Users/genylgicalde/heygenyl-portfolio/src/data/site.ts) if `hello@heygenyl.com` is not your final inbox.
+- [ ] Confirm the contact email in [src/data/site.ts](/Users/genylgicalde/heygenyl-portfolio/src/data/site.ts) points to your final inbox before launch.
 - [ ] Confirm `siteConfig.name`, `siteConfig.title`, `siteConfig.description`, and `siteConfig.location` in [src/data/site.ts](/Users/genylgicalde/heygenyl-portfolio/src/data/site.ts) match the exact way you want to present yourself publicly.
 - [ ] Submit one live test through [src/pages/contact.astro](/Users/genylgicalde/heygenyl-portfolio/src/pages/contact.astro) and approve the first FormSubmit verification email if it appears.
 
