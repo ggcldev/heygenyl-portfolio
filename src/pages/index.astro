@@ -448,7 +448,7 @@ const homeSchema = [
     const FEATURED_DESKTOP_BREAKPOINT = 1024;
     const FEATURED_VERTICAL_SCROLL_RATIO_NARROW = 0.72;
     const FEATURED_VERTICAL_SCROLL_RATIO_DESKTOP = 1;
-    const FEATURED_END_HOLD_NARROW_PX = 0;
+    const FEATURED_END_HOLD_NARROW_PX = 96;
     const FEATURED_END_HOLD_DESKTOP_PX = 180;
     const FEATURED_SCROLL_EASE = 0.14;
     const FEATURED_EASE_EPSILON = 0.001;
@@ -489,12 +489,18 @@ const homeSchema = [
       const stage = section.querySelector("[data-featured-stage]");
       const track = section.querySelector("[data-featured-track]");
       const shell = section.querySelector(".featured-projects-shell");
+      const copy = section.querySelector(".featured-projects-copy");
       if (
         !(stage instanceof HTMLElement) ||
         !(track instanceof HTMLElement) ||
         !(shell instanceof HTMLElement)
       ) {
         return;
+      }
+      if (copy instanceof HTMLElement) {
+        section.style.setProperty("--featured-copy-height", `${copy.offsetHeight}px`);
+      } else {
+        section.style.setProperty("--featured-copy-height", "0px");
       }
 
       const maxShiftByViewport = Math.max(track.scrollWidth - stage.clientWidth, 0);
@@ -504,10 +510,7 @@ const homeSchema = [
       const lastItem = items.at(-1);
       const maxShiftToLastCardStart =
         lastItem instanceof HTMLElement ? Math.max(lastItem.offsetLeft, 0) : 0;
-      const maxShift =
-        window.innerWidth >= FEATURED_DESKTOP_BREAKPOINT
-          ? Math.max(maxShiftByViewport, maxShiftToLastCardStart)
-          : maxShiftByViewport;
+      const maxShift = Math.max(maxShiftByViewport, maxShiftToLastCardStart);
       const stageOffset = shell.offsetTop + stage.offsetTop;
       const stageBlockHeight = stageOffset + stage.offsetHeight;
       const naturalHeight = section.scrollHeight;
@@ -571,13 +574,13 @@ const homeSchema = [
         window.innerWidth <= FEATURED_NARROW_BREAKPOINT
           ? FEATURED_START_DELAY_NARROW_PX
           : FEATURED_START_DELAY_DESKTOP_PX;
+      const isDesktop = window.innerWidth >= FEATURED_DESKTOP_BREAKPOINT;
       const scrollY = window.scrollY;
 
       let progress =
         (scrollY - scrollStart - startDelay) / scrollDistance;
       if (scrollY <= scrollStart) progress = 0;
       if (scrollY >= scrollEnd) progress = 1;
-      if (progress >= 0.985) progress = 1;
       progress = Math.min(
         Math.max(progress, 0),
         1,
@@ -594,18 +597,16 @@ const homeSchema = [
 
       state.targetProgress = progress;
 
-      if (
-        reduceMotionQuery.matches ||
-        state.targetProgress <= 0 ||
-        state.targetProgress >= 1
-      ) {
+      if (reduceMotionQuery.matches || !isDesktop) {
         state.currentProgress = state.targetProgress;
       } else {
         const delta = state.targetProgress - state.currentProgress;
+        const easing =
+          Math.abs(delta) > 0.22 ? Math.min(FEATURED_SCROLL_EASE + 0.08, 0.3) : FEATURED_SCROLL_EASE;
         if (Math.abs(delta) <= FEATURED_EASE_EPSILON) {
           state.currentProgress = state.targetProgress;
         } else {
-          state.currentProgress += delta * FEATURED_SCROLL_EASE;
+          state.currentProgress += delta * easing;
         }
       }
 

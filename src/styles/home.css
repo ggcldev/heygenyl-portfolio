@@ -941,6 +941,8 @@
 		position: relative;
 		--featured-stick-top: clamp(4rem, 9vh, 9rem);
 		--featured-card-gap: clamp(1.75rem, 2.6vw, 2.8rem);
+		--featured-copy-height: 0px;
+		--featured-copy-gap: clamp(0.65rem, 1.8vw, 1rem);
 	}
 
 	.featured-projects-shell {
@@ -1057,10 +1059,22 @@
 
 	.featured-projects-scroll.is-enhanced .featured-projects-stage {
 		position: sticky;
-		top: var(--featured-stick-top);
+		top: calc(
+			var(--featured-stick-top) + var(--featured-copy-height) +
+				var(--featured-copy-gap)
+		);
+		z-index: 1;
 		overflow: hidden;
 		touch-action: pan-y;
 		overscroll-behavior: auto;
+	}
+
+	.featured-projects-scroll.is-enhanced .featured-projects-copy {
+		position: sticky;
+		top: var(--featured-stick-top);
+		z-index: 2;
+		padding-bottom: var(--featured-copy-gap);
+		background: var(--color-bg);
 	}
 
 	.featured-projects-scroll.is-enhanced .featured-projects-track {
@@ -1084,6 +1098,9 @@
 		.featured-projects-scroll.is-enhanced .featured-projects-copy {
 			position: sticky;
 			top: var(--featured-stick-top);
+			z-index: auto;
+			padding-bottom: 0;
+			background: transparent;
 		}
 
 		.featured-projects-scroll.is-enhanced .featured-projects-stage {
