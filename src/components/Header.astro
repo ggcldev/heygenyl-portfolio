@@ -14,7 +14,7 @@ const serviceNavLabelBySlug: Record<string, string> = {
   <nav class="relative h-full w-full flex items-center justify-between">
     <a
       href="/"
-      class="text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
+      class="site-header__brand text-base-900 hover:text-base-500 font-bold uppercase"
     >
       Hey Genyl
     </a>
@@ -25,7 +25,7 @@ const serviceNavLabelBySlug: Record<string, string> = {
       id="nav-toggle"
       aria-label="Toggle navigation"
       aria-pressed="false"
-      class="md:hidden text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase"
+      class="site-header__menu-toggle md:hidden text-base-900 hover:text-base-500 font-bold uppercase"
     >
       Menu
     </button>
@@ -59,27 +59,27 @@ const serviceNavLabelBySlug: Record<string, string> = {
       aria-label="Mobile navigation"
       aria-hidden="true"
       style="display:none;"
-      class="fixed inset-0 z-[1000] p-8 overflow-auto bg-[var(--color-paper)] text-[var(--color-ink)]"
+      class="mobile-nav fixed inset-0 z-[1000] p-8 overflow-auto bg-[var(--color-paper)] text-[var(--color-ink)]"
     >
       <button
         id="mobile-close"
         aria-label="Close navigation"
         style="position:absolute;right:1rem;top:1rem;"
-        class="text-xs 2xl:text-lg font-bold uppercase"
+        class="mobile-nav__close font-bold uppercase"
       >
         Close
       </button>
-      <div class="flex flex-col gap-2 items-start">
-        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/services/">Services</HeaderLink>
+      <div class="mobile-nav__list flex flex-col gap-2 items-start">
+        <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/services/">Services</HeaderLink>
         {activeServicePages.map((service) => (
-          <a class="pl-4 text-muted hover:text-base-500 text-xs 2xl:text-lg font-bold uppercase" href={`/services/${service.slug}/`}>
+          <a class="mobile-nav__sublink pl-4 text-muted hover:text-base-500 font-bold uppercase" href={`/services/${service.slug}/`}>
             {serviceNavLabelBySlug[service.slug] ?? service.shortTitle}
           </a>
         ))}
-        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
-        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/blog/">Blog</HeaderLink>
-        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/tools/">Tools</HeaderLink>
-        <HeaderLink class="nav-link text-xs 2xl:text-lg text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/contact/">Contact</HeaderLink>
+        <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
+        <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/blog/">Blog</HeaderLink>
+        <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/tools/">Tools</HeaderLink>
+        <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/contact/">Contact</HeaderLink>
         <ThemeToggle />
       </div>
     </div>

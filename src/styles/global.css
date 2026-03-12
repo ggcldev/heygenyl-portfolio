@@ -262,6 +262,32 @@
 			padding 260ms ease;
 	}
 
+	.site-header__brand,
+	.site-header__menu-toggle {
+		font-size: 0.75rem;
+		letter-spacing: 0.08em;
+		line-height: 1.1;
+	}
+
+	.mobile-nav__close {
+		font-size: 0.78rem;
+		letter-spacing: 0.1em;
+	}
+
+	.mobile-nav__list {
+		padding-top: 1.9rem;
+	}
+
+	.mobile-nav__link {
+		font-size: 0.88rem;
+		letter-spacing: 0.08em;
+	}
+
+	.mobile-nav__sublink {
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+	}
+
 	.site-header.is-scrolled {
 		background: color-mix(in oklab, var(--color-paper) 98%, transparent);
 		border-bottom-color: color-mix(in oklab, var(--color-ink) 16%, transparent);
@@ -275,6 +301,34 @@
 			min-height: calc(var(--grid-cell) * 2);
 			padding-left: calc(var(--grid-cell) / 1);
 			padding-right: calc(var(--grid-cell) / 1);
+		}
+
+		.site-header__brand,
+		.site-header__menu-toggle {
+			font-size: 0.98rem;
+			letter-spacing: 0.09em;
+		}
+
+		.mobile-nav {
+			padding: 1.25rem 1.25rem 1.5rem;
+		}
+
+		.mobile-nav__close {
+			font-size: 0.9rem;
+		}
+
+		.mobile-nav__list {
+			padding-top: 2.2rem;
+			gap: 0.7rem;
+		}
+
+		.mobile-nav__link {
+			font-size: 1.02rem;
+		}
+
+		.mobile-nav__sublink {
+			font-size: 0.92rem;
+			padding-left: 1rem;
 		}
 
 		.site-header.is-scrolled {
