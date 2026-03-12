@@ -1,0 +1,7 @@
+{
+  "http://127.0.0.1:4321/": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1773292475177-67881.report.html",
+  "http://127.0.0.1:4321/services/": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1773292476618-70760.report.html",
+  "http://127.0.0.1:4321/case-studies/": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1773292478113-69892.report.html",
+  "http://127.0.0.1:4321/blog/": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1773292479816-88483.report.html",
+  "http://127.0.0.1:4321/contact/": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1773292481410-70952.report.html"
+}

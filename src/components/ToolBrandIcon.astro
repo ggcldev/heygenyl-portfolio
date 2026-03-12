@@ -1,0 +1,59 @@
+---
+import { siGoogle, siGooglesearchconsole, siSemrush } from "simple-icons";
+
+interface Props {
+  name: string;
+  className?: string;
+}
+
+const { name, className = "" } = Astro.props as Props;
+const key = name.trim().toLowerCase();
+
+const iconMap: Record<
+  string,
+  {
+    path: string;
+    color: string;
+  }
+> = {
+  semrush: {
+    path: siSemrush.path,
+    color: `#${siSemrush.hex}`,
+  },
+  "google search console": {
+    path: siGooglesearchconsole.path,
+    color: `#${siGooglesearchconsole.hex}`,
+  },
+  "google search": {
+    path: siGoogle.path,
+    color: `#${siGoogle.hex}`,
+  },
+};
+
+const icon = iconMap[key];
+const fallback = name
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((part) => part[0]?.toUpperCase() ?? "")
+  .join("")
+  .slice(0, 2);
+---
+
+{
+  icon ? (
+    <span
+      class:list={["tool-brand-icon", className]}
+      style={`--tool-icon-color:${icon.color};`}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d={icon.path}></path>
+      </svg>
+    </span>
+  ) : (
+    <span class:list={["tool-brand-icon", "tool-brand-icon--fallback", className]} aria-hidden="true">
+      <span>{fallback}</span>
+    </span>
+  )
+}

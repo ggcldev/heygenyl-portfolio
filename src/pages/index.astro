@@ -3,6 +3,7 @@ import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 import Hero from "../components/Hero.astro";
 import CtaArrow from "../components/CtaArrow.astro";
+import ToolBrandIcon from "../components/ToolBrandIcon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/home.css";
 import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
@@ -52,25 +53,29 @@ const approachSteps = [
     id: "research-compete",
     title: "Research and Compete",
     copy:
-      "I start with your competitors, not your website. I study who's winning in your market and reverse engineer exactly why.",
+      "I start with your competitors, not your website. I identify who's ranking at the top of your market and reverse engineer exactly why - their site structure, the pages driving their leads, the keywords they're targeting, and the gaps they're leaving open. This tells me what's already working in your market before I touch anything on your end.",
+    tools: ["SEMrush", "Ahrefs", "Screaming Frog", "Google Search"],
   },
   {
     id: "audit-strategize",
     title: "Audit and Strategize",
     copy:
-      "I dig into your current site, find what's working, protect it, and build a clear keyword-driven roadmap around how your customers actually search.",
+      "Once I know what the market looks like, I dig into your current site. I find what's already ranking, protect it, and identify what's holding you back. From there I build a keyword-driven roadmap - organized around how your customers actually search - so every page we build or improve has a clear purpose and a target.",
+    tools: ["Google Search Console", "SEMrush", "Screaming Frog"],
   },
   {
     id: "build-optimize",
     title: "Build and Optimize",
     copy:
-      "Clean site structure, targeted pages, technical fixes, content, internal linking, GBP - everything executed in the right order.",
+      "This is where the work happens. Clean site structure, dedicated service and city pages, technical fixes, on-page content written around your target keywords, strategic internal linking, and full Google Business Profile optimization - all executed in the right order so nothing cancels each other out.",
+    tools: ["Screaming Frog", "Google Search Console", "WebCEO", "Local Falcon"],
   },
   {
     id: "track-report",
-    title: "Track and Report Honestly",
+    title: "Track and Report",
     copy:
-      "I track what matters and report what's real. If something isn't working, I say so and we fix it.",
+      "I track your keyword rankings, organic traffic, and GBP visibility every month. You get a clear, straightforward report - no SEO jargon, no vanity metrics. Just what moved, what it means for your business, and what we're focused on next.",
+    tools: ["Google Search Console", "Agency Analytics", "Local Falcon", "SEMrush"],
   },
 ];
 
@@ -263,6 +268,17 @@ const homeSchema = [
                     {step.title}
                   </h3>
                   <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
+                  <div class="approach-tools">
+                    <p class="approach-tools__label">Tools</p>
+                    <ul class="approach-tools__list">
+                      {step.tools.map((tool) => (
+                        <li class="approach-tools__item">
+                          <ToolBrandIcon name={tool} className="approach-tools__icon" />
+                          <span>{tool}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </article>
               );
             })}
@@ -425,15 +441,21 @@ const homeSchema = [
   );
 
   if (featuredSections.length > 0) {
-    const desktopQuery = window.matchMedia("(min-width: 640px)");
     const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const FEATURED_START_DELAY_NARROW_PX = 44;
-    const FEATURED_START_DELAY_DESKTOP_PX = 12;
+    const FEATURED_START_DELAY_NARROW_PX = 0;
+    const FEATURED_START_DELAY_DESKTOP_PX = 0;
     const FEATURED_NARROW_BREAKPOINT = 900;
-    const FEATURED_END_HOLD_PX = 120;
+    const FEATURED_DESKTOP_BREAKPOINT = 1024;
+    const FEATURED_VERTICAL_SCROLL_RATIO_NARROW = 0.72;
+    const FEATURED_VERTICAL_SCROLL_RATIO_DESKTOP = 1;
+    const FEATURED_END_HOLD_NARROW_PX = 0;
+    const FEATURED_END_HOLD_DESKTOP_PX = 180;
+    const FEATURED_SCROLL_EASE = 0.14;
+    const FEATURED_EASE_EPSILON = 0.001;
+    const featuredState = new WeakMap();
     let frameId = 0;
 
-    const canEnhance = () => desktopQuery.matches;
+    const canEnhance = () => !reduceMotionQuery.matches;
 
     const resetItemAnimation = (track) => {
       const items = track.querySelectorAll(".featured-project-item");
@@ -475,17 +497,35 @@ const homeSchema = [
         return;
       }
 
-      const maxShift = Math.max(track.scrollWidth - stage.clientWidth, 0);
+      const maxShiftByViewport = Math.max(track.scrollWidth - stage.clientWidth, 0);
+      const items = Array.from(track.querySelectorAll(".featured-project-item")).filter(
+        (item) => item instanceof HTMLElement,
+      );
+      const lastItem = items.at(-1);
+      const maxShiftToLastCardStart =
+        lastItem instanceof HTMLElement ? Math.max(lastItem.offsetLeft, 0) : 0;
+      const maxShift =
+        window.innerWidth >= FEATURED_DESKTOP_BREAKPOINT
+          ? Math.max(maxShiftByViewport, maxShiftToLastCardStart)
+          : maxShiftByViewport;
       const stageOffset = shell.offsetTop + stage.offsetTop;
       const stageBlockHeight = stageOffset + stage.offsetHeight;
       const naturalHeight = section.scrollHeight;
-      const requiredHeight = Math.ceil(
-        stageBlockHeight + maxShift + FEATURED_END_HOLD_PX,
-      );
-      const finalHeight = Math.max(naturalHeight, requiredHeight);
+      const verticalRatio =
+        window.innerWidth >= FEATURED_DESKTOP_BREAKPOINT
+          ? FEATURED_VERTICAL_SCROLL_RATIO_DESKTOP
+          : FEATURED_VERTICAL_SCROLL_RATIO_NARROW;
+      const endHoldPx =
+        window.innerWidth >= FEATURED_DESKTOP_BREAKPOINT
+          ? FEATURED_END_HOLD_DESKTOP_PX
+          : FEATURED_END_HOLD_NARROW_PX;
       const scrollDistance = Math.max(
-        finalHeight - stageBlockHeight - FEATURED_END_HOLD_PX,
+        Math.ceil(maxShift * verticalRatio),
         1,
+      );
+      const finalHeight = Math.max(
+        naturalHeight,
+        Math.ceil(stageBlockHeight + scrollDistance + endHoldPx),
       );
       const sectionTop = window.scrollY + section.getBoundingClientRect().top;
       const stickTop = Number.parseFloat(window.getComputedStyle(stage).top) || 0;
@@ -512,42 +552,80 @@ const homeSchema = [
         section.style.minHeight = "";
         const shell = section.querySelector(".featured-projects-shell");
         if (shell instanceof HTMLElement) shell.style.minHeight = "";
-        return;
+        featuredState.delete(section);
+        return false;
       }
 
       const scrollDistance = Number(section.dataset.featuredScrollDistance || "0");
       const maxShift = Number(section.dataset.featuredMaxShift || "0");
-      const stageOffset = Number(section.dataset.featuredStageOffset || "0");
+      const scrollStart = Number(section.dataset.featuredScrollStart || "0");
+      const scrollEnd = Number(section.dataset.featuredScrollEnd || "0");
       if (scrollDistance <= 0 || maxShift <= 0) {
         track.style.transform = "";
         resetItemAnimation(track);
-        return;
+        featuredState.delete(section);
+        return false;
       }
 
-      const sectionRect = section.getBoundingClientRect();
-      const stickTop = Number.parseFloat(window.getComputedStyle(stage).top) || 0;
-      const stickyEndBoundary = stickTop + stage.offsetHeight + 1;
       const startDelay =
         window.innerWidth <= FEATURED_NARROW_BREAKPOINT
           ? FEATURED_START_DELAY_NARROW_PX
           : FEATURED_START_DELAY_DESKTOP_PX;
+      const scrollY = window.scrollY;
 
       let progress =
-        (stickTop - sectionRect.top - stageOffset - startDelay) / scrollDistance;
-      if (sectionRect.bottom <= stickyEndBoundary) {
-        progress = 1;
-      }
+        (scrollY - scrollStart - startDelay) / scrollDistance;
+      if (scrollY <= scrollStart) progress = 0;
+      if (scrollY >= scrollEnd) progress = 1;
+      if (progress >= 0.985) progress = 1;
       progress = Math.min(
         Math.max(progress, 0),
         1,
       );
-      track.style.transform = `translate3d(${-maxShift * progress}px, 0, 0)`;
-      updateItemAnimation(track, progress);
+
+      let state = featuredState.get(section);
+      if (!state) {
+        state = {
+          currentProgress: progress,
+          targetProgress: progress,
+        };
+        featuredState.set(section, state);
+      }
+
+      state.targetProgress = progress;
+
+      if (
+        reduceMotionQuery.matches ||
+        state.targetProgress <= 0 ||
+        state.targetProgress >= 1
+      ) {
+        state.currentProgress = state.targetProgress;
+      } else {
+        const delta = state.targetProgress - state.currentProgress;
+        if (Math.abs(delta) <= FEATURED_EASE_EPSILON) {
+          state.currentProgress = state.targetProgress;
+        } else {
+          state.currentProgress += delta * FEATURED_SCROLL_EASE;
+        }
+      }
+
+      const renderProgress = state.currentProgress;
+      track.style.transform = `translate3d(${-maxShift * renderProgress}px, 0, 0)`;
+      updateItemAnimation(track, renderProgress);
+
+      return !reduceMotionQuery.matches &&
+        Math.abs(state.targetProgress - state.currentProgress) > FEATURED_EASE_EPSILON;
     };
 
     const updateAll = () => {
       frameId = 0;
-      featuredSections.forEach(updateSection);
+      let shouldContinue = false;
+      featuredSections.forEach((section) => {
+        if (updateSection(section)) shouldContinue = true;
+      });
+      if (shouldContinue) {
+        frameId = window.requestAnimationFrame(updateAll);
+      }
     };
 
     const requestUpdate = () => {
@@ -580,8 +658,7 @@ const homeSchema = [
     window.addEventListener("load", applyMode);
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", applyMode);
-    desktopQuery.addEventListener("change", applyMode);
-    reduceMotionQuery.addEventListener("change", requestUpdate);
+    reduceMotionQuery.addEventListener("change", applyMode);
 
     featuredSections.forEach((section) => {
       const images = section.querySelectorAll("img");
@@ -589,6 +666,92 @@ const homeSchema = [
         if (img.complete) return;
         img.addEventListener("load", applyMode, { once: true });
       });
+
+      const stage = section.querySelector("[data-featured-stage]");
+      if (!(stage instanceof HTMLElement)) return;
+
+      let pendingWheelDelta = 0;
+      let wheelFrameId = 0;
+      const flushWheelDelta = () => {
+        wheelFrameId = 0;
+        if (Math.abs(pendingWheelDelta) < 0.01) return;
+        const maxScrollLeft = Math.max(stage.scrollWidth - stage.clientWidth, 0);
+        stage.scrollLeft = Math.min(
+          Math.max(stage.scrollLeft + pendingWheelDelta, 0),
+          maxScrollLeft,
+        );
+        pendingWheelDelta = 0;
+      };
+
+      stage.addEventListener(
+        "wheel",
+        (event) => {
+          if (section.classList.contains("is-enhanced")) return;
+          if (stage.scrollWidth <= stage.clientWidth + 1) return;
+
+          const dominantDelta =
+            Math.abs(event.deltaX) > Math.abs(event.deltaY)
+              ? event.deltaX
+              : event.deltaY;
+          if (Math.abs(dominantDelta) < 0.01) return;
+
+          event.preventDefault();
+
+          const deltaModeScale =
+            event.deltaMode === 1
+              ? 16
+              : event.deltaMode === 2
+                ? window.innerHeight
+                : 1;
+          const rawDelta = dominantDelta * deltaModeScale;
+          const clampedDelta = Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), 88);
+          pendingWheelDelta += clampedDelta * 0.86;
+
+          if (!wheelFrameId) {
+            wheelFrameId = window.requestAnimationFrame(flushWheelDelta);
+          }
+        },
+        { passive: false },
+      );
+
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartScrollLeft = 0;
+
+      stage.addEventListener("pointerdown", (event) => {
+        if (section.classList.contains("is-enhanced")) return;
+        if (event.pointerType !== "mouse" || event.button !== 0) return;
+        if (stage.scrollWidth <= stage.clientWidth + 1) return;
+
+        if (wheelFrameId) {
+          window.cancelAnimationFrame(wheelFrameId);
+          wheelFrameId = 0;
+          pendingWheelDelta = 0;
+        }
+        isDragging = true;
+        dragStartX = event.clientX;
+        dragStartScrollLeft = stage.scrollLeft;
+        stage.classList.add("is-dragging");
+        stage.setPointerCapture?.(event.pointerId);
+      });
+
+      stage.addEventListener("pointermove", (event) => {
+        if (!isDragging) return;
+        const deltaX = event.clientX - dragStartX;
+        stage.scrollLeft = dragStartScrollLeft - deltaX;
+      });
+
+      const stopDragging = (event) => {
+        if (!isDragging) return;
+        isDragging = false;
+        stage.classList.remove("is-dragging");
+        if (stage.hasPointerCapture?.(event.pointerId)) {
+          stage.releasePointerCapture(event.pointerId);
+        }
+      };
+
+      stage.addEventListener("pointerup", stopDragging);
+      stage.addEventListener("pointercancel", stopDragging);
     });
   }
 
