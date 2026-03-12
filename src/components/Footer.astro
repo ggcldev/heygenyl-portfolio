@@ -2,18 +2,72 @@
 import { siteConfig } from "../data/site";
 ---
 
-<footer class="py-8">
+<footer class="py-10 md:py-12">
   <div class="content-shell">
-    <div class="grid gap-6 pt-8 pb-4 md:flex md:items-center md:justify-between" style="border-top: 1px solid var(--color-border);">
-      <p class="text-sm text-muted m-0">
-        {siteConfig.title} © {new Date().getFullYear()}.
-      </p>
-      <div class="md:text-right space-y-2 md:space-y-1">
-        <p class="text-2xl sm:text-3xl font-semibold tracking-tight m-0">
-          {siteConfig.location}
-        </p>
-        <p class="text-sm text-subtle m-0">
-          Contact: <a class="underline" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+    <div
+      class="border-t pt-8 md:pt-10"
+      style="border-color: var(--color-border);"
+    >
+      <div class="grid gap-10 md:grid-cols-2 xl:grid-cols-4">
+        <div class="grid gap-3">
+          <a
+            class="text-lg font-bold uppercase tracking-[0.08em] w-fit"
+            href="/"
+          >
+            Hey Genyl
+          </a>
+        </div>
+
+        <nav class="grid gap-3" aria-label="Footer services">
+          <p class="m-0 text-xs font-bold uppercase tracking-[0.16em] text-subtle">
+            Services
+          </p>
+          <div class="grid gap-2">
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/services/local-seo/">
+              Local SEO
+            </a>
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/services/seo-specialist/">
+              SEO Specialist
+            </a>
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/services/wordpress-seo-expert/">
+              WordPress SEO Expert
+            </a>
+          </div>
+        </nav>
+
+        <nav class="grid gap-3" aria-label="Footer quick links">
+          <p class="m-0 text-xs font-bold uppercase tracking-[0.16em] text-subtle">
+            Quick Links
+          </p>
+          <div class="grid gap-2">
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/">Home</a>
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/blog/">Blog</a>
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/case-studies/">
+              Case Studies
+            </a>
+            <a class="w-fit text-sm text-muted hover:text-ink" href="/contact/">Contact</a>
+          </div>
+        </nav>
+
+        <div class="grid gap-3">
+          <p class="m-0 text-xs font-bold uppercase tracking-[0.16em] text-subtle">
+            Contact
+          </p>
+          <a
+            class="w-fit text-sm text-muted hover:text-ink"
+            href={`mailto:${siteConfig.email}`}
+          >
+            {siteConfig.email}
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="mt-8 border-t pt-4"
+        style="border-color: color-mix(in oklab, var(--color-ink) 10%, transparent);"
+      >
+        <p class="m-0 text-xs text-subtle">
+          © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
         </p>
       </div>
     </div>
