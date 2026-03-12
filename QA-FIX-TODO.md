@@ -140,9 +140,9 @@ Use this as the implementation checklist before deployment.
   - File: `src/components/BaseHead.astro`
   - No extra social tags are needed beyond the current setup.
 
-- [x] Split and simplify the homepage interaction script.
+- [ ] Split or simplify the homepage interaction script if future changes are planned.
   - File: `src/scripts/homepage.ts`
-  - Broke the runtime behavior into smaller setup blocks for featured projects, approach tabs, and the homepage FAQ.
+  - This module is now the largest and most runtime-heavy client-side surface in the repo.
 
 - [x] Keep documentation in sync with the current architecture.
   - Files: `README.md`, `PRELAUNCH-CHECKLIST.md`
