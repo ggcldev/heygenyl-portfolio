@@ -34,6 +34,15 @@ export default defineConfig({
     build: {
       cssMinify: "lightningcss",
       target: "es2022",
+      rollupOptions: {
+        output: {
+          assetFileNames: (info) => {
+            const raw = (info.names?.[0] ?? "asset").replace(/@/g, "_");
+            const name = raw.replace(/\.[^.]+$/, "");
+            return `_astro/${name}.[hash][extname]`;
+          },
+        },
+      },
     },
   },
 });

@@ -1,3 +1,8 @@
+/* Establish correct cascade order before any layer content.
+   Without this, Astro loads page CSS before layout CSS, which makes
+   "components" the first (lowest-priority) layer in the cascade. */
+@layer properties, theme, base, components, utilities;
+
 @layer components {
 	.home-page .content-shell {
 		width: min(100%, 1440px);
