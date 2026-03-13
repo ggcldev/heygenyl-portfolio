@@ -12,6 +12,9 @@ const allowedServicePaths = new Set([
 export default defineConfig({
   site: "https://heygenyl.com",
   output: "static",
+  build: {
+    inlineStylesheets: "always",
+  },
   integrations: [
     mdx(),
     sitemap({
