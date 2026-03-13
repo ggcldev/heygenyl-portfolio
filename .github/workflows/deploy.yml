@@ -1,12 +1,9 @@
-name: Deploy to Hostinger
+name: Build & deploy to Hostinger
 
 on:
   push:
     branches:
       - main
-
-permissions:
-  contents: write
 
 jobs:
   deploy:
@@ -29,14 +26,13 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Push dist to deploy branch
-        run: |
-          cd dist
-          git init
-          git checkout -b deploy
-          git add -A
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "Deploy $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/ggcldev/heygenyl-portfolio.git
-          git push --force origin deploy
+      - name: Deploy dist via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_IP }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: dist/
+          server-dir: /public_html/
+          dangerous-clean-slate: false
