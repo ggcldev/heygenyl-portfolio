@@ -21,8 +21,13 @@ if (featuredSections.length > 0) {
   const FEATURED_EASE_EPSILON = 0.001;
   const featuredState = new WeakMap<HTMLElement, FeaturedState>();
   let frameId = 0;
+  let hasEnhancedSections = false;
 
-  const canEnhance = () => !reduceMotionQuery.matches;
+  // Keep horizontal-scroll enhancement desktop-only to avoid costly layout work
+  // during mobile's critical render path.
+  const canEnhance = () =>
+    !reduceMotionQuery.matches &&
+    window.innerWidth >= FEATURED_DESKTOP_BREAKPOINT;
 
   const resetItemAnimation = (track: HTMLElement) => {
     const items = track.querySelectorAll<HTMLElement>(".featured-project-item");
@@ -203,12 +208,14 @@ if (featuredSections.length > 0) {
   };
 
   const requestUpdate = () => {
+    if (!hasEnhancedSections) return;
     if (frameId) return;
     frameId = window.requestAnimationFrame(updateAll);
   };
 
   const applyMode = () => {
     const enhanced = canEnhance();
+    hasEnhancedSections = false;
 
     featuredSections.forEach((section) => {
       section.style.minHeight = "";
@@ -216,6 +223,7 @@ if (featuredSections.length > 0) {
       if (shell instanceof HTMLElement) shell.style.minHeight = "";
 
       if (enhanced) {
+        hasEnhancedSections = true;
         section.classList.add("is-enhanced");
         computeSectionMetrics(section);
         return;
@@ -229,6 +237,10 @@ if (featuredSections.length > 0) {
       }
     });
 
+    if (!hasEnhancedSections && frameId) {
+      window.cancelAnimationFrame(frameId);
+      frameId = 0;
+    }
     requestUpdate();
   };
 

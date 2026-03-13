@@ -490,5 +490,17 @@ const homeSchema = [
 </BaseLayout>
 
 <script>
-  import "../scripts/homepage";
+  const loadHomepageEnhancements = () => {
+    void import("../scripts/homepage");
+  };
+
+  const scheduleHomepageEnhancements = () => {
+    setTimeout(loadHomepageEnhancements, 0);
+  };
+
+  if (document.readyState === "complete") {
+    scheduleHomepageEnhancements();
+  } else {
+    window.addEventListener("load", scheduleHomepageEnhancements, { once: true });
+  }
 </script>
