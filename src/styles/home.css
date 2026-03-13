@@ -979,7 +979,7 @@
 		font-weight: 700;
 		letter-spacing: 0.13em;
 		text-transform: uppercase;
-		color: color-mix(in oklab, var(--color-ink) 60%, transparent);
+		color: color-mix(in oklab, var(--color-ink) 72%, transparent);
 	}
 
 	.approach-tools__list {
