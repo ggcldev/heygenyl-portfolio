@@ -50,7 +50,7 @@ if (featuredSections.length > 0) {
 
     items.forEach((item, index) => {
       const distance = Math.min(Math.abs(index - activePosition), 1.4);
-      const opacity = Math.max(1 - distance * 0.4, 0.44);
+      const opacity = Math.max(1 - distance * 0.1, 0.86);
       const yShift = distance * 14;
       item.style.opacity = opacity.toFixed(3);
       item.style.transform = `translate3d(0, ${yShift.toFixed(1)}px, 0)`;
