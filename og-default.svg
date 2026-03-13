@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" rx="40" fill="#F7EFE3" />
+  <circle cx="1080" cy="112" r="150" fill="#E5C6B0" />
+  <circle cx="160" cy="542" r="180" fill="#DCE8E2" />
+  <rect
+    x="78"
+    y="78"
+    width="1044"
+    height="474"
+    rx="30"
+    fill="#FFF9F1"
+    stroke="#D9CABC"
+    stroke-width="2"
+  />
+  <rect x="118" y="118" width="130" height="130" rx="65" fill="#22473A" />
+  <text
+    x="183"
+    y="194"
+    text-anchor="middle"
+    fill="#FFF9F1"
+    font-family="Arial, sans-serif"
+    font-size="46"
+    font-weight="700"
+  >
+    HG
+  </text>
+  <text
+    x="118"
+    y="336"
+    fill="#CC6C31"
+    font-family="Arial, sans-serif"
+    font-size="22"
+    letter-spacing="4"
+  >
+    FREELANCE SEO SPECIALIST
+  </text>
+  <text
+    x="118"
+    y="420"
+    fill="#13201B"
+    font-family="Georgia, serif"
+    font-size="64"
+  >
+    Hey Genyl
+  </text>
+  <text
+    x="118"
+    y="478"
+    fill="#58645D"
+    font-family="Arial, sans-serif"
+    font-size="28"
+  >
+    Services, case studies, and SEO writing for brands that need cleaner growth.
+  </text>
+</svg>

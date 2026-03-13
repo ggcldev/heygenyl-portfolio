@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://heygenyl.com/sitemap-index.xml
