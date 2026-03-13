@@ -96,29 +96,29 @@ const serviceCardSummaryBySlug: Record<string, string> = {
 
 const homeFaqs = [
   {
-    question: "What services do you offer?",
+    question: "What SEO services do you offer?",
     answer:
       "I specialize in SEO and WordPress development for local service businesses and agencies. That covers local SEO, on-page optimization, Google Business Profile management, and WordPress SEO depending on what your site and market actually need.",
   },
   {
-    question: "How much do you charge?",
+    question: "How much does hiring a freelance SEO specialist cost?",
     answer:
-      "Pricing depends on the scope and complexity of your project. I do not use one-size-fits-all packages. The best way to figure out what makes sense is to get on a quick call and go from there.",
+      "Pricing depends on the scope and complexity of your project. I don't do one-size-fits-all packages. The best way to figure out what makes sense is to get on a quick call and go from there.",
   },
   {
-    question: "What is your process like?",
+    question: "What does your SEO process look like?",
     answer:
-      "I start by understanding your business, your market, and what is already working before touching anything. From there we move into research, strategy, execution, and ongoing optimization so every decision has a reason behind it.",
+      "I start by understanding your business, your market, and what's already working before touching anything. From there we move into research, strategy, execution, and ongoing optimization so every decision has a reason behind it.",
   },
   {
-    question: "How long will my project take?",
+    question: "How long does it take to see SEO results?",
     answer:
-      "For SEO, you are looking at a minimum of 3 months to start seeing real movement, with full campaign support running up to 9 months. Timelines are always discussed upfront based on your goals, so nothing is set in stone until we talk.",
+      "For SEO, you're looking at a minimum of 3 months to start seeing real movement, with full campaign support running up to 9 months. Timelines are always discussed upfront based on your goals, so nothing is set in stone until we talk.",
   },
   {
     question: "How do payments and revisions work?",
     answer:
-      "I require a 50% deposit before work begins, with the remaining balance due at agreed milestones or upon completion, all processed through Wise. Revisions are unlimited because the goal is to get it right.",
+      "I require a 50% deposit before work begins, with the remaining balance due at agreed milestones or upon completion, all processed through Wise. Revisions are unlimited, because the goal is to get it right.",
   },
 ];
 
@@ -451,7 +451,7 @@ const homeSchema = [
             {homeFaqs.map((item) => (
               <details class="home-faq-item" data-home-faq-item>
                 <summary class="home-faq-question" data-home-faq-trigger>
-                  <span>{item.question}</span>
+                  <h3 class="m-0">{item.question}</h3>
                   <span class="home-faq-icon" aria-hidden="true"></span>
                 </summary>
                 <div class="home-faq-answer" data-home-faq-answer>
