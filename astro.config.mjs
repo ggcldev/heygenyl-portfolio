@@ -12,6 +12,7 @@ const allowedServicePaths = new Set([
 export default defineConfig({
   site: "https://heygenyl.com",
   output: "static",
+  trailingSlash: "always",
   build: {
     inlineStylesheets: "always",
   },
