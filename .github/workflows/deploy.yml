@@ -1,6 +1,7 @@
 name: Build & deploy to Hostinger
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
