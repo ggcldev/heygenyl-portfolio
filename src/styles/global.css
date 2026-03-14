@@ -1304,7 +1304,7 @@
 
 	@media (min-width: 64rem) {
 		.blog-page-view .post-article .prose {
-			font-size: 1.125rem;
+			font-size: 1.125rem !important;
 		}
 	}
 
