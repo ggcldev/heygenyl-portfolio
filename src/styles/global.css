@@ -1302,6 +1302,12 @@
 		font-weight: 400 !important;
 	}
 
+	@media (min-width: 64rem) {
+		.blog-page-view .post-article .prose {
+			font-size: 1.125rem;
+		}
+	}
+
 	.blog-page-view .post-article .prose h1,
 	.blog-page-view .post-article .prose h2 {
 		font-weight: 700 !important;
