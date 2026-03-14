@@ -48,11 +48,13 @@ This repo includes a `.pages.yml` file for Pages CMS. If you connect the reposit
 
 ## Optional contact form overrides
 
-The contact page works out of the box on static hosting by posting to FormSubmit using the email in `src/data/site.ts`. If you want to swap providers later, copy `.env.example` to `.env` and set:
+The contact page works out of the box on static hosting by posting to FormSubmit using the email in `src/data/site.ts`. By default it uses FormSubmit's native verification challenge to reduce spam. If you want to swap providers later, copy `.env.example` to `.env` and set:
 
 - `PUBLIC_CONTACT_FORM_PROVIDER`
 - `PUBLIC_CONTACT_FORM_ENDPOINT`
 - `PUBLIC_CONTACT_FORM_AJAX_ENDPOINT`
+
+Leave `PUBLIC_CONTACT_FORM_AJAX_ENDPOINT` unset if you want FormSubmit's native verification flow. Set it only if you explicitly want AJAX submissions.
 
 ## Deployment for Hostinger shared hosting
 

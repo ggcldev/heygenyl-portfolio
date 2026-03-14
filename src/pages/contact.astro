@@ -19,9 +19,9 @@ const contactFormEndpoint = usesFormSubmit
   ? configuredContactFormEndpoint || `https://formsubmit.co/${siteConfig.email}`
   : configuredContactFormEndpoint;
 const contactFormAjaxEndpoint = usesFormSubmit
-  ? configuredContactFormAjaxEndpoint ||
-    `https://formsubmit.co/ajax/${siteConfig.email}`
+  ? configuredContactFormAjaxEndpoint
   : configuredContactFormAjaxEndpoint || configuredContactFormEndpoint;
+const usesAjaxContactFlow = contactFormAjaxEndpoint.length > 0;
 
 const schema = [
   {
@@ -45,13 +45,15 @@ const schema = [
       intro="Use this page to funnel inquiries from Upwork, direct outreach, referrals, and portfolio traffic. The form now submits in the browser and still works on static hosting."
       chips={["Static-hosting ready", "Browser-based intake", "Direct-email fallback"]}
       actions={[
-        { label: "Email directly", href: `mailto:${siteConfig.email}` },
+        { label: "Email directly", href: "#", dataMl: "hi|heygenyl.com" },
         { label: "View services", href: "/services/", variant: "secondary" },
       ]}
       noteTitle="Submission flow"
       noteCopy={
-        usesFormSubmit
-          ? `This route uses FormSubmit by default. Update ${siteConfig.email} if your final inbox changes, and approve the first live submission email from FormSubmit before launch.`
+        usesFormSubmit && !usesAjaxContactFlow
+          ? `This route uses FormSubmit with native verification by default. Update ${siteConfig.email} if your final inbox changes, and approve the first live submission email from FormSubmit before launch.`
+          : usesFormSubmit && usesAjaxContactFlow
+          ? `This route uses FormSubmit AJAX mode with client-side anti-spam checks. Keep your endpoint private and monitor for abuse.`
           : "This route is wired to your configured form endpoint. Verify the endpoint and thank-you redirect before launch."
       }
     />
@@ -85,8 +87,9 @@ const schema = [
             action={contactFormEndpoint}
             method="POST"
             data-contact-form
-            data-contact-ajax-endpoint={contactFormAjaxEndpoint}
+            data-contact-ajax-endpoint={usesAjaxContactFlow ? contactFormAjaxEndpoint : undefined}
             data-contact-success-url={contactThanksPath}
+            data-contact-min-seconds={usesAjaxContactFlow ? "4" : undefined}
           >
             {usesFormSubmit && (
               <>
@@ -98,6 +101,7 @@ const schema = [
                 <input type="hidden" name="_next" value={contactThanksUrl} />
                 <input type="hidden" name="_url" value={contactPageUrl} />
                 <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="true" />
                 <div class="field-honeypot" aria-hidden="true">
                   <label for="_honey">Leave this field empty</label>
                   <input
@@ -158,16 +162,37 @@ const schema = [
               />
             </div>
 
+            {usesAjaxContactFlow && (
+              <div class="field-group" data-human-check>
+                <label for="humanCheckAnswer">Human verification</label>
+                <p class="muted-note" data-human-check-prompt>
+                  Solve the quick check before sending.
+                </p>
+                <input
+                  id="humanCheckAnswer"
+                  name="humanCheckAnswer"
+                  type="text"
+                  class="field-control"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  placeholder="Enter the answer"
+                  required
+                  data-human-check-input
+                />
+              </div>
+            )}
+
             <p class="muted-note">
-              Submissions are sent from the browser and redirect to an on-site
-              thank-you page. If the form fails, use the direct email link below.
+              {usesAjaxContactFlow
+                ? "Submissions are sent from the browser and redirect to an on-site thank-you page. If the form fails, use the direct email link below."
+                : "FormSubmit may ask for a verification challenge before sending. After successful submission, you will be redirected to the thank-you page."}
             </p>
 
             <p class="form-feedback" data-contact-feedback aria-live="polite" hidden></p>
 
             <div class="page-nav">
               <button class="button primary" type="submit">Send project inquiry</button>
-              <a class="button secondary" href={`mailto:${siteConfig.email}`}>
+              <a class="button secondary" href="#" data-ml="hi|heygenyl.com">
                 Email directly
               </a>
             </div>

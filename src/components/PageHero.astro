@@ -5,6 +5,7 @@ interface Action {
   label: string;
   href: string;
   variant?: "primary" | "secondary";
+  dataMl?: string;
 }
 
 interface Props {
@@ -47,6 +48,7 @@ const {
               "button",
               action.variant === "secondary" ? "secondary" : "primary",
             ]}
+            {...(action.dataMl ? { "data-ml": action.dataMl } : {})}
           >
             {action.label}
           </a>

@@ -54,5 +54,14 @@ const headProps = {
       <slot />
     </main>
     <Footer />
+    <script>
+      document.querySelectorAll<HTMLAnchorElement>("a[data-ml]").forEach((a) => {
+        const [user, domain] = (a.dataset.ml ?? "").split("|");
+        if (user && domain) {
+          a.href = `mailto:${user}@${domain}`;
+          if (a.dataset.mlLabel) a.textContent = `${user}@${domain}`;
+        }
+      });
+    </script>
   </body>
 </html>
