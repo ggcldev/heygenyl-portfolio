@@ -62,12 +62,21 @@ const setSubmitButtonState = (
     return;
   }
 
+  const label = button.querySelector<HTMLElement>("[data-submit-label]");
+
   if (!button.dataset.idleLabel) {
-    button.dataset.idleLabel = button.textContent?.trim() || "Send project inquiry";
+    button.dataset.idleLabel =
+      label?.textContent?.trim() || button.textContent?.trim() || "Send project inquiry";
   }
 
   button.disabled = isPending;
-  button.textContent = isPending ? "Sending..." : button.dataset.idleLabel;
+  const nextLabel = isPending ? "Sending..." : button.dataset.idleLabel;
+  if (label) {
+    label.textContent = nextLabel;
+    return;
+  }
+
+  button.textContent = nextLabel;
 };
 
 export const submitContactForm = async (

@@ -1,5 +1,4 @@
 ---
-import PageHero from "../components/PageHero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteConfig } from "../data/site";
 
@@ -40,151 +39,148 @@ const schema = [
   schema={schema}
 >
   <div class="contact-page">
-    <PageHero
-      eyebrow="Contact"
-      title="Hire an SEO specialist without turning the first call into a discovery marathon."
-      intro="Use this page to funnel inquiries from Upwork, direct outreach, referrals, and portfolio traffic. The form now submits in the browser and still works on static hosting."
-      chips={["Static-hosting ready", "Browser-based intake", "Direct-email fallback"]}
-      actions={[
-        { label: "Email directly", href: "#", dataMl: "hi|heygenyl.com" },
-        { label: "View services", href: "/services/", variant: "secondary" },
-      ]}
-      noteTitle="Submission flow"
-      noteCopy={
-        usesFormSubmit && !usesAjaxContactFlow
-          ? `This route uses FormSubmit with native verification by default. Update ${siteConfig.email} if your final inbox changes, and approve the first live submission email from FormSubmit before launch.`
-          : usesFormSubmit && usesAjaxContactFlow
-          ? `This route uses FormSubmit AJAX mode with client-side anti-spam checks. Keep your endpoint private and monitor for abuse.`
-          : "This route is wired to your configured form endpoint. Verify the endpoint and thank-you redirect before launch."
-      }
-    />
-
-    <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-        <div class="md:sticky md:top-24 self-start">
-          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Project intake</h2>
-          <p class="text-sm text-muted mt-2">
-            Keep the first message specific enough that the right clients can
-            self-qualify.
+    <section class="content-shell py-24">
+      <div class="grid grid-cols-1 items-start gap-10 md:grid-cols-2 md:gap-12">
+        <div class="hero pt-8 md:pt-10">
+          <p class="eyebrow m-0">Contact</p>
+          <h1>Your Competitors Are Ranking. Let's Fix That.</h1>
+          <h2 class="m-0 text-[clamp(1.05rem,1.6vw,1.3rem)] font-bold uppercase">
+            What Happens After You Reach Out
+          </h2>
+          <p>
+            I work with local businesses and agencies that are tired of being invisible on Google. If you need someone to dig into your site, figure out what's holding you back, and actually fix it, that's exactly what I do. I'm currently taking on freelance projects and open to full-time roles where SEO is taken seriously, not treated as an afterthought.
           </p>
         </div>
 
-        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-          <article class="card">
-            <p class="eyebrow">What to include</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              Make it easy for the right clients to self-qualify.
-            </h3>
-            <ul class="m-0 mt-4 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
-              <li>What kind of site or business you are working on</li>
-              <li>Which service page made them reach out</li>
-              <li>Whether they need strategy, implementation, or both</li>
-              <li>Any timing or launch deadline that affects priorities</li>
-            </ul>
-          </article>
-
-          <form
-            class="form-surface grid gap-5"
-            action={contactFormEndpoint}
-            method="POST"
-            data-contact-form
-            data-contact-ajax-endpoint={usesAjaxContactFlow ? contactFormAjaxEndpoint : undefined}
-            data-contact-success-url={contactThanksPath}
-            data-contact-min-seconds={usesAjaxContactFlow ? "4" : undefined}
-          >
-            {usesFormSubmit && (
-              <>
+        <form
+          class="form-surface contact-form grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-8 md:gap-y-7"
+          action={contactFormEndpoint}
+          method="POST"
+          data-contact-form
+          data-contact-ajax-endpoint={usesAjaxContactFlow ? contactFormAjaxEndpoint : undefined}
+          data-contact-success-url={contactThanksPath}
+          data-contact-min-seconds={usesAjaxContactFlow ? "4" : undefined}
+        >
+          {usesFormSubmit && (
+            <>
+              <input
+                type="hidden"
+                name="_subject"
+                value="New portfolio inquiry from heygenyl.com"
+              />
+              <input type="hidden" name="_next" value={contactThanksUrl} />
+              <input type="hidden" name="_url" value={contactPageUrl} />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="true" />
+              <div class="field-honeypot" aria-hidden="true">
+                <label for="_honey">Leave this field empty</label>
                 <input
-                  type="hidden"
-                  name="_subject"
-                  value="New portfolio inquiry from heygenyl.com"
+                  id="_honey"
+                  name="_honey"
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
                 />
-                <input type="hidden" name="_next" value={contactThanksUrl} />
-                <input type="hidden" name="_url" value={contactPageUrl} />
-                <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_captcha" value="true" />
-                <div class="field-honeypot" aria-hidden="true">
-                  <label for="_honey">Leave this field empty</label>
-                  <input
-                    id="_honey"
-                    name="_honey"
-                    type="text"
-                    tabindex="-1"
-                    autocomplete="off"
-                  />
-                </div>
-              </>
-            )}
-
-            <div class="field-group">
-              <label for="name">Name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                class="field-control"
-                placeholder="Your name"
-                required
-              />
-            </div>
-
-            <div class="field-group">
-              <label for="email">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                class="field-control"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div class="field-group">
-              <label for="service">Service needed</label>
-              <select id="service" name="service" class="field-control">
-                <option>Freelance SEO specialist</option>
-                <option>Local SEO consultant</option>
-                <option>Technical SEO specialist</option>
-                <option>SEO audit service</option>
-                <option>WordPress website designer</option>
-                <option>WordPress developer for hire</option>
-              </select>
-            </div>
-
-            <div class="field-group">
-              <label for="message">Project details</label>
-              <textarea
-                id="message"
-                name="message"
-                class="field-control"
-                placeholder="Tell me about the site, what is not working, and what kind of support you need."
-                required
-              />
-            </div>
-
-            {turnstileSiteKey && (
-              <div class="field-group">
-                <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="dark" data-appearance="always"></div>
               </div>
-            )}
+            </>
+          )}
 
-            <p class="muted-note">
-              {usesAjaxContactFlow
-                ? "Submissions are sent from the browser and redirect to an on-site thank-you page. If the form fails, use the direct email link below."
-                : "FormSubmit may ask for a verification challenge before sending. After successful submission, you will be redirected to the thank-you page."}
-            </p>
+          <div class="field-group">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              class="field-control"
+              placeholder="Your name"
+              required
+            />
+          </div>
 
-            <p class="form-feedback" data-contact-feedback aria-live="polite" hidden></p>
+          <div class="field-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="field-control"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
 
-            <div class="page-nav">
-              <button class="button primary" type="submit">Send project inquiry</button>
-              <a class="button secondary" href="#" data-ml="hi|heygenyl.com">
-                Email directly
-              </a>
+          <div class="field-group md:col-span-2">
+            <label for="websiteUrl">Your Website URL</label>
+            <input
+              id="websiteUrl"
+              name="websiteUrl"
+              type="url"
+              class="field-control"
+              placeholder="https://yourwebsite.com"
+            />
+          </div>
+
+          <div class="field-group md:col-span-2">
+            <label for="service">Service needed</label>
+            <select id="service" name="service" class="field-control">
+              <option>SEO</option>
+              <option>Local SEO</option>
+              <option>Website Audit</option>
+              <option>Technical Audit</option>
+              <option>WordPress Design</option>
+              <option>WordPress SEO</option>
+              <option>Others (Specificy in Project Details)</option>
+            </select>
+          </div>
+
+          <div class="field-group md:col-span-2">
+            <label for="message">Project details</label>
+            <textarea
+              id="message"
+              name="message"
+              class="field-control"
+              placeholder="Tell me about the site, what is not working, and what kind of support you need."
+              required
+            />
+          </div>
+
+          {turnstileSiteKey && (
+            <div class="field-group md:col-span-2">
+              <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="dark" data-appearance="always"></div>
             </div>
-          </form>
-        </div>
+          )}
+
+          <p class="muted-note md:col-span-2">
+            {usesAjaxContactFlow
+              ? "Submissions are sent from the browser and redirect to an on-site thank-you page. If the form fails, use the direct email link below."
+              : "FormSubmit may ask for a verification challenge before sending. After successful submission, you will be redirected to the thank-you page."}
+          </p>
+
+          <p class="form-feedback md:col-span-2" data-contact-feedback aria-live="polite" hidden></p>
+
+          <div class="page-nav md:col-span-2">
+            <button class="button primary button-with-arrow" type="submit">
+              <span data-submit-label>Send Message</span>
+              <span class="button-arrow-circle" aria-hidden="true">
+                <svg
+                  class="button-arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  focusable="false"
+                >
+                  <path d="M5 15L15 5" />
+                  <path d="M8.8 5H15V11.2" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </form>
       </div>
     </section>
   </div>
