@@ -25,87 +25,89 @@ const schema = [
 ---
 
 <BaseLayout title={study.metaTitle} description={study.metaDescription} schema={schema}>
-  <PageHero
-    eyebrow="Case study"
-    title={study.title}
-    intro={study.summary}
-    compact
-    chips={study.chips}
-    actions={[
-      { label: "Discuss your site", href: "/contact/" },
-      { label: "Related service", href: study.serviceHref, variant: "secondary" },
-    ]}
-    noteTitle="Use real metrics before launch"
-    noteCopy={study.note}
-  />
+  <div class="case-studies-page">
+    <PageHero
+      eyebrow="Case study"
+      title={study.title}
+      intro={study.summary}
+      compact
+      chips={study.chips}
+      actions={[
+        { label: "Discuss your site", href: "/contact/" },
+        { label: "Related service", href: study.serviceHref, variant: "secondary" },
+      ]}
+      noteTitle="Use real metrics before launch"
+      noteCopy={study.note}
+    />
 
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Snapshot</h2>
-        <p class="text-sm text-muted mt-2">
-          Lead with the signals a hiring manager or client cares about first.
-        </p>
-      </div>
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Snapshot</h2>
+          <p class="text-sm text-muted mt-2">
+            Lead with the signals a hiring manager or client cares about first.
+          </p>
+        </div>
 
-      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {study.snapshot.map((item) => (
-          <article class="card">
-            <p class="eyebrow">{item.label}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{item.value}</h3>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Challenge and strategy</h2>
-      </div>
-
-      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        <article class="card">
-          <p class="eyebrow">Challenge</p>
-          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{study.challengeTitle}</h3>
-          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2 mt-3">
-            {study.challenge.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article class="card">
-          <p class="eyebrow">Strategy</p>
-          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{study.strategyTitle}</h3>
-          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2 mt-3">
-            {study.strategy.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Proof points</h2>
-      </div>
-
-      <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
-        {study.proofPoints.map((item) => (
-          <article class="card">
-            <p class="eyebrow">{item.title}</p>
-            <p class="text-sm 2xl:text-lg text-muted">{item.copy}</p>
-          </article>
-        ))}
-        <div class="page-nav">
-          <a class="button secondary" href={study.serviceHref}>View related service</a>
+        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+          {study.snapshot.map((item) => (
+            <article class="card">
+              <p class="eyebrow">{item.label}</p>
+              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{item.value}</h3>
+            </article>
+          ))}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Challenge and strategy</h2>
+        </div>
+
+        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+          <article class="card">
+            <p class="eyebrow">Challenge</p>
+            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{study.challengeTitle}</h3>
+            <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2 mt-3">
+              {study.challenge.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="card">
+            <p class="eyebrow">Strategy</p>
+            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{study.strategyTitle}</h3>
+            <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2 mt-3">
+              {study.strategy.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Proof points</h2>
+        </div>
+
+        <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
+          {study.proofPoints.map((item) => (
+            <article class="card">
+              <p class="eyebrow">{item.title}</p>
+              <p class="text-sm 2xl:text-lg text-muted">{item.copy}</p>
+            </article>
+          ))}
+          <div class="page-nav">
+            <a class="button secondary" href={study.serviceHref}>View related service</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

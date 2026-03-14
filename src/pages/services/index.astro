@@ -18,43 +18,45 @@ const schema = [
   description="SEO and WordPress services hub covering freelance SEO specialist support, local SEO specialist work, and WordPress SEO expert implementation."
   schema={schema}
 >
-  <PageHero
-    eyebrow="Services hub"
-    title="SEO and WordPress services built around how clients actually search."
-    intro="This hub currently focuses on three core offers written for clear commercial intent: freelance SEO specialist, local SEO specialist, and WordPress SEO expert."
-    chips={["SEO and WordPress services", "3 active service pages", "Commercial-intent pages"]}
-    actions={[
-      { label: "Open contact page", href: "/contact/" },
-      { label: "See case studies", href: "/case-studies/", variant: "secondary" },
-    ]}
-    noteTitle="Architecture note"
-    noteCopy="Keep this page broad while the child pages carry the exact service phrases."
-  />
+  <div class="services-page">
+    <PageHero
+      eyebrow="Services hub"
+      title="SEO and WordPress services built around how clients actually search."
+      intro="This hub currently focuses on three core offers written for clear commercial intent: freelance SEO specialist, local SEO specialist, and WordPress SEO expert."
+      chips={["SEO and WordPress services", "3 active service pages", "Commercial-intent pages"]}
+      actions={[
+        { label: "Open contact page", href: "/contact/" },
+        { label: "See case studies", href: "/case-studies/", variant: "secondary" },
+      ]}
+      noteTitle="Architecture note"
+      noteCopy="Keep this page broad while the child pages carry the exact service phrases."
+    />
 
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-      <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">All services</h2>
-        <p class="text-sm text-muted mt-2">
-          Keep the hub broad, then let each child route carry one specific
-          commercial phrase.
-        </p>
-      </div>
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+        <div class="md:sticky md:top-24 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">All services</h2>
+          <p class="text-sm text-muted mt-2">
+            Keep the hub broad, then let each child route carry one specific
+            commercial phrase.
+          </p>
+        </div>
 
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {activeServicePages.map((service) => (
-          <a
-            class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-            href={`/services/${service.slug}/`}
-          >
-            <p class="eyebrow">{service.shortTitle}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-              {service.title}
-            </h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{service.summary}</p>
-          </a>
-        ))}
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+          {activeServicePages.map((service) => (
+            <a
+              class="card block transition duration-300 ease-in-out hover:-translate-y-1"
+              href={`/services/${service.slug}/`}
+            >
+              <p class="eyebrow">{service.shortTitle}</p>
+              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+                {service.title}
+              </h3>
+              <p class="text-sm 2xl:text-lg text-muted mt-2">{service.summary}</p>
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>

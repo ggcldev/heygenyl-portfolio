@@ -38,142 +38,144 @@ const schema = [
   description="Contact page for SEO consulting, WordPress design, development support, audits, and project inquiries."
   schema={schema}
 >
-  <PageHero
-    eyebrow="Contact"
-    title="Hire an SEO specialist without turning the first call into a discovery marathon."
-    intro="Use this page to funnel inquiries from Upwork, direct outreach, referrals, and portfolio traffic. The form now submits in the browser and still works on static hosting."
-    chips={["Static-hosting ready", "Browser-based intake", "Direct-email fallback"]}
-    actions={[
-      { label: "Email directly", href: `mailto:${siteConfig.email}` },
-      { label: "View services", href: "/services/", variant: "secondary" },
-    ]}
-    noteTitle="Submission flow"
-    noteCopy={
-      usesFormSubmit
-        ? `This route uses FormSubmit by default. Update ${siteConfig.email} if your final inbox changes, and approve the first live submission email from FormSubmit before launch.`
-        : "This route is wired to your configured form endpoint. Verify the endpoint and thank-you redirect before launch."
-    }
-  />
+  <div class="contact-page">
+    <PageHero
+      eyebrow="Contact"
+      title="Hire an SEO specialist without turning the first call into a discovery marathon."
+      intro="Use this page to funnel inquiries from Upwork, direct outreach, referrals, and portfolio traffic. The form now submits in the browser and still works on static hosting."
+      chips={["Static-hosting ready", "Browser-based intake", "Direct-email fallback"]}
+      actions={[
+        { label: "Email directly", href: `mailto:${siteConfig.email}` },
+        { label: "View services", href: "/services/", variant: "secondary" },
+      ]}
+      noteTitle="Submission flow"
+      noteCopy={
+        usesFormSubmit
+          ? `This route uses FormSubmit by default. Update ${siteConfig.email} if your final inbox changes, and approve the first live submission email from FormSubmit before launch.`
+          : "This route is wired to your configured form endpoint. Verify the endpoint and thank-you redirect before launch."
+      }
+    />
 
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-      <div class="md:sticky md:top-24 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Project intake</h2>
-        <p class="text-sm text-muted mt-2">
-          Keep the first message specific enough that the right clients can
-          self-qualify.
-        </p>
-      </div>
-
-      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        <article class="card">
-          <p class="eyebrow">What to include</p>
-          <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-            Make it easy for the right clients to self-qualify.
-          </h3>
-          <ul class="m-0 mt-4 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
-            <li>What kind of site or business you are working on</li>
-            <li>Which service page made them reach out</li>
-            <li>Whether they need strategy, implementation, or both</li>
-            <li>Any timing or launch deadline that affects priorities</li>
-          </ul>
-        </article>
-
-        <form
-          class="form-surface grid gap-5"
-          action={contactFormEndpoint}
-          method="POST"
-          data-contact-form
-          data-contact-ajax-endpoint={contactFormAjaxEndpoint}
-          data-contact-success-url={contactThanksPath}
-        >
-          {usesFormSubmit && (
-            <>
-              <input
-                type="hidden"
-                name="_subject"
-                value="New portfolio inquiry from heygenyl.com"
-              />
-              <input type="hidden" name="_next" value={contactThanksUrl} />
-              <input type="hidden" name="_url" value={contactPageUrl} />
-              <input type="hidden" name="_template" value="table" />
-              <div class="field-honeypot" aria-hidden="true">
-                <label for="_honey">Leave this field empty</label>
-                <input
-                  id="_honey"
-                  name="_honey"
-                  type="text"
-                  tabindex="-1"
-                  autocomplete="off"
-                />
-              </div>
-            </>
-          )}
-
-          <div class="field-group">
-            <label for="name">Name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              class="field-control"
-              placeholder="Your name"
-              required
-            />
-          </div>
-
-          <div class="field-group">
-            <label for="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              class="field-control"
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-
-          <div class="field-group">
-            <label for="service">Service needed</label>
-            <select id="service" name="service" class="field-control">
-              <option>Freelance SEO specialist</option>
-              <option>Local SEO consultant</option>
-              <option>Technical SEO specialist</option>
-              <option>SEO audit service</option>
-              <option>WordPress website designer</option>
-              <option>WordPress developer for hire</option>
-            </select>
-          </div>
-
-          <div class="field-group">
-            <label for="message">Project details</label>
-            <textarea
-              id="message"
-              name="message"
-              class="field-control"
-              placeholder="Tell me about the site, what is not working, and what kind of support you need."
-              required
-            />
-          </div>
-
-          <p class="muted-note">
-            Submissions are sent from the browser and redirect to an on-site
-            thank-you page. If the form fails, use the direct email link below.
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+        <div class="md:sticky md:top-24 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Project intake</h2>
+          <p class="text-sm text-muted mt-2">
+            Keep the first message specific enough that the right clients can
+            self-qualify.
           </p>
+        </div>
 
-          <p class="form-feedback" data-contact-feedback aria-live="polite" hidden></p>
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+          <article class="card">
+            <p class="eyebrow">What to include</p>
+            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+              Make it easy for the right clients to self-qualify.
+            </h3>
+            <ul class="m-0 mt-4 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+              <li>What kind of site or business you are working on</li>
+              <li>Which service page made them reach out</li>
+              <li>Whether they need strategy, implementation, or both</li>
+              <li>Any timing or launch deadline that affects priorities</li>
+            </ul>
+          </article>
 
-          <div class="page-nav">
-            <button class="button primary" type="submit">Send project inquiry</button>
-            <a class="button secondary" href={`mailto:${siteConfig.email}`}>
-              Email directly
-            </a>
-          </div>
-        </form>
+          <form
+            class="form-surface grid gap-5"
+            action={contactFormEndpoint}
+            method="POST"
+            data-contact-form
+            data-contact-ajax-endpoint={contactFormAjaxEndpoint}
+            data-contact-success-url={contactThanksPath}
+          >
+            {usesFormSubmit && (
+              <>
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="New portfolio inquiry from heygenyl.com"
+                />
+                <input type="hidden" name="_next" value={contactThanksUrl} />
+                <input type="hidden" name="_url" value={contactPageUrl} />
+                <input type="hidden" name="_template" value="table" />
+                <div class="field-honeypot" aria-hidden="true">
+                  <label for="_honey">Leave this field empty</label>
+                  <input
+                    id="_honey"
+                    name="_honey"
+                    type="text"
+                    tabindex="-1"
+                    autocomplete="off"
+                  />
+                </div>
+              </>
+            )}
+
+            <div class="field-group">
+              <label for="name">Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                class="field-control"
+                placeholder="Your name"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                class="field-control"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="service">Service needed</label>
+              <select id="service" name="service" class="field-control">
+                <option>Freelance SEO specialist</option>
+                <option>Local SEO consultant</option>
+                <option>Technical SEO specialist</option>
+                <option>SEO audit service</option>
+                <option>WordPress website designer</option>
+                <option>WordPress developer for hire</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="message">Project details</label>
+              <textarea
+                id="message"
+                name="message"
+                class="field-control"
+                placeholder="Tell me about the site, what is not working, and what kind of support you need."
+                required
+              />
+            </div>
+
+            <p class="muted-note">
+              Submissions are sent from the browser and redirect to an on-site
+              thank-you page. If the form fails, use the direct email link below.
+            </p>
+
+            <p class="form-feedback" data-contact-feedback aria-live="polite" hidden></p>
+
+            <div class="page-nav">
+              <button class="button primary" type="submit">Send project inquiry</button>
+              <a class="button secondary" href={`mailto:${siteConfig.email}`}>
+                Email directly
+              </a>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <script>
     import "../scripts/contact-form";

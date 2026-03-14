@@ -52,103 +52,105 @@ const schema = [
 ---
 
 <BaseLayout title={service.metaTitle} description={service.metaDescription} schema={schema}>
-  <PageHero
-    eyebrow="Service page"
-    title={service.title}
-    intro={service.summary}
-    compact
-    chips={service.chips}
-    actions={[
-      { label: "Start a project", href: "/contact/" },
-      { label: "See case studies", href: "/case-studies/", variant: "secondary" },
-    ]}
-    noteTitle="Use this page to rank for the exact service phrase"
-    noteCopy={service.note}
-  />
+  <div class="services-page">
+    <PageHero
+      eyebrow="Service page"
+      title={service.title}
+      intro={service.summary}
+      compact
+      chips={service.chips}
+      actions={[
+        { label: "Start a project", href: "/contact/" },
+        { label: "See case studies", href: "/case-studies/", variant: "secondary" },
+      ]}
+      noteTitle="Use this page to rank for the exact service phrase"
+      noteCopy={service.note}
+    />
 
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">What I handle</h2>
-        <p class="text-sm text-muted mt-2">
-          Execution, prioritization, and the handoff your site actually needs.
-        </p>
-      </div>
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">What I handle</h2>
+          <p class="text-sm text-muted mt-2">
+            Execution, prioritization, and the handoff your site actually needs.
+          </p>
+        </div>
 
-      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        {service.deliverables.map((item) => (
-          <article class="card">
-            <p class="eyebrow">{item.title}</p>
-            <p class="text-sm 2xl:text-lg text-muted">{item.copy}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Best fit</h2>
-      </div>
-
-      <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-        <article class="card">
-          <p class="eyebrow">Ideal if you need</p>
-          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
-            {service.idealFor.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article class="card">
-          <p class="eyebrow">Likely outcomes</p>
-          <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
-            {service.outcomes.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">Process</h2>
-      </div>
-
-      <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
-        {service.process.map((step, index) => (
-          <article class="card">
-            <p class="eyebrow">Step {index + 1}</p>
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{step.title}</h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="content-shell">
-    <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-      <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase">FAQ</h2>
-      </div>
-
-      <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
-        {service.faq.map((item) => (
-          <article class="card">
-            <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{item.question}</h3>
-            <p class="text-sm 2xl:text-lg text-muted mt-2">{item.answer}</p>
-          </article>
-        ))}
-        <div class="page-nav">
-          <a class="button primary" href="/contact/">Book a project intro</a>
+        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+          {service.deliverables.map((item) => (
+            <article class="card">
+              <p class="eyebrow">{item.title}</p>
+              <p class="text-sm 2xl:text-lg text-muted">{item.copy}</p>
+            </article>
+          ))}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Best fit</h2>
+        </div>
+
+        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+          <article class="card">
+            <p class="eyebrow">Ideal if you need</p>
+            <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+              {service.idealFor.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="card">
+            <p class="eyebrow">Likely outcomes</p>
+            <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+              {service.outcomes.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Process</h2>
+        </div>
+
+        <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
+          {service.process.map((step, index) => (
+            <article class="card">
+              <p class="eyebrow">Step {index + 1}</p>
+              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{step.title}</h3>
+              <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="content-shell">
+      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
+        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
+          <h2 class="text-sm 2xl:text-xl font-bold uppercase">FAQ</h2>
+        </div>
+
+        <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
+          {service.faq.map((item) => (
+            <article class="card">
+              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{item.question}</h3>
+              <p class="text-sm 2xl:text-lg text-muted mt-2">{item.answer}</p>
+            </article>
+          ))}
+          <div class="page-nav">
+            <a class="button primary" href="/contact/">Book a project intro</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
