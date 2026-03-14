@@ -120,6 +120,12 @@ export const attachContactForm = (
       }
     }
 
+    const turnstileInput = form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
+    if (form.querySelector(".cf-turnstile") && (!turnstileInput || !turnstileInput.value)) {
+      setFeedback(feedback, "error", "Please complete the verification check.");
+      return;
+    }
+
     if (humanCheck) {
       const answer = humanCheck.input.value.trim();
       if (answer !== humanCheck.expectedAnswer) {
@@ -140,6 +146,7 @@ export const attachContactForm = (
     try {
       const formData = new FormData(form);
       formData.delete("humanCheckAnswer");
+      formData.delete("cf-turnstile-response");
 
       const response = await submitForm(endpoint, formData);
       if (!response.ok) {

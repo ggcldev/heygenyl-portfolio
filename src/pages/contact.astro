@@ -19,9 +19,10 @@ const contactFormEndpoint = usesFormSubmit
   ? configuredContactFormEndpoint || `https://formsubmit.co/${siteConfig.email}`
   : configuredContactFormEndpoint;
 const contactFormAjaxEndpoint = usesFormSubmit
-  ? configuredContactFormAjaxEndpoint
+  ? configuredContactFormAjaxEndpoint || `https://formsubmit.co/ajax/${siteConfig.email}`
   : configuredContactFormAjaxEndpoint || configuredContactFormEndpoint;
 const usesAjaxContactFlow = contactFormAjaxEndpoint.length > 0;
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || "";
 
 const schema = [
   {
@@ -162,23 +163,9 @@ const schema = [
               />
             </div>
 
-            {usesAjaxContactFlow && (
-              <div class="field-group" data-human-check>
-                <label for="humanCheckAnswer">Human verification</label>
-                <p class="muted-note" data-human-check-prompt>
-                  Solve the quick check before sending.
-                </p>
-                <input
-                  id="humanCheckAnswer"
-                  name="humanCheckAnswer"
-                  type="text"
-                  class="field-control"
-                  inputmode="numeric"
-                  autocomplete="off"
-                  placeholder="Enter the answer"
-                  required
-                  data-human-check-input
-                />
+            {turnstileSiteKey && (
+              <div class="field-group">
+                <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="dark"></div>
               </div>
             )}
 
@@ -202,6 +189,9 @@ const schema = [
     </section>
   </div>
 
+  {turnstileSiteKey && (
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  )}
   <script>
     import "../scripts/contact-form";
   </script>
