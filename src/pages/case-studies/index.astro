@@ -1,7 +1,26 @@
 ---
+import { Picture } from "astro:assets";
 import PageHero from "../../components/PageHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { caseStudies, siteConfig } from "../../data/site";
+import desertItSolutionsImage from "../../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
+import worksAutoCenterImage from "../../assets/case-studies/the-works-auto-center/the-works-auto-center-img-1-desktop.webp";
+import everythingProbateImage from "../../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
+
+const caseStudyCardMedia = {
+  "desert-it-solutions-msp": {
+    src: desertItSolutionsImage,
+    alt: "Desert IT Solutions case study preview",
+  },
+  "the-works-auto-center-car-detailing": {
+    src: worksAutoCenterImage,
+    alt: "The Works Auto Center case study preview",
+  },
+  "everything-probate-legal-firm": {
+    src: everythingProbateImage,
+    alt: "Everything Probate case study preview",
+  },
+} as const;
 
 const schema = [
   {
@@ -20,41 +39,54 @@ const schema = [
 >
   <div class="case-studies-page">
     <PageHero
-      eyebrow="Case studies hub"
-      title="SEO case studies that can be specific without pretending every project looks the same."
-      intro="These pages are structured to show problem framing, implementation thinking, and business outcomes by niche. Replace the starter proof blocks with your real screenshots and metrics."
-      chips={["SEO case studies", "Niche-specific pages", "Portfolio-ready structure"]}
+      eyebrow="Case Studies"
+      title="Here's What I've Been Working On"
+      intro="Every project starts with a different problem. Here is how I diagnosed each one, what I did about it, and what actually moved the needle."
       actions={[
-        { label: "Discuss your site", href: "/contact/" },
-        { label: "Open service hub", href: "/services/", variant: "secondary" },
+        { label: "Let's Jump on a Call", href: "/contact/", withArrow: true },
       ]}
-      noteTitle="Publishing note"
-      noteCopy="Keep the page names niche-specific. It helps both relevance and memorability."
     />
 
     <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-        <div class="md:sticky md:top-24 self-start">
-          <h2 class="text-sm 2xl:text-xl font-bold uppercase">All case studies</h2>
-          <p class="text-sm text-muted mt-2">
-            Each route is meant to feel like a specific engagement, not a generic
-            portfolio entry.
-          </p>
-        </div>
+      <div class="grid grid-cols-1 gap-y-8 py-24">
+        <div class="mx-auto w-full max-w-3xl grid grid-cols-1 gap-y-8">
+          {caseStudies.map((study) => {
+            const media =
+              caseStudyCardMedia[study.slug as keyof typeof caseStudyCardMedia];
 
-        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-          {caseStudies.map((study) => (
-            <a
-              class="card block transition duration-300 ease-in-out hover:-translate-y-1"
-              href={`/case-studies/${study.slug}/`}
-            >
-              <p class="eyebrow">{study.shortTitle}</p>
-              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-                {study.title}
-              </h3>
-              <p class="text-sm 2xl:text-lg text-muted mt-2">{study.summary}</p>
-            </a>
-          ))}
+            return (
+              <a
+                class="block w-full text-left transition duration-200 ease-out hover:opacity-90"
+                href={`/case-studies/${study.slug}/`}
+              >
+                <article class="grid gap-4 sm:grid-cols-[240px_minmax(0,1fr)] sm:items-start">
+                  <div class="overflow-hidden">
+                    <Picture
+                      src={media.src}
+                      alt={media.alt}
+                      formats={["avif", "webp"]}
+                      fallbackFormat="webp"
+                      widths={[360, 480, 640, 800]}
+                      sizes="(max-width: 639px) 100vw, 240px"
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+
+                  <div class="grid gap-2">
+                    <p class="eyebrow">{study.shortTitle}</p>
+                    <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
+                      {study.title}
+                    </h3>
+                    <p class="case-study-card__summary text-sm 2xl:text-lg text-muted m-0">
+                      {study.summary}
+                    </p>
+                  </div>
+                </article>
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
