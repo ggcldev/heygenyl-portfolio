@@ -8,22 +8,22 @@ const shouldShowCookieBanner = Boolean(gaMeasurementId) && import.meta.env.PROD;
   shouldShowCookieBanner && (
     <>
       <section
-        class="cookie-consent"
-        data-cookie-consent
+        class="site-consent-banner"
+        data-site-consent-banner
         role="dialog"
         aria-live="polite"
         aria-label="Cookie preferences"
       >
-        <p class="cookie-consent__copy">
+        <p class="site-consent-banner__copy">
           This site uses cookies for analytics (GA4) to understand site performance.
           You can accept or decline non-essential cookies. Read more in the{" "}
           <a href="/privacy-policy/">Privacy Policy</a>.
         </p>
-        <div class="cookie-consent__actions">
-          <button class="button primary" type="button" data-cookie-accept>
+        <div class="site-consent-banner__actions">
+          <button class="button primary" type="button" data-site-consent-accept>
             Accept
           </button>
-          <button class="button secondary" type="button" data-cookie-reject>
+          <button class="button secondary" type="button" data-site-consent-reject>
             Decline
           </button>
         </div>
@@ -33,11 +33,11 @@ const shouldShowCookieBanner = Boolean(gaMeasurementId) && import.meta.env.PROD;
         (() => {
           const consentStorageKey = "site_cookie_consent_v1";
           const consentEventName = "cookie-consent-updated";
-          const root = document.querySelector("[data-cookie-consent]");
+          const root = document.querySelector("[data-site-consent-banner]");
           if (!root) return;
 
-          const acceptButton = root.querySelector("[data-cookie-accept]");
-          const rejectButton = root.querySelector("[data-cookie-reject]");
+          const acceptButton = root.querySelector("[data-site-consent-accept]");
+          const rejectButton = root.querySelector("[data-site-consent-reject]");
 
           const readConsent = () => {
             try {
