@@ -305,17 +305,21 @@
 	}
 
 	.site-header {
-		height: calc(var(--grid-cell) / 2);
-		min-height: calc(var(--grid-cell) / 2);
+		height: calc(var(--grid-cell) * 0.72);
+		min-height: calc(var(--grid-cell) * 0.72);
 		display: flex;
 		align-items: center;
+		padding-top: clamp(0.24rem, 0.62vh, 0.46rem);
+		padding-bottom: clamp(0.24rem, 0.62vh, 0.46rem);
 		padding-left: calc(var(--grid-cell) / 2);
 		padding-right: calc(var(--grid-cell) / 2);
 		position: sticky;
 		top: 0;
 		z-index: 120;
-		background: color-mix(in oklab, var(--color-paper) 96%, transparent);
-		border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 10%, transparent);
+		background: color-mix(in oklab, var(--color-paper) 84%, transparent);
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px);
+		border-bottom: 1px solid transparent;
 		transition:
 			background-color 260ms ease,
 			border-color 260ms ease,
@@ -332,7 +336,7 @@
 
 	.site-header__brand,
 	.site-header__menu-toggle {
-		font-size: 0.75rem;
+		font-size: 0.84rem;
 		letter-spacing: 0.08em;
 		line-height: 1.1;
 	}
@@ -357,7 +361,7 @@
 	}
 
 	.site-header.is-scrolled {
-		background: color-mix(in oklab, var(--color-paper) 98%, transparent);
+		background: color-mix(in oklab, var(--color-paper) 88%, transparent);
 		border-bottom-color: color-mix(in oklab, var(--color-ink) 16%, transparent);
 		box-shadow: 0 8px 24px color-mix(in oklab, var(--color-ink) 12%, transparent);
 		padding-left: calc(var(--grid-cell) * 0.42);
@@ -366,14 +370,16 @@
 
 	@media (max-width: 720px) {
 		.site-header {
-			min-height: calc(var(--grid-cell) * 2);
+			min-height: calc(var(--grid-cell) * 2.35);
+			padding-top: 0.42rem;
+			padding-bottom: 0.42rem;
 			padding-left: calc(var(--grid-cell) / 1);
 			padding-right: calc(var(--grid-cell) / 1);
 		}
 
 		.site-header__brand,
 		.site-header__menu-toggle {
-			font-size: 0.98rem;
+			font-size: 1.04rem;
 			letter-spacing: 0.09em;
 		}
 
