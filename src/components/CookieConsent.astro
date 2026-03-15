@@ -33,6 +33,7 @@ const shouldShowCookieBanner = Boolean(gaMeasurementId) && import.meta.env.PROD;
         (() => {
           const consentStorageKey = "site_cookie_consent_v1";
           const consentEventName = "cookie-consent-updated";
+          const consentOpenEventName = "site-consent-open";
           const root = document.querySelector("[data-site-consent-banner]");
           if (!root) return;
 
@@ -58,12 +59,13 @@ const shouldShowCookieBanner = Boolean(gaMeasurementId) && import.meta.env.PROD;
           };
 
           const existing = readConsent();
-          if (existing === "accepted" || existing === "rejected") {
-            root.hidden = true;
-            return;
-          }
+          const hasStoredDecision =
+            existing === "accepted" || existing === "rejected";
+          root.hidden = hasStoredDecision;
 
-          root.hidden = false;
+          const openBanner = () => {
+            root.hidden = false;
+          };
 
           acceptButton?.addEventListener("click", () => {
             writeConsent("accepted");
@@ -73,6 +75,15 @@ const shouldShowCookieBanner = Boolean(gaMeasurementId) && import.meta.env.PROD;
           rejectButton?.addEventListener("click", () => {
             writeConsent("rejected");
             root.hidden = true;
+          });
+
+          window.addEventListener(consentOpenEventName, openBanner);
+
+          document.querySelectorAll("[data-site-consent-open]").forEach((node) => {
+            node.addEventListener("click", (event) => {
+              event.preventDefault();
+              openBanner();
+            });
           });
         })();
       </script>
