@@ -425,6 +425,11 @@
 		max-width: 780px;
 	}
 
+	.services-page .hero,
+	.case-studies-page .hero {
+		padding-top: clamp(1.2rem, 3.5vh, 2.25rem);
+	}
+
 	.hero h1 {
 		font-size: clamp(2.25rem, 4vw, 3.25rem);
 		line-height: 1.1;
