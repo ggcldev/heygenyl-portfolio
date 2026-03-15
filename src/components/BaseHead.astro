@@ -40,6 +40,8 @@ const toTrailingSlashPath = (pathname: string) => {
 const canonicalPath = toTrailingSlashPath(Astro.url.pathname);
 const canonicalURL = new URL(canonicalPath, baseUrl);
 const imageURL = new URL(ogImage, baseUrl);
+const cookieConsentStorageKey = "site_cookie_consent_v1";
+const cookieConsentEventName = "cookie-consent-updated";
 const gaMeasurementId =
   import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-C40VC19FCY";
 const shouldLoadAnalytics = Boolean(gaMeasurementId) && import.meta.env.PROD;
@@ -116,8 +118,14 @@ const robots = noIndex
 }
 {
   shouldLoadAnalytics && (
-    <script is:inline define:vars={{ gaMeasurementId }}>
-      var __ga = function () {
+    <script
+      is:inline
+      define:vars={{ gaMeasurementId, cookieConsentStorageKey, cookieConsentEventName }}
+    >
+      var __loadGa = function () {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+
         var s = document.createElement("script");
         s.src =
           "https://www.googletagmanager.com/gtag/js?id=" + gaMeasurementId;
@@ -130,11 +138,24 @@ const robots = noIndex
         gtag("js", new Date());
         gtag("config", gaMeasurementId);
       };
-      if ("requestIdleCallback" in window) {
-        requestIdleCallback(__ga);
-      } else {
-        setTimeout(__ga, 3500);
+
+      var __readCookieConsent = function () {
+        try {
+          return localStorage.getItem(cookieConsentStorageKey);
+        } catch {
+          return null;
+        }
+      };
+
+      if (__readCookieConsent() === "accepted") {
+        __loadGa();
       }
+
+      window.addEventListener(cookieConsentEventName, function (event) {
+        if (event instanceof CustomEvent && event.detail === "accepted") {
+          __loadGa();
+        }
+      });
     </script>
   )
 }

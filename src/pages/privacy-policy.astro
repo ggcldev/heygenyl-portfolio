@@ -1,0 +1,116 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteConfig } from "../data/site";
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Privacy Policy",
+    url: new URL("/privacy-policy/", siteConfig.url).toString(),
+  },
+];
+---
+
+<BaseLayout
+  title="Privacy Policy | Hey Genyl"
+  description="Privacy Policy for heygenyl.com covering data collection, use, cookies, GA4 analytics, and third-party tools."
+  schema={schema}
+>
+  <div class="privacy-page">
+    <section class="content-shell py-16 md:py-20">
+      <div
+        class="section-heading max-w-3xl mx-auto text-left border-b pb-8 gap-4 md:gap-5"
+        style="border-color: var(--color-border);"
+      >
+        <p class="eyebrow">Legal</p>
+        <h1>Privacy Policy</h1>
+        <p class="post-meta">Last updated: March 15, 2026</p>
+      </div>
+    </section>
+
+    <section class="content-shell pb-16 md:pb-20">
+      <div class="max-w-3xl mx-auto text-left border-t" style="border-color: var(--color-border);">
+        <section class="py-7 border-b" style="border-color: var(--color-border);">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">Information We Collect</h2>
+          <div class="mt-3 grid gap-3 text-sm 2xl:text-lg text-muted">
+            <p class="m-0">
+              When you submit the contact form, we may collect your name, email
+              address, website URL, selected service, and project details.
+            </p>
+            <p class="m-0">
+              We also collect limited technical data through analytics and
+              security tools, such as browser/device information and approximate
+              usage patterns.
+            </p>
+          </div>
+        </section>
+
+        <section class="py-7 border-b" style="border-color: var(--color-border);">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">How We Use Your Information</h2>
+          <div class="mt-3 grid gap-3 text-sm 2xl:text-lg text-muted">
+            <p class="m-0">We use your information to:</p>
+            <ul class="m-0 pl-5 grid gap-2">
+              <li>Respond to inquiries and project requests</li>
+              <li>Improve website performance and user experience</li>
+              <li>Protect the site from spam and abuse</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="py-7 border-b" style="border-color: var(--color-border);">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">Cookies and Analytics</h2>
+          <div class="mt-3 grid gap-3 text-sm 2xl:text-lg text-muted">
+            <p class="m-0">
+              This website uses cookies/local storage for preferences and analytics.
+              A cookie consent banner is shown before Google Analytics 4 (GA4)
+              tracking is enabled.
+            </p>
+            <p class="m-0">
+              If you decline non-essential cookies, GA4 tracking will not be loaded.
+            </p>
+          </div>
+        </section>
+
+        <section class="py-7 border-b" style="border-color: var(--color-border);">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">Third-Party Services</h2>
+          <div class="mt-3 grid gap-3 text-sm 2xl:text-lg text-muted">
+            <ul class="m-0 pl-5 grid gap-2">
+              <li><strong>Google Analytics 4 (GA4)</strong> for traffic and behavior analytics</li>
+              <li><strong>FormSubmit</strong> for contact form delivery</li>
+              <li><strong>Cloudflare Turnstile</strong> for spam/bot protection on the contact form</li>
+            </ul>
+            <p class="m-0">
+              These providers may process data according to their own privacy policies.
+            </p>
+          </div>
+        </section>
+
+        <section class="py-7 border-b" style="border-color: var(--color-border);">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">Data Retention</h2>
+          <p class="mt-3 mb-0 text-sm 2xl:text-lg text-muted">
+            Inquiry data is retained as needed to handle communication and
+            project-related follow-up, unless deletion is requested.
+          </p>
+        </section>
+
+        <section class="py-7 border-b" style="border-color: var(--color-border);">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">Your Choices</h2>
+          <p class="mt-3 mb-0 text-sm 2xl:text-lg text-muted">
+            You can choose whether to accept analytics cookies via the consent
+            banner. You may also contact us to request access, correction, or
+            deletion of information you submitted.
+          </p>
+        </section>
+
+        <section class="py-7">
+          <h2 class="m-0 text-sm 2xl:text-xl font-bold uppercase">Contact</h2>
+          <p class="mt-3 mb-0 text-sm 2xl:text-lg text-muted">
+            For privacy questions, contact us at{" "}
+            <a href="#" data-ml="hi|heygenyl.com" data-ml-label>Loading...</a>.
+          </p>
+        </section>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
