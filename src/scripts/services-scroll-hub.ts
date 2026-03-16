@@ -2,9 +2,6 @@ const initServicesScrollHub = () => {
   const root = document.querySelector<HTMLElement>("[data-services-flow]");
   if (!root) return;
 
-  const scroller = root.querySelector<HTMLElement>("[data-services-cards]");
-  if (!scroller) return;
-
   const cards = Array.from(
     root.querySelectorAll<HTMLElement>("[data-service-card]"),
   );
@@ -13,202 +10,44 @@ const initServicesScrollHub = () => {
   );
   if (cards.length === 0 || statusItems.length === 0) return;
 
-  const desktopQuery = window.matchMedia("(min-width: 768px)");
-  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  let activeIndex = 0;
-  let targetIndex = 0;
-  let wheelLocked = false;
-  let wheelCooldownUntil = 0;
-  let settleFrameId = 0;
-  let settleTimeoutId = 0;
-  let syncFrameId = 0;
-
-  const lockCooldownMs = () => (reduceMotionQuery.matches ? 120 : 550);
-
-  const clampIndex = (index: number) =>
-    Math.min(Math.max(index, 0), cards.length - 1);
-
   const setStatus = (index: number) => {
-    activeIndex = index;
-
-    statusItems.forEach((item, itemIndex) => {
-      item.dataset.state = itemIndex === index ? "current" : "upcoming";
+    statusItems.forEach((item, i) => {
+      item.dataset.state = i === index ? "current" : "upcoming";
     });
   };
 
-  const getNearestIndexFromScroll = () => {
-    const scrollTop = scroller.scrollTop;
-    let nearestIndex = 0;
-    let nearestDistance = Number.POSITIVE_INFINITY;
-
-    cards.forEach((card, index) => {
-      const distance = Math.abs(card.offsetTop - scrollTop);
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearestIndex = index;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const index = cards.indexOf(entry.target as HTMLElement);
+        if (index !== -1) setStatus(index);
       }
-    });
+    },
+    { rootMargin: "0px 0px -50% 0px", threshold: 0 },
+  );
 
-    return nearestIndex;
-  };
-
-  const isSectionActive = () => {
-    const rect = root.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    return (
-      rect.top <= viewportHeight * 0.34 &&
-      rect.bottom >= viewportHeight * 0.66
-    );
-  };
-
-  const clearSettleTimers = () => {
-    if (settleFrameId) {
-      window.cancelAnimationFrame(settleFrameId);
-      settleFrameId = 0;
-    }
-    if (settleTimeoutId) {
-      window.clearTimeout(settleTimeoutId);
-      settleTimeoutId = 0;
-    }
-  };
-
-  const finishSnap = () => {
-    clearSettleTimers();
-    wheelLocked = false;
-    setStatus(targetIndex);
-    wheelCooldownUntil = performance.now() + lockCooldownMs();
-  };
-
-  const snapToIndex = (index: number, smooth = true) => {
-    targetIndex = clampIndex(index);
-    const targetCard = cards[targetIndex];
-    if (!targetCard) return;
-
-    const targetTop = targetCard.offsetTop;
-    setStatus(targetIndex);
-    wheelLocked = true;
-    clearSettleTimers();
-
-    if (desktopQuery.matches) {
-      scroller.scrollTo({
-        top: targetTop,
-        behavior: smooth && !reduceMotionQuery.matches ? "smooth" : "auto",
-      });
-    } else {
-      targetCard.scrollIntoView({
-        behavior: smooth && !reduceMotionQuery.matches ? "smooth" : "auto",
-        block: "start",
-      });
-      finishSnap();
-      return;
-    }
-
-    // Instant scroll — finish immediately
-    if (!smooth || reduceMotionQuery.matches) {
-      finishSnap();
-      return;
-    }
-
-    const settle = () => {
-      if (!wheelLocked) return;
-      if (Math.abs(scroller.scrollTop - targetTop) <= 1.5) {
-        finishSnap();
-        return;
-      }
-      settleFrameId = window.requestAnimationFrame(settle);
-    };
-
-    settleFrameId = window.requestAnimationFrame(settle);
-    settleTimeoutId = window.setTimeout(() => {
-      if (!wheelLocked) return;
-      scroller.scrollTo({ top: targetTop, behavior: "auto" });
-      finishSnap();
-    }, 600);
-  };
-
-  const syncStatus = () => {
-    syncFrameId = 0;
-    if (wheelLocked) return;
-
-    const nearest = getNearestIndexFromScroll();
-    if (nearest !== activeIndex) {
-      targetIndex = nearest;
-      setStatus(nearest);
-    }
-  };
-
-  const requestSync = () => {
-    if (syncFrameId) return;
-    syncFrameId = window.requestAnimationFrame(syncStatus);
-  };
-
-  const onWheelCapture = (event: WheelEvent) => {
-    if (!desktopQuery.matches) return;
-    if (!isSectionActive()) return;
-    if (Math.abs(event.deltaY) < 8) return;
-
-    const direction = event.deltaY > 0 ? 1 : -1;
-    const nextIndex = clampIndex(activeIndex + direction);
-
-    // At boundary — let the page scroll naturally
-    if (nextIndex === activeIndex) return;
-
-    // During an active snap animation, absorb the event
-    if (wheelLocked) {
-      event.preventDefault();
-      return;
-    }
-
-    // During post-snap cooldown, absorb residual trackpad inertia
-    if (performance.now() < wheelCooldownUntil) {
-      event.preventDefault();
-      return;
-    }
-
-    event.preventDefault();
-    snapToIndex(nextIndex, true);
-  };
-
-  const onStatusActivate = (index: number) => {
-    wheelCooldownUntil = 0;
-    snapToIndex(index, true);
-  };
-
-  const onModeChange = () => {
-    clearSettleTimers();
-    wheelLocked = false;
-    requestSync();
-  };
-
-  window.addEventListener("wheel", onWheelCapture, {
-    passive: false,
-    capture: true,
-  });
+  cards.forEach((card) => observer.observe(card));
 
   statusItems.forEach((item) => {
     const index = Number(item.dataset.index ?? "0");
     if (Number.isNaN(index)) return;
 
-    item.addEventListener("click", () => {
-      onStatusActivate(index);
-    });
+    const activate = () => {
+      const card = cards[index];
+      if (!card) return;
+      card.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
 
+    item.addEventListener("click", activate);
     item.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
       event.preventDefault();
-      onStatusActivate(index);
+      activate();
     });
   });
 
   setStatus(0);
-  requestSync();
-
-  scroller.addEventListener("scroll", requestSync, { passive: true });
-  window.addEventListener("resize", requestSync);
-  desktopQuery.addEventListener("change", onModeChange);
-  reduceMotionQuery.addEventListener("change", onModeChange);
-  window.addEventListener("beforeunload", clearSettleTimers);
 };
 
 initServicesScrollHub();

@@ -541,13 +541,21 @@
 
 	.services-scroll-hub__cards {
 		display: grid;
-		gap: 0.9rem;
+		gap: 2rem;
 	}
 
 	.card.services-scroll-hub__card {
 		background: none;
 		border: none;
 		box-shadow: none;
+		padding: 0;
+	}
+
+	.services-scroll-hub__card img {
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+		margin-top: 1.25rem;
 	}
 
 	@media (min-width: 768px) {
@@ -563,33 +571,7 @@
 		}
 
 		.services-scroll-hub__cards {
-			position: relative;
 			max-width: 54rem;
-			height: clamp(28rem, 60vh, 42rem);
-			overflow-y: auto;
-			overscroll-behavior: contain;
-			padding-block: 0.5rem;
-			padding-right: 0;
-			gap: 0.75rem;
-			scrollbar-width: none;
-			-ms-overflow-style: none;
-		}
-
-		.services-scroll-hub__cards::-webkit-scrollbar {
-			display: none;
-		}
-
-		.services-scroll-hub__card {
-			height: calc(clamp(28rem, 60vh, 42rem) - 0.35rem);
-			display: flex;
-			flex-direction: column;
-			overflow: hidden;
-		}
-
-		.services-scroll-hub__card img {
-			flex: 1 1 0;
-			min-height: 0;
-			object-fit: cover;
 		}
 	}
 
