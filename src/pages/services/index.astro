@@ -3,6 +3,12 @@ import PageHero from "../../components/PageHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { activeServicePages, siteConfig } from "../../data/site";
 
+const serviceRailLabelBySlug: Record<string, string> = {
+  "seo-specialist": "SEO",
+  "local-seo": "Local SEO",
+  "wordpress-seo-expert": "WordPress",
+};
+
 const schema = [
   {
     "@context": "https://schema.org",
@@ -28,21 +34,43 @@ const schema = [
       ]}
     />
 
-    <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-        <div class="md:sticky md:top-24 self-start">
+    <section class="content-shell services-scroll-hub" data-services-flow>
+      <div class="services-scroll-hub__layout">
+        <div class="services-scroll-hub__rail">
           <h2 class="text-sm 2xl:text-xl font-bold uppercase">All services</h2>
           <p class="text-sm text-muted mt-2">
             Keep the hub broad, then let each child route carry one specific
             commercial phrase.
           </p>
+          <ul class="services-scroll-hub__status" aria-live="polite">
+            {activeServicePages.map((service, index) => {
+              const label = serviceRailLabelBySlug[service.slug] ?? service.shortTitle;
+              const state = index === 0 ? "current" : index === 1 ? "next" : "upcoming";
+
+              return (
+                <li
+                  class="services-scroll-hub__status-item"
+                  data-service-status-item
+                  data-index={index}
+                  data-state={state}
+                  role="button"
+                  tabindex="0"
+                  aria-label={`Show ${label} service card`}
+                >
+                  <span class="services-scroll-hub__status-name">{label}</span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
-        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-          {activeServicePages.map((service) => (
+        <div class="services-scroll-hub__cards" data-services-cards>
+          {activeServicePages.map((service, index) => (
             <a
-              class="card block transition duration-300 ease-in-out hover:-translate-y-1"
+              class="card services-scroll-hub__card block transition duration-300 ease-in-out hover:-translate-y-1"
               href={`/services/${service.slug}/`}
+              data-service-card
+              data-index={index}
             >
               <p class="eyebrow">{service.shortTitle}</p>
               <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
@@ -54,5 +82,8 @@ const schema = [
         </div>
       </div>
     </section>
+    <script>
+      import "../../scripts/services-scroll-hub";
+    </script>
   </div>
 </BaseLayout>
