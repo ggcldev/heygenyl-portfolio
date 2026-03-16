@@ -48,46 +48,40 @@ const schema = [
     />
 
     <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-8 py-24">
-        <div class="mx-auto w-full max-w-3xl grid grid-cols-1 gap-y-8">
-          {caseStudies.map((study) => {
-            const media =
-              caseStudyCardMedia[study.slug as keyof typeof caseStudyCardMedia];
+      <div class="case-study-rows">
+        {caseStudies.map((study, index) => {
+          const media =
+            caseStudyCardMedia[study.slug as keyof typeof caseStudyCardMedia];
+          const studyLabel = study.title.replace(" Case Study", "");
+          const rowNumber = String(index + 1).padStart(2, "0");
 
-            return (
-              <a
-                class="block w-full text-left transition duration-200 ease-out hover:opacity-90"
-                href={`/case-studies/${study.slug}/`}
-              >
-                <article class="grid gap-4 sm:grid-cols-[240px_minmax(0,1fr)] sm:items-start">
-                  <div class="overflow-hidden">
-                    <Picture
-                      src={media.src}
-                      alt={media.alt}
-                      formats={["avif", "webp"]}
-                      fallbackFormat="webp"
-                      widths={[360, 480, 640, 800]}
-                      sizes="(max-width: 639px) 100vw, 240px"
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
+          return (
+            <a class="case-study-row" href={`/case-studies/${study.slug}/`}>
+              <article class="case-study-row__grid">
+                <p class="case-study-row__index">{rowNumber}</p>
 
-                  <div class="grid gap-2">
-                    <p class="eyebrow">{study.shortTitle}</p>
-                    <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-                      {study.title}
-                    </h3>
-                    <p class="case-study-card__summary text-sm 2xl:text-lg text-muted m-0">
-                      {study.summary}
-                    </p>
-                  </div>
-                </article>
-              </a>
-            );
-          })}
-        </div>
+                <div class="case-study-row__overview">
+                  <h3 class="case-study-row__title">{studyLabel}</h3>
+                  <p class="case-study-row__summary">{study.summary}</p>
+                </div>
+
+                <div class="case-study-row__media">
+                  <Picture
+                    src={media.src}
+                    alt={media.alt}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="webp"
+                    widths={[360, 480, 640, 800]}
+                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 180px, 224px"
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </article>
+            </a>
+          );
+        })}
       </div>
     </section>
   </div>

@@ -88,6 +88,7 @@
 	--color-base-600: var(--color-muted);
 	--color-base-500: color-mix(in oklab, var(--color-ink) 52%, transparent);
 	--color-base-200: var(--color-border);
+	--color-accent: #2EBAC1;
 	--radius-card: 24px;
 	--grid-line: color-mix(in oklab, var(--color-ink) 10%, transparent);
 }
@@ -112,6 +113,7 @@
 		--color-muted: color-mix(in oklab, var(--color-ink) 70%, transparent);
 		--color-paper: #0d0d10;
 		--color-surface: #131318;
+		--color-accent: #2EBAC1;
 		--color-border: color-mix(in oklab, var(--color-ink) 16%, transparent);
 		--grid-line: color-mix(in oklab, var(--color-ink) 10%, transparent);
 	}
@@ -473,8 +475,10 @@
 
 	.case-studies-page .hero {
 		padding-top: clamp(2rem, 5.2vh, 3.1rem);
-		width: min(100%, 48rem);
+		width: min(100%, 1140px);
+		max-width: 1140px;
 		margin-inline: auto;
+		border-bottom: 0;
 	}
 
 	.case-studies-page .hero h1 {
@@ -486,14 +490,117 @@
 		justify-content: flex-start;
 	}
 
-	.case-study-card__summary {
-		max-width: 58ch;
-		line-height: 1.5;
+	.services-page .hero .eyebrow,
+	.case-studies-page .hero .eyebrow,
+	.contact-page .hero .eyebrow {
+		color: var(--color-accent);
+		font-weight: 700;
+	}
+
+	.case-study-rows {
+		margin-top: clamp(0.5rem, 1.2vw, 1rem);
+		width: min(100%, 1140px);
+		margin-inline: auto;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.case-study-row {
+		display: block;
+		border-top: 1px solid var(--color-border);
+		padding-block: clamp(1.25rem, 2.8vw, 2rem);
+		transition: background-color 180ms ease;
+	}
+
+	.case-study-row:hover {
+		background: color-mix(in oklab, var(--color-ink) 3%, transparent);
+	}
+
+	.case-study-row:focus-visible {
+		outline: 2px solid color-mix(in oklab, var(--color-accent) 52%, transparent);
+		outline-offset: 4px;
+	}
+
+	.case-study-row__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 1rem;
+	}
+
+	.case-study-row__index {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 0.98rem;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		line-height: 1;
+		color: var(--color-accent);
+	}
+
+	.case-study-row__overview {
+		display: grid;
+		gap: 0.45rem;
+	}
+
+	.case-study-row__title {
+		margin: 0;
+		font-size: clamp(1.25rem, 2vw, 2.15rem);
+		line-height: 1.05;
+		text-wrap: balance;
+		max-width: 14ch;
+	}
+
+	.case-study-row__summary {
+		margin: 0;
+		max-width: 42ch;
+		color: var(--color-muted);
+		line-height: 1.45;
 		text-wrap: pretty;
 		display: -webkit-box;
-		-webkit-line-clamp: 4;
+		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+	}
+
+	.case-study-row__media {
+		width: 100%;
+		max-width: 16rem;
+		aspect-ratio: 1 / 1;
+		overflow: hidden;
+		background: color-mix(in oklab, var(--color-ink) 5%, var(--color-paper));
+	}
+
+	.case-study-row__media img {
+		object-position: 42% center;
+		transition: transform 220ms ease;
+	}
+
+	.case-study-row:hover .case-study-row__media img {
+		transform: scale(1.03);
+	}
+
+	@media (min-width: 768px) {
+		.case-study-row__grid {
+			grid-template-columns: 2.75rem minmax(0, 1fr) 9.5rem;
+			gap: clamp(0.9rem, 2vw, 1.6rem);
+			align-items: start;
+		}
+
+		.case-study-row__media {
+			max-width: none;
+			width: 8.5rem;
+			justify-self: start;
+		}
+	}
+
+	@media (min-width: 1200px) {
+		.case-study-row__grid {
+			grid-template-columns: 3.25rem minmax(0, 1fr) 11.75rem;
+		}
+
+		.case-study-row__media {
+			width: 10.5rem;
+			justify-self: start;
+		}
 	}
 
 	.hero h1 {
@@ -528,7 +635,7 @@
 		justify-content: center;
 		gap: 0.35rem;
 		padding: 0.65rem 1.1rem;
-		border-radius: 0;
+		border-radius: 0.4rem;
 		border: 1px solid var(--color-border);
 		font-weight: 600;
 		font-size: 0.75rem;
@@ -560,6 +667,8 @@
 
 	.button-with-arrow {
 		gap: 0.5rem;
+		font-weight: 700;
+		font-size: 0.82rem;
 		transition:
 			background-color 220ms ease,
 			border-color 220ms ease,
@@ -599,9 +708,10 @@
 
 	.button-with-arrow:not(:disabled):hover,
 	.button-with-arrow:not(:disabled):focus-visible {
-		background: color-mix(in oklab, var(--color-paper) 97%, var(--color-ink) 3%);
-		border-color: color-mix(in oklab, var(--color-ink) 30%, transparent);
-		box-shadow: 0 6px 14px color-mix(in oklab, var(--color-ink) 12%, transparent);
+		color: #fff;
+		border-color: var(--color-accent);
+		background: var(--color-accent);
+		box-shadow: 0 6px 14px color-mix(in oklab, var(--color-accent) 20%, transparent);
 	}
 
 	.button-with-arrow:not(:disabled):hover [data-submit-label],
@@ -833,6 +943,21 @@
 		gap: 0.4rem;
 	}
 
+	.blog-hub-hero {
+		width: min(100%, 1140px);
+		max-width: 1140px;
+	}
+
+	.blog-hub-hero .eyebrow {
+		color: var(--color-accent);
+	}
+
+	.blog-hub-hero__title {
+		max-width: 28ch;
+		text-wrap: balance;
+		line-height: 1.2;
+	}
+
 	.section-heading h1 {
 		margin: 0;
 		font-size: clamp(2.2rem, 3.6vw, 2.8rem);
@@ -1037,8 +1162,8 @@
 	.contact-page .content-shell,
 	.blog-page-view.content-shell,
 	.blog-page-view .content-shell {
-		width: min(100%, 1440px);
-		max-width: 1440px;
+		width: min(100%, 1140px);
+		max-width: 1140px;
 		margin-inline: auto;
 		padding-inline: clamp(1rem, 2.4vw, 1.5rem);
 	}
@@ -1422,6 +1547,11 @@
 	.blog-page-view .eyebrow,
 	.blog-page-view .text-subtle {
 		color: #fff;
+	}
+
+	.blog-page-view .blog-hub-hero .eyebrow {
+		color: var(--color-accent);
+		font-weight: 700;
 	}
 
 	.blog-page-view .section-heading ul {
