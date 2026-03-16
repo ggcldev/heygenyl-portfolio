@@ -24,8 +24,7 @@ const initServicesScrollHub = () => {
   let settleTimeoutId = 0;
   let syncFrameId = 0;
 
-  const lockCooldownMs = () => (reduceMotionQuery.matches ? 90 : 340);
-  const inertiaExtensionMs = () => (reduceMotionQuery.matches ? 45 : 170);
+  const lockCooldownMs = () => (reduceMotionQuery.matches ? 120 : 550);
 
   const clampIndex = (index: number) =>
     Math.min(Math.max(index, 0), cards.length - 1);
@@ -34,13 +33,7 @@ const initServicesScrollHub = () => {
     activeIndex = index;
 
     statusItems.forEach((item, itemIndex) => {
-      let state = "upcoming";
-      if (itemIndex === index) {
-        state = "current";
-      } else if (itemIndex === index + 1) {
-        state = "next";
-      }
-      item.dataset.state = state;
+      item.dataset.state = itemIndex === index ? "current" : "upcoming";
     });
   };
 
@@ -111,23 +104,18 @@ const initServicesScrollHub = () => {
       return;
     }
 
-    const startedAt = performance.now();
+    // Instant scroll — finish immediately
+    if (!smooth || reduceMotionQuery.matches) {
+      finishSnap();
+      return;
+    }
+
     const settle = () => {
       if (!wheelLocked) return;
-
-      const distance = Math.abs(scroller.scrollTop - targetTop);
-      const elapsed = performance.now() - startedAt;
-      const settled = distance <= 1.5;
-      const timedOut = elapsed > 1100;
-
-      if (settled || timedOut) {
-        if (!settled) {
-          scroller.scrollTo({ top: targetTop, behavior: "auto" });
-        }
+      if (Math.abs(scroller.scrollTop - targetTop) <= 1.5) {
         finishSnap();
         return;
       }
-
       settleFrameId = window.requestAnimationFrame(settle);
     };
 
@@ -136,7 +124,7 @@ const initServicesScrollHub = () => {
       if (!wheelLocked) return;
       scroller.scrollTo({ top: targetTop, behavior: "auto" });
       finishSnap();
-    }, reduceMotionQuery.matches ? 260 : 1280);
+    }, 600);
   };
 
   const syncStatus = () => {
@@ -160,19 +148,23 @@ const initServicesScrollHub = () => {
     if (!isSectionActive()) return;
     if (Math.abs(event.deltaY) < 8) return;
 
-    const now = performance.now();
-    if (wheelLocked || now < wheelCooldownUntil) {
+    const direction = event.deltaY > 0 ? 1 : -1;
+    const nextIndex = clampIndex(activeIndex + direction);
+
+    // At boundary — let the page scroll naturally
+    if (nextIndex === activeIndex) return;
+
+    // During an active snap animation, absorb the event
+    if (wheelLocked) {
       event.preventDefault();
-      wheelCooldownUntil = Math.max(
-        wheelCooldownUntil,
-        now + inertiaExtensionMs(),
-      );
       return;
     }
 
-    const direction = event.deltaY > 0 ? 1 : -1;
-    const nextIndex = clampIndex(activeIndex + direction);
-    if (nextIndex === activeIndex) return;
+    // During post-snap cooldown, absorb residual trackpad inertia
+    if (performance.now() < wheelCooldownUntil) {
+      event.preventDefault();
+      return;
+    }
 
     event.preventDefault();
     snapToIndex(nextIndex, true);

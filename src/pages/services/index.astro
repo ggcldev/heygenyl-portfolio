@@ -38,14 +38,10 @@ const schema = [
       <div class="services-scroll-hub__layout">
         <div class="services-scroll-hub__rail">
           <h2 class="text-sm 2xl:text-xl font-bold uppercase">All services</h2>
-          <p class="text-sm text-muted mt-2">
-            Keep the hub broad, then let each child route carry one specific
-            commercial phrase.
-          </p>
           <ul class="services-scroll-hub__status" aria-live="polite">
             {activeServicePages.map((service, index) => {
               const label = serviceRailLabelBySlug[service.slug] ?? service.shortTitle;
-              const state = index === 0 ? "current" : index === 1 ? "next" : "upcoming";
+              const state = index === 0 ? "current" : "upcoming";
 
               return (
                 <li
@@ -77,6 +73,12 @@ const schema = [
                 {service.title}
               </h3>
               <p class="text-sm 2xl:text-lg text-muted mt-2">{service.summary}</p>
+              <img
+                src={`https://placehold.co/480x200/1a1a1a/555?text=${encodeURIComponent(service.shortTitle)}`}
+                alt={`${service.shortTitle} illustration`}
+                style="width: 100%; height: auto; border-radius: var(--radius-card); margin-top: 1.25rem; margin-bottom: 1.25rem; opacity: 0.6;"
+              />
+              <span class="button primary" style="width: fit-content; margin-top: auto;">View Page</span>
             </a>
           ))}
         </div>
