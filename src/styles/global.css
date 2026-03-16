@@ -580,9 +580,16 @@
 		}
 
 		.services-scroll-hub__card {
-			min-height: calc(clamp(28rem, 60vh, 42rem) - 0.35rem);
+			height: calc(clamp(28rem, 60vh, 42rem) - 0.35rem);
 			display: flex;
 			flex-direction: column;
+			overflow: hidden;
+		}
+
+		.services-scroll-hub__card img {
+			flex: 1 1 0;
+			min-height: 0;
+			object-fit: cover;
 		}
 	}
 
