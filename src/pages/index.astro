@@ -122,6 +122,30 @@ const homeFaqs = [
   },
 ];
 
+const testimonialItems = [
+  {
+    id: "managed-it",
+    quote:
+      "Genyl fixed our technical SEO issues and restructured our service pages. In under 90 days, we started getting qualified calls from organic search again.",
+    name: "David L.",
+    role: "Operations Lead, Managed IT Company",
+  },
+  {
+    id: "local-service",
+    quote:
+      "Our Google Business Profile went from almost invisible to consistently showing in the local pack. We now get steady map leads every week.",
+    name: "Maria C.",
+    role: "Owner, Local Home Services Business",
+  },
+  {
+    id: "agency",
+    quote:
+      "We needed SEO strategy and WordPress implementation in one person. Genyl delivered both, and the site now loads faster, ranks better, and converts more.",
+    name: "Angela T.",
+    role: "Marketing Manager, Growth Agency",
+  },
+];
+
 const homeSchema = [
   {
     "@context": "https://schema.org",
@@ -319,8 +343,7 @@ const homeSchema = [
 
     <section class="content-shell">
       <div
-        class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24"
-        style="border-color: var(--color-border);"
+        class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24"
       >
         <div class="md:sticky md:top-24 self-start">
           <h2 class="text-sm 2xl:text-xl font-bold uppercase">Services</h2>
@@ -377,6 +400,67 @@ const homeSchema = [
               </div>
             </a>
           ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="content-shell">
+      <div class="pt-24 pb-6">
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase m-0">Testimonials</h2>
+      </div>
+      <div
+        class="border-b pt-0 pb-0"
+        style="border-color: var(--color-border);"
+      >
+        <div class="testimonial-tabs" data-testimonial-tabs>
+          <div class="testimonial-panels" data-testimonial-panels>
+            {testimonialItems.map((item, index) => {
+              const tabId = `testimonial-tab-${item.id}`;
+              const panelId = `testimonial-panel-${item.id}`;
+              const isActive = index === 0;
+
+              return (
+                <article
+                  id={panelId}
+                  class="testimonial-panel"
+                  role="tabpanel"
+                  aria-labelledby={tabId}
+                  data-testimonial-panel-id={item.id}
+                  hidden={!isActive}
+                >
+                  <p class="testimonial-panel__quote">"{item.quote}"</p>
+                </article>
+              );
+            })}
+          </div>
+
+          <div
+            class="testimonial-tablist"
+            role="tablist"
+            aria-label="Client testimonials"
+          >
+            {testimonialItems.map((item, index) => {
+              const tabId = `testimonial-tab-${item.id}`;
+              const panelId = `testimonial-panel-${item.id}`;
+              const isActive = index === 0;
+
+              return (
+                <button
+                  id={tabId}
+                  type="button"
+                  class="testimonial-tab"
+                  role="tab"
+                  aria-controls={panelId}
+                  aria-selected={isActive ? "true" : "false"}
+                  tabindex={isActive ? "0" : "-1"}
+                  data-testimonial-tab-id={item.id}
+                >
+                  <span class="testimonial-tab__name">{item.name}</span>
+                  <span class="testimonial-tab__role">{item.role}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
