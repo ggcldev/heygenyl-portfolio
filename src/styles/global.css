@@ -1079,6 +1079,7 @@
 
 	.blog-page-view .post-page > .section-heading h1 {
 		margin: 0 0 0.1rem;
+		font-weight: 700;
 	}
 
 	.blog-page-view .post-page > .section-heading .blog-author-card {
@@ -1093,6 +1094,9 @@
 	.post-page {
 		display: grid;
 		gap: 2rem;
+		width: 100%;
+		max-width: min(100%, 40rem);
+		margin-inline: auto;
 	}
 
 	.post-layout {
@@ -1139,12 +1143,13 @@
 		flex: 1;
 		font-size: 0.84rem;
 		line-height: 1.35;
-		color: inherit;
+		color: var(--color-accent);
 		text-decoration: none;
 	}
 
 	.post-toc-section-link:hover,
 	.post-toc-section-link:focus-visible {
+		color: #fff;
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 	}
@@ -1209,32 +1214,34 @@
 	.post-toc-subitem a {
 		font-size: 0.78rem;
 		line-height: 1.35;
-		color: color-mix(in oklab, var(--color-ink) 84%, transparent);
+		color: var(--color-accent);
 		text-decoration: none;
 	}
 
 	.post-toc-subitem a:hover,
 	.post-toc-subitem a:focus-visible {
+		color: #fff;
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 	}
 
 	@media (min-width: 1024px) {
 		.post-layout {
-			grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
-			gap: 2.25rem;
+			grid-template-columns: minmax(0, 16rem) minmax(0, 40rem);
+			justify-content: center;
+			gap: clamp(1rem, 2vw, 1.75rem);
 		}
 
 		.post-layout--toc-sm {
-			grid-template-columns: minmax(0, 13.5rem) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 13.5rem) minmax(0, 40rem);
 		}
 
 		.post-layout--toc-md {
-			grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 16rem) minmax(0, 40rem);
 		}
 
 		.post-layout--toc-lg {
-			grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 18rem) minmax(0, 40rem);
 		}
 
 		.post-toc {
@@ -1246,8 +1253,8 @@
 		}
 
 		.post-page {
-			max-width: none;
-			margin: 0;
+			max-width: min(100%, 40rem);
+			margin-inline: auto;
 		}
 	}
 
@@ -1349,8 +1356,8 @@
 		margin: 0;
 		display: grid;
 		gap: 0.1rem;
-		font-size: 0.84rem;
-		line-height: 1.45;
+		font-size: 0.8rem;
+		line-height: 1.4;
 	}
 
 	.blog-author-card__line {
@@ -1374,15 +1381,16 @@
 	}
 
 	.blog-author-card__name {
-		color: #8ea5ff;
+		color: var(--color-accent);
+		font-weight: 700;
 		text-decoration: underline;
-		text-decoration-color: color-mix(in oklab, #8ea5ff 75%, transparent);
+		text-decoration-color: color-mix(in oklab, var(--color-accent) 72%, transparent);
 		text-underline-offset: 0.12em;
 	}
 
 	.blog-author-card__name:hover,
 	.blog-author-card__name:focus-visible {
-		color: #c2d0ff;
+		color: color-mix(in oklab, var(--color-accent) 82%, #fff 18%);
 	}
 
 	.blog-author-card__role,
@@ -1658,6 +1666,35 @@
 		color: #fff;
 	}
 
+	.blog-page-view .post-toc .post-toc-section-link,
+	.blog-page-view .post-toc .post-toc-section-link:visited,
+	.blog-page-view .post-toc .post-toc-subitem a,
+	.blog-page-view .post-toc .post-toc-subitem a:visited {
+		color: var(--color-accent) !important;
+	}
+
+	.blog-page-view .post-toc .post-toc-section-link:hover,
+	.blog-page-view .post-toc .post-toc-section-link:focus-visible,
+	.blog-page-view .post-toc .post-toc-subitem a:hover,
+	.blog-page-view .post-toc .post-toc-subitem a:focus-visible {
+		color: #fff !important;
+	}
+
+	.blog-page-view .blog-author-card__name {
+		color: var(--color-accent);
+		text-decoration-color: color-mix(in oklab, var(--color-accent) 72%, transparent);
+	}
+
+	.blog-page-view .blog-author-card__name:hover,
+	.blog-page-view .blog-author-card__name:focus-visible {
+		color: color-mix(in oklab, var(--color-accent) 82%, #fff 18%);
+	}
+
+	.blog-page-view .post-meta .post-meta__published {
+		color: var(--color-accent);
+		font-weight: 700;
+	}
+
 	.blog-page-view .blog-hub-hero .eyebrow {
 		color: var(--color-accent);
 		font-weight: 700;
@@ -1722,7 +1759,7 @@
 
 	@media (min-width: 64rem) {
 		.blog-page-view .post-article .prose {
-			font-size: 1.125rem !important;
+			font-size: 1rem !important;
 		}
 	}
 
@@ -1731,7 +1768,21 @@
 		font-weight: 700 !important;
 	}
 
-	.blog-page-view .post-article .prose h3,
+	.blog-page-view .post-page > .section-heading h1 {
+		color: var(--color-accent) !important;
+	}
+
+	.blog-page-view .post-article .prose h2 {
+		font-size: clamp(1.5rem, 2vw, 1.8rem) !important;
+		line-height: 1.22 !important;
+	}
+
+	.blog-page-view .post-article .prose h3 {
+		font-size: clamp(1.06rem, 1.18vw, 1.18rem) !important;
+		line-height: 1.32 !important;
+		font-weight: 500 !important;
+	}
+
 	.blog-page-view .post-article .prose h4,
 	.blog-page-view .post-article .prose h5,
 	.blog-page-view .post-article .prose h6,

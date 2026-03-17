@@ -232,7 +232,7 @@ const schema = [
     <div class={`post-layout post-layout--toc-${tocSize} max-w-7xl w-full mx-auto`}>
       <PostToc sections={tocSections} size={tocSize} />
 
-      <article class="post-page max-w-4xl w-full mx-auto">
+      <article class="post-page w-full mx-auto">
         <header class="section-heading">
           <p class="eyebrow">Journal</p>
           <h1>{post.data.title}</h1>
@@ -245,12 +245,14 @@ const schema = [
           imageAlt={authorProfile.imageAlt}
         />
           <p class="post-meta">
-            Published{" "}
-            {post.data.pubDate.toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
+            <span class="post-meta__published">
+              Published{" "}
+              {post.data.pubDate.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
             {" · "}
             {readingMinutes} minute read
             {post.data.updatedDate && (
