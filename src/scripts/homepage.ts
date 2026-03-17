@@ -347,52 +347,27 @@ if (featuredSections.length > 0) {
   });
 }
 
-const approachTabGroups = Array.from(
-  document.querySelectorAll<HTMLElement>("[data-approach-tabs]"),
-);
-
-approachTabGroups.forEach((group) => {
-  const tabs = Array.from(group.querySelectorAll<HTMLElement>("[role='tab']"));
-  const panels = Array.from(
-    group.querySelectorAll<HTMLElement>("[role='tabpanel']"),
-  );
-  const panelShell = group.querySelector(".approach-panels");
+function initTabGroup(
+  group: HTMLElement,
+  tabAttr: string,
+  panelAttr: string,
+  onActivate?: (group: HTMLElement, tabs: HTMLElement[], nextTab: HTMLElement, panels: HTMLElement[], nextPanel: HTMLElement) => void,
+  onInit?: (group: HTMLElement, tabs: HTMLElement[], panels: HTMLElement[]) => void,
+) {
+  const tabs = Array.from(group.querySelectorAll<HTMLElement>(`[${tabAttr}]`));
+  const panels = Array.from(group.querySelectorAll<HTMLElement>(`[${panelAttr}]`));
   if (tabs.length === 0 || panels.length === 0) return;
-  if (!(panelShell instanceof HTMLElement)) return;
 
-  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const hoverPointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-  const TRANSITION_MS = 300;
-  let transitionTimer = 0;
-
-  const clearPanelState = () => {
-    panels.forEach((panel) => {
-      panel.classList.remove("is-entering", "is-leaving");
-    });
-  };
 
   const activateTab = (nextTab: HTMLElement, withFocus = false) => {
-    const tabKey = nextTab.getAttribute("data-tab-id");
+    const tabKey = nextTab.getAttribute(tabAttr);
     if (!tabKey) return;
 
     const nextPanel = panels.find(
-      (panel) => panel.getAttribute("data-panel-id") === tabKey,
+      (panel) => panel.getAttribute(panelAttr) === tabKey,
     );
     if (!(nextPanel instanceof HTMLElement)) return;
-
-    const currentPanel =
-      panels.find((panel) => !panel.hasAttribute("hidden")) ?? nextPanel;
-    const shouldAnimate =
-      !reduceMotionQuery.matches && currentPanel !== nextPanel;
-
-    if (transitionTimer) {
-      window.clearTimeout(transitionTimer);
-      transitionTimer = 0;
-    }
-
-    clearPanelState();
-    panelShell.classList.remove("is-animating");
-    panelShell.style.height = "";
 
     tabs.forEach((tab) => {
       const isActive = tab === nextTab;
@@ -400,29 +375,7 @@ approachTabGroups.forEach((group) => {
       tab.setAttribute("tabindex", isActive ? "0" : "-1");
     });
 
-    if (!shouldAnimate) {
-      panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
-    } else {
-      nextPanel.hidden = false;
-      const currentHeight = currentPanel.getBoundingClientRect().height;
-      const nextHeight = nextPanel.getBoundingClientRect().height;
-
-      panelShell.style.height = `${currentHeight}px`;
-      panelShell.classList.add("is-animating");
-      void panelShell.offsetHeight;
-      panelShell.style.height = `${nextHeight}px`;
-
-      currentPanel.classList.add("is-leaving");
-      nextPanel.classList.add("is-entering");
-
-      transitionTimer = window.setTimeout(() => {
-        panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
-        clearPanelState();
-        panelShell.classList.remove("is-animating");
-        panelShell.style.height = "";
-        transitionTimer = 0;
-      }, TRANSITION_MS);
-    }
+    onActivate?.(group, tabs, nextTab, panels, nextPanel);
 
     if (withFocus) {
       nextTab.focus();
@@ -453,95 +406,118 @@ approachTabGroups.forEach((group) => {
     });
   });
 
+  onInit?.(group, tabs, panels);
+
   const initialTab =
     tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0];
   if (!initialTab) return;
   activateTab(initialTab);
+}
+
+/* Approach tabs */
+
+const approachTabGroups = Array.from(
+  document.querySelectorAll<HTMLElement>("[data-approach-tabs]"),
+);
+
+approachTabGroups.forEach((group) => {
+  const panelShell = group.querySelector(".approach-panels");
+  if (!(panelShell instanceof HTMLElement)) return;
+
+  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const TRANSITION_MS = 300;
+  let transitionTimer = 0;
+
+  const clearPanelState = () => {
+    Array.from(group.querySelectorAll<HTMLElement>("[role='tabpanel']")).forEach(
+      (panel) => panel.classList.remove("is-entering", "is-leaving"),
+    );
+  };
+
+  initTabGroup(
+    group,
+    "data-tab-id",
+    "data-panel-id",
+    (_group, _tabs, _nextTab, panels, nextPanel) => {
+      const currentPanel =
+        panels.find((panel) => !panel.hasAttribute("hidden")) ?? nextPanel;
+      const shouldAnimate =
+        !reduceMotionQuery.matches && currentPanel !== nextPanel;
+
+      if (transitionTimer) {
+        window.clearTimeout(transitionTimer);
+        transitionTimer = 0;
+      }
+
+      clearPanelState();
+      panelShell.classList.remove("is-animating");
+      panelShell.style.height = "";
+
+      if (!shouldAnimate) {
+        panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
+      } else {
+        nextPanel.hidden = false;
+        const currentHeight = currentPanel.getBoundingClientRect().height;
+        const nextHeight = nextPanel.getBoundingClientRect().height;
+
+        panelShell.style.height = `${currentHeight}px`;
+        panelShell.classList.add("is-animating");
+        void panelShell.offsetHeight;
+        panelShell.style.height = `${nextHeight}px`;
+
+        currentPanel.classList.add("is-leaving");
+        nextPanel.classList.add("is-entering");
+
+        transitionTimer = window.setTimeout(() => {
+          panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
+          clearPanelState();
+          panelShell.classList.remove("is-animating");
+          panelShell.style.height = "";
+          transitionTimer = 0;
+        }, TRANSITION_MS);
+      }
+    },
+  );
 });
+
+/* Testimonial tabs */
 
 const testimonialTabGroups = Array.from(
   document.querySelectorAll<HTMLElement>("[data-testimonial-tabs]"),
 );
 
 testimonialTabGroups.forEach((group) => {
-  const tabs = Array.from(
-    group.querySelectorAll<HTMLElement>("[data-testimonial-tab-id]"),
+  group.style.setProperty(
+    "--testimonial-tab-count",
+    String(group.querySelectorAll("[data-testimonial-tab-id]").length),
   );
-  const panels = Array.from(
-    group.querySelectorAll<HTMLElement>("[data-testimonial-panel-id]"),
+
+  initTabGroup(
+    group,
+    "data-testimonial-tab-id",
+    "data-testimonial-panel-id",
+    (g, tabs, nextTab, panels, nextPanel) => {
+      const activeIndex = tabs.indexOf(nextTab);
+      if (activeIndex >= 0) {
+        g.style.setProperty("--testimonial-active-index", String(activeIndex));
+        g.style.setProperty("--testimonial-active-column", String(activeIndex + 1));
+      }
+      g.setAttribute("data-active-testimonial", nextTab.getAttribute("data-testimonial-tab-id") ?? "");
+
+      panels.forEach((panel) => {
+        const isActive = panel === nextPanel;
+        panel.classList.toggle("is-active", isActive);
+        panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+      });
+    },
+    (_g, _tabs, panels) => {
+      panels.forEach((panel) => {
+        panel.hidden = false;
+        panel.classList.remove("is-active");
+        panel.setAttribute("aria-hidden", "true");
+      });
+    },
   );
-  if (tabs.length === 0 || panels.length === 0) return;
-  group.style.setProperty("--testimonial-tab-count", String(tabs.length));
-
-  const hoverPointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-
-  const activateTab = (nextTab: HTMLElement, withFocus = false) => {
-    const tabKey = nextTab.getAttribute("data-testimonial-tab-id");
-    if (!tabKey) return;
-
-    const nextPanel = panels.find(
-      (panel) => panel.getAttribute("data-testimonial-panel-id") === tabKey,
-    );
-    if (!(nextPanel instanceof HTMLElement)) return;
-
-    tabs.forEach((tab) => {
-      const isActive = tab === nextTab;
-      tab.setAttribute("aria-selected", isActive ? "true" : "false");
-      tab.setAttribute("tabindex", isActive ? "0" : "-1");
-    });
-
-    const activeIndex = tabs.indexOf(nextTab);
-    if (activeIndex >= 0) {
-      group.style.setProperty("--testimonial-active-index", String(activeIndex));
-      group.style.setProperty("--testimonial-active-column", String(activeIndex + 1));
-    }
-    group.setAttribute("data-active-testimonial", tabKey);
-
-    panels.forEach((panel) => {
-      const isActive = panel === nextPanel;
-      panel.classList.toggle("is-active", isActive);
-      panel.setAttribute("aria-hidden", isActive ? "false" : "true");
-    });
-
-    if (withFocus) {
-      nextTab.focus();
-    }
-  };
-
-  tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => activateTab(tab));
-    tab.addEventListener("mouseenter", () => {
-      if (!hoverPointerQuery.matches) return;
-      activateTab(tab);
-    });
-    tab.addEventListener("keydown", (event) => {
-      let nextIndex = index;
-
-      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
-      else if (event.key === "ArrowLeft") {
-        nextIndex = (index - 1 + tabs.length) % tabs.length;
-      } else if (event.key === "Home") nextIndex = 0;
-      else if (event.key === "End") nextIndex = tabs.length - 1;
-      else return;
-
-      const targetTab = tabs[nextIndex];
-      if (!targetTab) return;
-
-      event.preventDefault();
-      activateTab(targetTab, true);
-    });
-  });
-
-  panels.forEach((panel) => {
-    panel.hidden = false;
-    panel.classList.remove("is-active");
-    panel.setAttribute("aria-hidden", "true");
-  });
-
-  const initialTab =
-    tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0];
-  if (!initialTab) return;
-  activateTab(initialTab);
 });
 
 const homeFaqItems = Array.from(

@@ -422,9 +422,10 @@ const homeSchema = [
               return (
                 <article
                   id={panelId}
-                  class="testimonial-panel"
+                  class={`testimonial-panel${isActive ? " is-active" : ""}`}
                   role="tabpanel"
                   aria-labelledby={tabId}
+                  aria-hidden={isActive ? "false" : "true"}
                   data-testimonial-panel-id={item.id}
                   hidden={!isActive}
                 >
