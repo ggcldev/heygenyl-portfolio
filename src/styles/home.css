@@ -1160,6 +1160,7 @@
 		overflow: hidden;
 		height: 100%;
 		min-height: 0;
+		isolation: isolate;
 	}
 
 	.testimonial-panels::before {
@@ -1171,21 +1172,25 @@
 		width: calc(100% / var(--testimonial-tab-count));
 		background: var(--color-accent);
 		transform: translateX(calc(var(--testimonial-active-index) * 100%));
-		transition: transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+		transition: transform 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
 		pointer-events: none;
 		z-index: 2;
 	}
 
-	.testimonial-panels.is-animating {
-		will-change: auto;
-	}
-
 	.testimonial-panel {
-		height: 100%;
+		position: absolute;
+		inset: 0;
 		display: grid;
 		grid-template-columns: repeat(var(--testimonial-tab-count), minmax(0, 1fr));
 		align-content: start;
 		padding: clamp(2.8rem, 7vh, 4.6rem) 0 clamp(0.6rem, 1.4vw, 0.9rem);
+		opacity: 0;
+		transform: translate3d(0, 12px, 0);
+		pointer-events: none;
+		transition:
+			opacity 140ms ease-out,
+			transform 190ms cubic-bezier(0.22, 0.61, 0.36, 1);
+		will-change: opacity, transform;
 	}
 
 	.testimonial-panel__quote {
@@ -1200,20 +1205,10 @@
 		text-align: left;
 	}
 
-	.testimonial-panel.is-entering {
-		animation: testimonial-panel-enter 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
-	}
-
-	.testimonial-panel.is-leaving {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		pointer-events: none;
-		animation: testimonial-panel-leave 240ms ease forwards;
-	}
-
-	.testimonial-panel[hidden] {
-		display: none;
+	.testimonial-panel.is-active {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+		pointer-events: auto;
 	}
 
 	.testimonial-tablist {
@@ -1232,8 +1227,8 @@
 		color: color-mix(in oklab, #fff 72%, transparent);
 		cursor: pointer;
 		transition:
-			color 220ms cubic-bezier(0.22, 0.61, 0.36, 1),
-			background-color 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+			color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+			background-color 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
 	}
 
 	.testimonial-tab:last-child {
@@ -1279,28 +1274,6 @@
 
 		.testimonial-tab {
 			padding: 0.82rem 0.68rem 0.9rem;
-		}
-	}
-
-	@keyframes testimonial-panel-enter {
-		from {
-			opacity: 0;
-			transform: translate3d(0, 10px, 0);
-		}
-		to {
-			opacity: 1;
-			transform: translate3d(0, 0, 0);
-		}
-	}
-
-	@keyframes testimonial-panel-leave {
-		from {
-			opacity: 1;
-			transform: translate3d(0, 0, 0);
-		}
-		to {
-			opacity: 0;
-			transform: translate3d(0, -8px, 0);
 		}
 	}
 
@@ -1538,13 +1511,13 @@
 		}
 
 		.testimonial-panels,
-		.testimonial-tab {
+		.testimonial-tab,
+		.testimonial-panel {
 			transition: none !important;
 		}
 
-		.testimonial-panel.is-entering,
-		.testimonial-panel.is-leaving {
-			animation: none !important;
+		.testimonial-panel {
+			transform: none !important;
 		}
 	}
 }

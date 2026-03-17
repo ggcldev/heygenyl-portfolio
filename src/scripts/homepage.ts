@@ -473,16 +473,7 @@ testimonialTabGroups.forEach((group) => {
   if (tabs.length === 0 || panels.length === 0) return;
   group.style.setProperty("--testimonial-tab-count", String(tabs.length));
 
-  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const hoverPointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-  const TRANSITION_MS = 280;
-  let transitionTimer = 0;
-
-  const clearPanelState = () => {
-    panels.forEach((panel) => {
-      panel.classList.remove("is-entering", "is-leaving");
-    });
-  };
 
   const activateTab = (nextTab: HTMLElement, withFocus = false) => {
     const tabKey = nextTab.getAttribute("data-testimonial-tab-id");
@@ -492,18 +483,6 @@ testimonialTabGroups.forEach((group) => {
       (panel) => panel.getAttribute("data-testimonial-panel-id") === tabKey,
     );
     if (!(nextPanel instanceof HTMLElement)) return;
-
-    const currentPanel =
-      panels.find((panel) => !panel.hasAttribute("hidden")) ?? nextPanel;
-    const shouldAnimate =
-      !reduceMotionQuery.matches && currentPanel !== nextPanel;
-
-    if (transitionTimer) {
-      window.clearTimeout(transitionTimer);
-      transitionTimer = 0;
-    }
-
-    clearPanelState();
 
     tabs.forEach((tab) => {
       const isActive = tab === nextTab;
@@ -518,19 +497,11 @@ testimonialTabGroups.forEach((group) => {
     }
     group.setAttribute("data-active-testimonial", tabKey);
 
-    if (!shouldAnimate) {
-      panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
-    } else {
-      nextPanel.hidden = false;
-      currentPanel.classList.add("is-leaving");
-      nextPanel.classList.add("is-entering");
-
-      transitionTimer = window.setTimeout(() => {
-        panels.forEach((panel) => panel.toggleAttribute("hidden", panel !== nextPanel));
-        clearPanelState();
-        transitionTimer = 0;
-      }, TRANSITION_MS);
-    }
+    panels.forEach((panel) => {
+      const isActive = panel === nextPanel;
+      panel.classList.toggle("is-active", isActive);
+      panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+    });
 
     if (withFocus) {
       nextTab.focus();
@@ -559,6 +530,12 @@ testimonialTabGroups.forEach((group) => {
       event.preventDefault();
       activateTab(targetTab, true);
     });
+  });
+
+  panels.forEach((panel) => {
+    panel.hidden = false;
+    panel.classList.remove("is-active");
+    panel.setAttribute("aria-hidden", "true");
   });
 
   const initialTab =

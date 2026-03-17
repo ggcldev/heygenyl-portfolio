@@ -578,13 +578,11 @@ const homeSchema = [
     void import("../scripts/homepage");
   };
 
-  const scheduleHomepageEnhancements = () => {
-    setTimeout(loadHomepageEnhancements, 0);
-  };
-
-  if (document.readyState === "complete") {
-    scheduleHomepageEnhancements();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadHomepageEnhancements, {
+      once: true,
+    });
   } else {
-    window.addEventListener("load", scheduleHomepageEnhancements, { once: true });
+    loadHomepageEnhancements();
   }
 </script>
