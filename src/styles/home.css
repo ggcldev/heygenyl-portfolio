@@ -31,7 +31,10 @@
 		min-height: clamp(180px, 22vw, 220px);
 		transform: translateY(calc(var(--service-offset-y) + var(--service-hover-shift))) skewX(-4deg);
 		transform-origin: center;
-		transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+		transition:
+			transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1),
+			background-color 240ms cubic-bezier(0.22, 0.61, 0.36, 1),
+			border-color 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
 		will-change: transform;
 	}
 
@@ -190,6 +193,7 @@
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: color-mix(in oklab, var(--color-ink) 74%, transparent);
+		transition: color 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
 	}
 
 	.service-skew-card__cta-icon-wrap {
@@ -471,8 +475,38 @@
 	}
 
 	.service-skew-card:focus-visible {
-		outline: 1px solid color-mix(in oklab, var(--color-ink) 28%, transparent);
+		outline: 1px solid color-mix(in oklab, var(--color-accent) 58%, transparent);
 		outline-offset: -1px;
+	}
+
+	.service-skew-card .flat-panel__kicker,
+	.service-skew-card .flat-panel__title,
+	.service-skew-card .flat-panel__copy {
+		transition: color 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.service-skew-card:hover,
+		.service-skew-card:focus-visible {
+			background: var(--color-accent);
+			border-color: color-mix(in oklab, var(--color-accent) 84%, #fff 16%);
+		}
+
+		.service-skew-card:hover::after,
+		.service-skew-card:focus-visible::after {
+			background: color-mix(in oklab, #fff 88%, transparent);
+		}
+
+		.service-skew-card:hover .flat-panel__kicker,
+		.service-skew-card:hover .flat-panel__title,
+		.service-skew-card:hover .flat-panel__copy,
+		.service-skew-card:hover .service-skew-card__cta,
+		.service-skew-card:focus-visible .flat-panel__kicker,
+		.service-skew-card:focus-visible .flat-panel__title,
+		.service-skew-card:focus-visible .flat-panel__copy,
+		.service-skew-card:focus-visible .service-skew-card__cta {
+			color: #fff;
+		}
 	}
 
 	@media (min-width: 768px) {
@@ -513,10 +547,10 @@
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap {
-				color: var(--color-ink);
-				border-color: color-mix(in oklab, var(--color-ink) 28%, transparent);
-				background: color-mix(in oklab, var(--color-paper) 82%, var(--color-ink) 18%);
-				box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-ink) 15%, transparent);
+				color: var(--color-accent);
+				border-color: color-mix(in oklab, #fff 82%, transparent);
+				background: color-mix(in oklab, #fff 94%, var(--color-accent) 6%);
+				box-shadow: 0 0 0 1px color-mix(in oklab, #fff 72%, transparent);
 				animation: service-icon-wrap-heartbeat 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
 			}
 
@@ -527,37 +561,57 @@
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap--seo::before,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap--seo::before {
-				opacity: 0.38;
+				background: linear-gradient(
+					90deg,
+					transparent 0%,
+					color-mix(in oklab, var(--color-accent) 62%, transparent) 50%,
+					transparent 100%
+				);
+				opacity: 0.6;
 				animation: service-seo-scan 2.8s linear infinite;
 			}
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap--seo::after,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap--seo::after {
-				opacity: 0.36;
+				border-color: color-mix(in oklab, var(--color-accent) 56%, transparent);
+				opacity: 0.52;
 				animation: service-seo-ring 2.8s ease-out infinite;
 			}
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap--local::before,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap--local::before {
-				opacity: 0.62;
+				border-color: color-mix(in oklab, var(--color-accent) 58%, transparent);
+				opacity: 0.74;
 				animation: service-local-ripple-a 2.4s ease-out infinite;
 			}
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap--local::after,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap--local::after {
-				opacity: 0.52;
+				border-color: color-mix(in oklab, var(--color-accent) 52%, transparent);
+				opacity: 0.64;
 				animation: service-local-ripple-b 2.4s ease-out infinite;
 			}
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap--wp::before,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap--wp::before {
-				opacity: 0.36;
+				background: repeating-linear-gradient(
+					90deg,
+					color-mix(in oklab, var(--color-accent) 44%, transparent) 0 11%,
+					transparent 11% 22%
+				);
+				opacity: 0.58;
 				animation: service-wp-grid-shift 2.6s linear infinite;
 			}
 
 			.service-skew-card:hover .service-skew-card__service-icon-wrap--wp::after,
 			.service-skew-card:focus-visible .service-skew-card__service-icon-wrap--wp::after {
-				opacity: 0.34;
+				background: linear-gradient(
+					180deg,
+					transparent 0%,
+					color-mix(in oklab, var(--color-accent) 38%, transparent) 52%,
+					transparent 100%
+				);
+				opacity: 0.52;
 				animation: service-wp-sweep 2.6s ease-in-out infinite;
 			}
 
@@ -586,7 +640,7 @@
 			.service-skew-card:focus-visible .service-skew-card__cta-icon-wrap {
 				background: color-mix(in oklab, white 96%, var(--color-paper) 4%);
 				box-shadow: inset 0 0 0 1px color-mix(in oklab, white 88%, transparent);
-				color: color-mix(in oklab, black 90%, transparent);
+				color: var(--color-accent);
 				transform: translate3d(1.5px, -1.5px, 0);
 			}
 		}
