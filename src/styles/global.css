@@ -995,6 +995,7 @@
 
 	.blog-story-card__date {
 		color: color-mix(in oklab, #ffffff 74%, transparent);
+		font-weight: 700;
 		margin: 0;
 	}
 
@@ -1003,6 +1004,7 @@
 		font-size: clamp(1.3rem, 2.3vw, 1.7rem);
 		line-height: 1.03;
 		letter-spacing: -0.015em;
+		font-weight: 700;
 		display: inline-block;
 		position: relative;
 		padding-bottom: 0.42rem;
@@ -1698,6 +1700,10 @@
 	.blog-page-view .blog-hub-hero .eyebrow {
 		color: var(--color-accent);
 		font-weight: 700;
+	}
+
+	.blog-page-view .blog-story-card__title {
+		color: var(--color-accent) !important;
 	}
 
 	.blog-page-view .section-heading ul {
