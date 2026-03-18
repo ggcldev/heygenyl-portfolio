@@ -356,7 +356,7 @@ function initTabGroup(
 ) {
   const tabs = Array.from(group.querySelectorAll<HTMLElement>(`[${tabAttr}]`));
   const panels = Array.from(group.querySelectorAll<HTMLElement>(`[${panelAttr}]`));
-  if (tabs.length === 0 || panels.length === 0) return;
+  if (tabs.length === 0 || panels.length === 0) return null;
 
   const hoverPointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
 
@@ -410,8 +410,15 @@ function initTabGroup(
 
   const initialTab =
     tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0];
-  if (!initialTab) return;
+  if (!initialTab) return null;
   activateTab(initialTab);
+
+  return {
+    tabs,
+    panels,
+    activateTab,
+    hoverPointerQuery,
+  };
 }
 
 /* Approach tabs */
@@ -492,7 +499,7 @@ testimonialTabGroups.forEach((group) => {
     String(group.querySelectorAll("[data-testimonial-tab-id]").length),
   );
 
-  initTabGroup(
+  const tabGroup = initTabGroup(
     group,
     "data-testimonial-tab-id",
     "data-testimonial-panel-id",
@@ -518,6 +525,66 @@ testimonialTabGroups.forEach((group) => {
       });
     },
   );
+
+  if (!tabGroup) return;
+
+  const { tabs, activateTab, hoverPointerQuery } = tabGroup;
+  let hoverFrameId = 0;
+  let pendingHoverIndex = -1;
+
+  const resolveHoverIndex = (clientX: number) => {
+    const bounds = group.getBoundingClientRect();
+    if (bounds.width <= 0 || tabs.length === 0) return -1;
+
+    const clampedX = Math.min(Math.max(clientX - bounds.left, 0), bounds.width - 1);
+    return Math.min(
+      tabs.length - 1,
+      Math.floor((clampedX / bounds.width) * tabs.length),
+    );
+  };
+
+  const getActiveIndex = () =>
+    tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+
+  const activateHoverIndex = (nextIndex: number) => {
+    if (nextIndex < 0 || nextIndex === getActiveIndex()) {
+      return;
+    }
+
+    const targetTab = tabs[nextIndex];
+    if (!targetTab) return;
+
+    activateTab(targetTab);
+  };
+
+  const flushHoverActivation = () => {
+    hoverFrameId = 0;
+
+    const nextIndex = pendingHoverIndex;
+    pendingHoverIndex = -1;
+    activateHoverIndex(nextIndex);
+  };
+
+  const queueHoverActivation = (event: PointerEvent) => {
+    if (!hoverPointerQuery.matches) return;
+
+    const nextIndex = resolveHoverIndex(event.clientX);
+    if (nextIndex < 0 || nextIndex === getActiveIndex()) {
+      return;
+    }
+
+    pendingHoverIndex = nextIndex;
+
+    if (!hoverFrameId) {
+      hoverFrameId = window.requestAnimationFrame(flushHoverActivation);
+    }
+  };
+
+  group.addEventListener("pointerenter", (event) => {
+    if (!hoverPointerQuery.matches) return;
+    activateHoverIndex(resolveHoverIndex(event.clientX));
+  });
+  group.addEventListener("pointermove", queueHoverActivation);
 });
 
 const homeFaqItems = Array.from(

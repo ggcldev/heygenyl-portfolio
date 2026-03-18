@@ -126,23 +126,23 @@ const testimonialItems = [
   {
     id: "managed-it",
     quote:
-      "Genyl fixed our technical SEO issues and restructured our service pages. In under 90 days, we started getting qualified calls from organic search again.",
-    name: "David L.",
-    role: "Operations Lead, Managed IT Company",
+      "Genyl consistently delivers work aligned with what we need, especially around technical SEO monitoring and audits for both global and local. His communication is strong, he's open to feedback, and he's genuinely easy to work with. What stood out most was his attitude and dedication. His eagerness to understand the business helped speed up the work significantly.",
+    name: "Lifted",
+    role: "Upwork Company",
   },
   {
     id: "local-service",
     quote:
-      "Our Google Business Profile went from almost invisible to consistently showing in the local pack. We now get steady map leads every week.",
-    name: "Maria C.",
-    role: "Owner, Local Home Services Business",
+      "Your feedback could be here. I'm currently helping businesses with SEO, technical audits, and website improvements. The next result here could be from your project.",
+    name: "Your Name Here",
+    role: "Owner",
   },
   {
     id: "agency",
     quote:
-      "We needed SEO strategy and WordPress implementation in one person. Genyl delivered both, and the site now loads faster, ranks better, and converts more.",
-    name: "Angela T.",
-    role: "Marketing Manager, Growth Agency",
+      "Your feedback could be here. I'm currently helping businesses with SEO, technical audits, and website improvements. The next result here could be from your project.",
+    name: "Your Name Here",
+    role: "Owner",
   },
 ];
 
@@ -406,7 +406,7 @@ const homeSchema = [
 
     <section class="content-shell">
       <div class="pt-24 pb-6">
-        <h2 class="text-sm 2xl:text-xl font-bold uppercase m-0">Testimonials</h2>
+        <h2 class="text-sm 2xl:text-xl font-bold uppercase m-0">What Clients Say</h2>
       </div>
       <div
         class="border-b pt-0 pb-0"
@@ -575,15 +575,5 @@ const homeSchema = [
 </BaseLayout>
 
 <script>
-  const loadHomepageEnhancements = () => {
-    void import("../scripts/homepage");
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", loadHomepageEnhancements, {
-      once: true,
-    });
-  } else {
-    loadHomepageEnhancements();
-  }
+  import "../scripts/homepage";
 </script>
