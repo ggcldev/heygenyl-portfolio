@@ -382,7 +382,8 @@
 		display: grid;
 		gap: 0.8rem;
 		padding: 0.95rem 1rem;
-		border: 1px solid color-mix(in oklab, var(--color-accent) 62%, #fff 38%);
+		border: 0;
+		border-radius: 1rem;
 		background:
 			linear-gradient(
 				135deg,
