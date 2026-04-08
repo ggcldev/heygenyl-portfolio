@@ -199,6 +199,25 @@ const schema = [
     url: postUrl,
   },
   breadcrumbSchema,
+  ...(post.data.howToSteps && post.data.howToSteps.length > 0
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          name: post.data.title,
+          description: post.data.description,
+          inLanguage: "en",
+          totalTime: "PT6H",
+          step: post.data.howToSteps.map((step, index) => ({
+            "@type": "HowToStep",
+            position: index + 1,
+            name: step.name,
+            text: step.text,
+            ...(step.anchor ? { url: `${postUrl}#${step.anchor}` } : {}),
+          })),
+        },
+      ]
+    : []),
   ...(faqEntries.length > 0
     ? [
         {
