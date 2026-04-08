@@ -18,10 +18,9 @@ const contactFormEndpoint = usesFormSubmit
   ? configuredContactFormEndpoint || `https://formsubmit.co/${siteConfig.email}`
   : configuredContactFormEndpoint;
 const contactFormAjaxEndpoint = usesFormSubmit
-  ? configuredContactFormAjaxEndpoint || `https://formsubmit.co/ajax/${siteConfig.email}`
+  ? ""
   : configuredContactFormAjaxEndpoint || configuredContactFormEndpoint;
 const usesAjaxContactFlow = contactFormAjaxEndpoint.length > 0;
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || "";
 
 const schema = [
   {
@@ -144,16 +143,10 @@ const schema = [
             />
           </div>
 
-          {turnstileSiteKey && (
-            <div class="field-group md:col-span-2">
-              <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="dark" data-appearance="always"></div>
-            </div>
-          )}
-
           <p class="muted-note md:col-span-2">
             {usesAjaxContactFlow
               ? "Submissions are sent from the browser and redirect to an on-site thank-you page. If the form fails, use the direct email link below."
-              : "FormSubmit may ask for a verification challenge before sending. After successful submission, you will be redirected to the thank-you page."}
+              : "The form submits through FormSubmit's hosted flow. If verification is required, complete it there and you will be redirected back to the on-site thank-you page."}
           </p>
 
           <p class="form-feedback md:col-span-2" data-contact-feedback aria-live="polite" hidden></p>
@@ -185,9 +178,6 @@ const schema = [
     </section>
   </div>
 
-  {turnstileSiteKey && (
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  )}
   <script>
     import "../scripts/contact-form";
   </script>
