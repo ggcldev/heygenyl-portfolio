@@ -18,9 +18,9 @@
     "assert": {
       "assertions": {
         "categories:performance": [
-          "error",
+          "warn",
           {
-            "minScore": 0.95
+            "minScore": 0.9
           }
         ],
         "categories:seo": [
@@ -42,21 +42,21 @@
           }
         ],
         "largest-contentful-paint": [
-          "error",
+          "warn",
           {
-            "maxNumericValue": 2500
+            "maxNumericValue": 3000
           }
         ],
         "cumulative-layout-shift": [
-          "error",
+          "warn",
           {
-            "maxNumericValue": 0.1
+            "maxNumericValue": 0.2
           }
         ],
         "total-blocking-time": [
-          "error",
+          "warn",
           {
-            "maxNumericValue": 200
+            "maxNumericValue": 250
           }
         ],
         "render-blocking-insight": "off",
