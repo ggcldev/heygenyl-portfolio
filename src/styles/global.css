@@ -1103,6 +1103,42 @@
 		margin: 0;
 	}
 
+	.post-reading-progress {
+		position: fixed;
+		left: 0;
+		top: calc(var(--grid-cell) * 0.72 - 0.08rem);
+		width: 100%;
+		height: 0.34rem;
+		z-index: 115;
+		pointer-events: none;
+	}
+
+	.post-reading-progress__track,
+	.post-reading-progress__bar {
+		position: absolute;
+		inset: 0;
+		transform-origin: left center;
+	}
+
+	.post-reading-progress__track {
+		background: color-mix(in oklab, var(--color-ink) 12%, transparent);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+
+	.post-reading-progress__bar {
+		background:
+			linear-gradient(
+				90deg,
+				color-mix(in oklab, var(--color-accent) 78%, #fff 22%) 0%,
+				color-mix(in oklab, #fff 28%, var(--color-accent) 72%) 100%
+			);
+		box-shadow: 0 0 18px color-mix(in oklab, var(--color-accent) 36%, transparent);
+		transform: scaleX(0);
+		will-change: transform;
+		transition: transform 120ms linear;
+	}
+
 	.post-page {
 		display: grid;
 		gap: 2rem;
@@ -1270,9 +1306,17 @@
 		}
 	}
 
+	@media (max-width: 720px) {
+		.post-reading-progress {
+			top: calc(var(--grid-cell) * 2.35 - 0.08rem);
+			height: 0.28rem;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.post-toc-toggle svg,
-		.post-toc-subwrap {
+		.post-toc-subwrap,
+		.post-reading-progress__bar {
 			transition: none !important;
 		}
 	}
