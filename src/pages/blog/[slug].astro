@@ -177,7 +177,7 @@ const schema = [
   authorSchema,
   {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": ["BlogPosting", "Article"],
     headline: post.data.title,
     description: post.data.description,
     datePublished: post.data.pubDate.toISOString(),
