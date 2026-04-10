@@ -53,6 +53,11 @@ const siteHeader = document.querySelector(".site-header");
 const mainContent = document.querySelector("main");
 const siteFooter = document.querySelector("footer");
 let lastFocusedElement: HTMLElement | null = null;
+let lastNavToggleAt = 0;
+
+if (mobileNav instanceof HTMLElement && mobileNav.parentElement !== document.body) {
+  document.body.appendChild(mobileNav);
+}
 
 const getFocusableElements = (): HTMLElement[] => {
   if (!(mobileNav instanceof HTMLElement)) return [];
@@ -139,11 +144,28 @@ const onHeaderScroll = () => {
 applyHeaderScrollState();
 
 if (navButton instanceof HTMLElement) {
-  navButton.addEventListener("click", toggleNav);
+  const onNavToggle = (event: Event) => {
+    const now = Date.now();
+    if (now - lastNavToggleAt < 320) return;
+    lastNavToggleAt = now;
+    event.preventDefault();
+    toggleNav();
+  };
+
+  navButton.addEventListener("click", onNavToggle);
+  navButton.addEventListener("touchend", onNavToggle, { passive: false });
 }
 
 if (mobileClose instanceof HTMLElement) {
   mobileClose.addEventListener("click", closeNav);
+}
+
+if (mobileNav instanceof HTMLElement) {
+  mobileNav.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest("a")) closeNav();
+  });
 }
 
 window.addEventListener("scroll", onHeaderScroll, { passive: true });
