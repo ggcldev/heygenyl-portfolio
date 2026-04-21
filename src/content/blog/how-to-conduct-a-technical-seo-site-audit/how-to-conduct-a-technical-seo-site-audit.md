@@ -86,11 +86,11 @@ You do not need an expensive stack to run a useful audit. For most sites, Google
 
 | Tool | Best For |
 | --- | --- |
-| Google Search Console | Indexation, coverage issues, Core Web Vitals, manual warnings |
-| Screaming Frog | Crawls, broken links, redirect chains, duplicate metadata |
-| PageSpeed Insights | Page-level speed and Core Web Vitals diagnostics |
-| Ahrefs or Semrush | Larger site audits, backlink context, historical reporting |
-| GA4 | Traffic trends and landing-page behavior |
+| <a href="https://search.google.com/search-console/about" target="_blank" rel="noopener">Google Search Console</a> | Indexation, coverage issues, Core Web Vitals, manual warnings |
+| <a href="https://www.screamingfrog.co.uk/seo-spider/" target="_blank" rel="noopener">Screaming Frog</a> | Crawls, broken links, redirect chains, duplicate metadata |
+| <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener">PageSpeed Insights</a> | Page-level speed and Core Web Vitals diagnostics |
+| <a href="https://ahrefs.com/" target="_blank" rel="noopener">Ahrefs</a> or <a href="https://www.semrush.com/" target="_blank" rel="noopener">Semrush</a> | Larger site audits, backlink context, historical reporting |
+| <a href="https://marketingplatform.google.com/about/analytics/" target="_blank" rel="noopener">GA4</a> | Traffic trends and landing-page behavior |
 
 Start with the free tools first. Paid tools save time, but they do not replace the need to interpret what the crawl is actually telling you.
 
@@ -166,7 +166,7 @@ Architecture problems usually show up as weak internal linking, inconsistent pag
 
 Technical SEO is not only about whether pages can be crawled. It is also about how efficiently they load and respond once users arrive.
 
-Core Web Vitals give you a useful way to prioritize speed work because they focus on the parts of performance users actually feel.
+<a href="https://web.dev/articles/vitals" target="_blank" rel="noopener">Core Web Vitals</a> give you a useful way to prioritize speed work because they focus on the parts of performance users actually feel.
 
 | Metric | What It Measures | Target |
 | --- | --- | --- |
@@ -336,7 +336,7 @@ Start with the crawl. Confirm indexation. Fix the blocks. Then work your way dow
 
 That is how you keep the audit from becoming another report that gets ignored.
 
-If you want a second set of eyes on your site, book a free SEO audit and I will help you identify the issues that are actually worth fixing first.
+If you want a second set of eyes on your site, book a free audit through my [SEO specialist service](/services/seo-specialist/) and I will help you identify the issues that are actually worth fixing first.
 
 ## Frequently Asked Questions
 

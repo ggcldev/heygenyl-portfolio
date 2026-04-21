@@ -83,7 +83,7 @@ Title tag and H1 - Service keyword and city in both. Title under 60 characters. 
 
 Meta description - 155 to 160 characters, primary keyword included, CTA as the last sentence.
 
-NAP - Name, address, and phone number must match exactly what is on your Google Business Profile and every citation. One inconsistency weakens local relevance across the board.
+NAP - Name, address, and phone number must match exactly what is on your <a href="https://www.google.com/business/" target="_blank" rel="noopener">Google Business Profile</a> and every citation. One inconsistency weakens local relevance across the board.
 
 CTA above the fold - Visitors should not scroll to find out how to reach you.
 
@@ -105,7 +105,7 @@ A local landing page sitting at position 40 with zero traffic is not contributin
 
 The businesses winning local search were built with intention. One keyword, one city, one intent. Structure before content, technical signals reinforcing what the page already says.
 
-Get your free SEO audit and find out which of your local pages are built to rank and which ones are holding your site back.
+If building out a service-area page plan from scratch is where this stalls, that is what my [local SEO service](/services/local-seo/) is for. Get your free SEO audit and find out which of your local pages are built to rank and which ones are holding your site back.
 
 ## Frequently Asked Questions
 

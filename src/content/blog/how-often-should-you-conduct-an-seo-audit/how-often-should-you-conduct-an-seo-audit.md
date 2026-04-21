@@ -22,7 +22,7 @@ That is the actual problem. Not the frequency.
 - Audit frequency depends on site size, content volume, and how often your site changes.
 - Two audit types exist: full audits and spot checks. Most sites need both.
 - Event-based triggers matter more than calendar schedules.
-- Google Search Console is your first diagnostic tool, not Screaming Frog or SEMrush.
+- <a href="https://search.google.com/search-console/about" target="_blank" rel="noopener">Google Search Console</a> is your first diagnostic tool, not <a href="https://www.screamingfrog.co.uk/seo-spider/" target="_blank" rel="noopener">Screaming Frog</a> or <a href="https://www.semrush.com/" target="_blank" rel="noopener">SEMrush</a>.
 - An audit without a fix plan is a report collecting dust.
 
 ## Why Most SEO Audits Do Nothing
@@ -41,7 +41,7 @@ Most articles treat all audits the same. They are not.
 
 ### Full Deep Audit
 
-You are checking everything. Technical health, content architecture, on-page signals, and off-page authority. You need Screaming Frog, SEMrush or Ahrefs, and GSC data pulled across a minimum 16-month date range.
+You are checking everything. Technical health, content architecture, on-page signals, and off-page authority. You need Screaming Frog, SEMrush or <a href="https://ahrefs.com/" target="_blank" rel="noopener">Ahrefs</a>, and GSC data pulled across a minimum 16-month date range.
 
 Run this once or twice a year depending on site size.
 
@@ -126,7 +126,7 @@ Open Google Search Console before anything else. Before Screaming Frog. Before S
 - Google Search Console - crawl errors, indexing, performance trends, Core Web Vitals
 - Screaming Frog - full site crawl, broken links, redirect chains, duplicate content
 - SEMrush or Ahrefs - keyword rankings, backlink profile, site audit reports
-- GA4 - user behavior, bounce rates, traffic trends by page
+- <a href="https://marketingplatform.google.com/about/analytics/" target="_blank" rel="noopener">GA4</a> - user behavior, bounce rates, traffic trends by page
 
 Pull the 16-month date range in GSC for any performance review. Three to six months is not enough baseline to separate a real trend from a blip.
 
@@ -144,7 +144,7 @@ The report is done, the list is long, and people either freeze or start touching
 
 Knowing you need an audit is the easy part. Knowing what to fix first is where most businesses get stuck.
 
-If you want a second set of eyes on your site, I offer a free SEO audit for businesses serious about improving their search performance. No pitch. Just a clear look at what is working, what is not, and where to start.
+If you want a second set of eyes on your site, I offer a free audit as part of my [SEO specialist service](/services/seo-specialist/) for businesses serious about improving their search performance. No pitch. Just a clear look at what is working, what is not, and where to start.
 
 Book your free SEO audit and let's figure out what your site actually needs.
 

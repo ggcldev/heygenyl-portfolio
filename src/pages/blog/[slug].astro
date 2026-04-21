@@ -7,6 +7,7 @@ import PostToc from "../../components/PostToc.astro";
 import { siteConfig } from "../../data/site";
 import { buildTocSections } from "../../utils/toc";
 import { getBlogPostSlug } from "../../utils/blog";
+import { authorProfile } from "../../data/author";
 import authorHeadshot from "../../assets/author/genyl_gicalde_seo_specialist.webp";
 
 export async function getStaticPaths() {
@@ -44,29 +45,6 @@ const socialImageAlt = post.data.imageAlt ?? post.data.title;
 const authorId = new URL("#author", siteConfig.url).toString();
 const organizationId = new URL("#organization", siteConfig.url).toString();
 const authorImageUrl = new URL(authorHeadshot.src, siteConfig.url).toString();
-const authorProfile = {
-  name: "Genyl Gicalde",
-  profileUrl: "https://www.linkedin.com/in/genylgicalde/",
-  jobTitle: "SEO Specialist, Local SEO and WordPress SEO Expert",
-  description:
-    "Freelance SEO specialist with 3+ years of experience in local SEO, technical SEO, and WordPress development. Specializes in service-area businesses across home services, legal, medical, and B2B industries. Helps local businesses and agencies rank higher in Google Search and Google Maps through structured silo architecture and GBP optimization.",
-  shortDescription:
-    "Freelance SEO specialist helping service-area businesses and agencies rank higher in Google Search and Google Maps.",
-  imageAlt: "Genyl Gicalde, freelance SEO specialist and WordPress SEO expert",
-  sameAs: [
-    "https://www.linkedin.com/in/genylgicalde/",
-    "https://www.instagram.com/genylgicalde/",
-  ],
-  knowsAbout: [
-    "SEO",
-    "Local SEO",
-    "WordPress SEO",
-    "Technical SEO",
-    "Google Maps",
-    "Google Business Profile",
-    "Content Writing",
-  ],
-};
 
 const extractFaqEntries = (markdownBody: string) => {
   const lines = markdownBody.split("\n");
@@ -104,10 +82,6 @@ const extractFaqEntries = (markdownBody: string) => {
       pushCurrent();
       currentQuestion = questionTitle.trim();
       answerBuffer = [];
-      continue;
-    }
-
-    if (/^###\s+/.test(line)) {
       continue;
     }
 
@@ -207,7 +181,9 @@ const schema = [
           name: post.data.title,
           description: post.data.description,
           inLanguage: "en",
-          totalTime: "PT6H",
+          ...(post.data.howToTotalTime
+            ? { totalTime: post.data.howToTotalTime }
+            : {}),
           step: post.data.howToSteps.map((step, index) => ({
             "@type": "HowToStep",
             position: index + 1,
@@ -323,62 +299,7 @@ const schema = [
     </div>
   </div>
 
-  <script is:inline>
-    (() => {
-      const progressBar = document.querySelector("[data-reading-progress-bar]");
-      const articleTarget = document.querySelector("[data-reading-progress-target]");
-      const siteHeader = document.querySelector(".site-header");
-
-      if (!(progressBar instanceof HTMLElement) || !(articleTarget instanceof HTMLElement)) {
-        return;
-      }
-
-      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-      let start = 0;
-      let end = 1;
-
-      const recalculateBounds = () => {
-        const headerHeight = siteHeader instanceof HTMLElement ? siteHeader.offsetHeight : 0;
-        const articleTop = articleTarget.offsetTop;
-        const articleHeight = articleTarget.offsetHeight;
-        const viewportHeight = window.innerHeight;
-
-        start = Math.max(0, articleTop - headerHeight);
-        end = Math.max(start + 1, articleTop + articleHeight - viewportHeight * 0.4);
-      };
-
-      const updateProgress = () => {
-        const progress = clamp((window.scrollY - start) / (end - start), 0, 1);
-        progressBar.style.transform = `scaleX(${progress})`;
-      };
-
-      let frame = 0;
-      const requestUpdate = () => {
-        if (frame) return;
-        frame = window.requestAnimationFrame(() => {
-          frame = 0;
-          updateProgress();
-        });
-      };
-
-      const recalculateAndUpdate = () => {
-        recalculateBounds();
-        updateProgress();
-      };
-
-      recalculateAndUpdate();
-      if ("ResizeObserver" in window) {
-        const observer = new ResizeObserver(() => {
-          recalculateAndUpdate();
-        });
-
-        observer.observe(articleTarget);
-        if (siteHeader instanceof HTMLElement) observer.observe(siteHeader);
-      }
-
-      window.addEventListener("scroll", requestUpdate, { passive: true });
-      window.addEventListener("resize", recalculateAndUpdate);
-      window.addEventListener("load", recalculateAndUpdate);
-    })();
+  <script>
+    import "../../scripts/reading-progress";
   </script>
 </BaseLayout>

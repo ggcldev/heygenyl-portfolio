@@ -1905,4 +1905,20 @@
 	.blog-page-view .post-article .prose ol li::marker {
 		color: #fff !important;
 	}
+
+	.blog-page-view .post-article .prose a,
+	.blog-page-view .post-article .prose :where(p, li, td, th, blockquote) a {
+		color: var(--color-accent) !important;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.18em;
+		transition: color 0.15s ease;
+	}
+
+	.blog-page-view .post-article .prose a:hover,
+	.blog-page-view .post-article .prose a:focus-visible,
+	.blog-page-view .post-article .prose :where(p, li, td, th, blockquote) a:hover,
+	.blog-page-view .post-article .prose :where(p, li, td, th, blockquote) a:focus-visible {
+		color: color-mix(in oklab, var(--color-accent) 70%, #fff 30%) !important;
+	}
 }

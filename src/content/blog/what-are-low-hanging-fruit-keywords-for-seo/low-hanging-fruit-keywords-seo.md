@@ -29,7 +29,7 @@ Low-hanging fruit keywords are search terms with low keyword difficulty (usually
 A keyword difficulty (KD) score below 30 is the common benchmark. Sites with moderate domain authority (DA 30–50) can sometimes compete up to KD 40. Always check the actual SERP before deciding—a KD of 35 can be easy if the top results are poorly optimized pages on low-authority sites.
 
 **How do I find low-hanging fruit keywords for free?**
-Google Search Console is the best free starting point. Filter your Performance report for queries where you rank in positions 4–20. These pages already have a ranking signal—they just need targeted optimization. Google Autocomplete, People Also Ask boxes, and Reddit threads also surface low-competition keyword patterns at no cost.
+<a href="https://search.google.com/search-console/about" target="_blank" rel="noopener">Google Search Console</a> is the best free starting point. Filter your Performance report for queries where you rank in positions 4–20. These pages already have a ranking signal—they just need targeted optimization. Google Autocomplete, People Also Ask boxes, and Reddit threads also surface low-competition keyword patterns at no cost.
 
 **Are low-hanging fruit keywords worth targeting?**
 Yes. A page ranking second for a 300-search/month keyword with high intent typically drives more conversions than a page ranking twelfth for a 10,000-search/month keyword. Lower competition means faster ranking, and specific keywords attract visitors who are closer to taking action—which directly improves your conversion rate.
@@ -107,8 +107,8 @@ Pay particular attention to queries where you rank positions 8–12. These are o
 
 If you have access to a paid tool, use these filters:
 
-- **Ahrefs Keywords Explorer:** Set KD to under 30, volume 100–1,000, then check the SERP overview. Look for low-DA domains in the top 5 results.
-- **Semrush Keyword Magic Tool:** Filter for low difficulty and long-tail modifiers. Sort by search intent to separate informational from commercial opportunities.
+- **<a href="https://ahrefs.com/" target="_blank" rel="noopener">Ahrefs</a> Keywords Explorer:** Set KD to under 30, volume 100–1,000, then check the SERP overview. Look for low-DA domains in the top 5 results.
+- **<a href="https://www.semrush.com/" target="_blank" rel="noopener">Semrush</a> Keyword Magic Tool:** Filter for low difficulty and long-tail modifiers. Sort by search intent to separate informational from commercial opportunities.
 - **Ubersuggest:** The free tier covers basic KD and volume data—a solid starting point for new sites or limited budgets.
 
 Beyond the KD score, look for SERPs where the top results are missing the keyword in their title tags, have thin content, or haven't been updated in two or more years. Those are weak results you can beat with a better page.
@@ -238,4 +238,4 @@ Low-hanging fruit keywords for SEO are the fastest path to organic traffic that 
 
 Find the terms your competitors overlook. Optimize the pages closest to page one. Track results consistently. You don't need a massive budget or a team of writers—you need a repeatable process and the patience to let rankings develop over 4–12 weeks.
 
-Start by pulling your positions 4 to 20 report in Google Search Console. Your next ranking opportunity is likely already there.
+Start by pulling your positions 4 to 20 report in Google Search Console. Your next ranking opportunity is likely already there. If you want the opportunity mapping done with you, that is part of my [SEO specialist service](/services/seo-specialist/).

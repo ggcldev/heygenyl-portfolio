@@ -111,4 +111,4 @@ Canonical if the page stays live and you just want to consolidate the ranking si
 
 ### How do I find duplicate content on my site?
 
-Start in Google Search Console under Index Coverage. Screaming Frog and Semrush Site Audit both flag it. Copyscape is the tool for external duplicates.
+Start in <a href="https://search.google.com/search-console/about" target="_blank" rel="noopener">Google Search Console</a> under Index Coverage. <a href="https://www.screamingfrog.co.uk/seo-spider/" target="_blank" rel="noopener">Screaming Frog</a> and <a href="https://www.semrush.com/" target="_blank" rel="noopener">Semrush</a> Site Audit both flag it. <a href="https://www.copyscape.com/" target="_blank" rel="noopener">Copyscape</a> is the tool for external duplicates.
