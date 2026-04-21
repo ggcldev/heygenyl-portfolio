@@ -85,10 +85,6 @@ const extractFaqEntries = (markdownBody: string) => {
       continue;
     }
 
-    if (/^###\s+/.test(line)) {
-      continue;
-    }
-
     answerBuffer.push(line.replace(/^[-*]\s+/, ""));
   }
 
@@ -185,7 +181,9 @@ const schema = [
           name: post.data.title,
           description: post.data.description,
           inLanguage: "en",
-          totalTime: "PT6H",
+          ...(post.data.howToTotalTime
+            ? { totalTime: post.data.howToTotalTime }
+            : {}),
           step: post.data.howToSteps.map((step, index) => ({
             "@type": "HowToStep",
             position: index + 1,
@@ -301,62 +299,7 @@ const schema = [
     </div>
   </div>
 
-  <script is:inline>
-    (() => {
-      const progressBar = document.querySelector("[data-reading-progress-bar]");
-      const articleTarget = document.querySelector("[data-reading-progress-target]");
-      const siteHeader = document.querySelector(".site-header");
-
-      if (!(progressBar instanceof HTMLElement) || !(articleTarget instanceof HTMLElement)) {
-        return;
-      }
-
-      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-      let start = 0;
-      let end = 1;
-
-      const recalculateBounds = () => {
-        const headerHeight = siteHeader instanceof HTMLElement ? siteHeader.offsetHeight : 0;
-        const articleTop = articleTarget.offsetTop;
-        const articleHeight = articleTarget.offsetHeight;
-        const viewportHeight = window.innerHeight;
-
-        start = Math.max(0, articleTop - headerHeight);
-        end = Math.max(start + 1, articleTop + articleHeight - viewportHeight * 0.4);
-      };
-
-      const updateProgress = () => {
-        const progress = clamp((window.scrollY - start) / (end - start), 0, 1);
-        progressBar.style.transform = `scaleX(${progress})`;
-      };
-
-      let frame = 0;
-      const requestUpdate = () => {
-        if (frame) return;
-        frame = window.requestAnimationFrame(() => {
-          frame = 0;
-          updateProgress();
-        });
-      };
-
-      const recalculateAndUpdate = () => {
-        recalculateBounds();
-        updateProgress();
-      };
-
-      recalculateAndUpdate();
-      if ("ResizeObserver" in window) {
-        const observer = new ResizeObserver(() => {
-          recalculateAndUpdate();
-        });
-
-        observer.observe(articleTarget);
-        if (siteHeader instanceof HTMLElement) observer.observe(siteHeader);
-      }
-
-      window.addEventListener("scroll", requestUpdate, { passive: true });
-      window.addEventListener("resize", recalculateAndUpdate);
-      window.addEventListener("load", recalculateAndUpdate);
-    })();
+  <script>
+    import "../../scripts/reading-progress";
   </script>
 </BaseLayout>

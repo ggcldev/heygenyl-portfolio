@@ -25,6 +25,10 @@ const blog = defineCollection({
           }),
         )
         .optional(),
+      howToTotalTime: z
+        .string()
+        .regex(/^P(T.*)?$/, "howToTotalTime must be an ISO 8601 duration (e.g. PT2H30M)")
+        .optional(),
     }),
 });
 
