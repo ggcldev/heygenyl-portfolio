@@ -29,7 +29,7 @@ A 301 redirect is a permanent signal that tells search engines a page has moved 
 For most sites, Google finishes re-crawling within two to six weeks. A 10 to 20 percent traffic dip in the first two weeks can be normal. If traffic has not recovered after four to six weeks, investigate your redirects, robots rules, and sitemap.
 
 **Which pages should I protect first during a redesign?**
-Start in Google Search Console. Export your top pages by organic traffic, then cross-reference with your backlink profile. Pages with the most links still need redirects even if traffic is lower.
+Start in <a href="https://search.google.com/search-console/about" target="_blank" rel="noopener">Google Search Console</a>. Export your top pages by organic traffic, then cross-reference with your backlink profile. Pages with the most links still need redirects even if traffic is lower.
 
 **What should I check immediately after launching a redesigned website?**
 Submit the new XML sitemap in Google Search Console on launch day. Check 404s daily for the first two weeks. Confirm staging noindex blocks are removed. Verify all 301 redirects and watch indexed page trends.
@@ -161,7 +161,7 @@ Technical SEO confirms your redesigned site remains fast, crawlable, and indexab
 
 ### Mobile-First and Core Web Vitals
 
-Google indexes mobile-first, so mobile quality directly affects rankings.
+Google indexes mobile-first, so mobile quality directly affects rankings. <a href="https://web.dev/articles/vitals" target="_blank" rel="noopener">Core Web Vitals</a> are the specific performance signals it measures.
 
 Track:
 
@@ -311,4 +311,4 @@ A website redesign does not need to cost rankings. Treat SEO as a launch require
 
 Audit before changes, map redirects completely, preserve metadata/content, test in staging, and monitor after launch.
 
-If you want a second review of your redesign plan, or traffic has already dropped after launch, get in touch for a free SEO audit.
+If you want a second review of your redesign plan, or traffic has already dropped after launch, get in touch for a free audit through my [WordPress SEO expert service](/services/wordpress-seo-expert/).

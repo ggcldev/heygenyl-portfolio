@@ -53,11 +53,11 @@ The formula is simple: Content + Authority = Rankings. One well-targeted page fo
 
 ### Google Maps and the Local Pack
 
-Google Maps runs on an entirely separate algorithm from organic search. When someone searches for a local service, they often see a map with three business listings before any organic results. That is the local pack.
+<a href="https://www.google.com/maps" target="_blank" rel="noopener">Google Maps</a> runs on an entirely separate algorithm from organic search. When someone searches for a local service, they often see a map with three business listings before any organic results. That is the local pack.
 
 Maps rankings are driven by:
 
-- Your Google Business Profile optimization
+- Your <a href="https://www.google.com/business/" target="_blank" rel="noopener">Google Business Profile</a> optimization
 - The quantity and quality of your reviews
 - How close you are to the searcher
 - How well your website supports your GBP
@@ -132,7 +132,7 @@ If people are searching for what you offer, SEO applies. This includes:
 - Automotive and detailing
 - B2B services
 
-Local SEO is the great equalizer. A well-optimized small business can outrank a large national brand in its own backyard because Google prioritizes relevance and proximity over size.
+[Local SEO](/services/local-seo/) is the great equalizer. A well-optimized small business can outrank a large national brand in its own backyard because Google prioritizes relevance and proximity over size.
 
 ## What Nobody Tells You About SEO
 
@@ -179,7 +179,7 @@ SEO is how you change that. It is how you show up first, build trust before the 
 
 It is not optional for businesses that want to grow. It is the foundation everything else sits on.
 
-Ready to stop losing leads to competitors? Start with a free SEO audit of your website and Google Business Profile to find out exactly what is holding you back.
+Ready to stop losing leads to competitors? Start with a free [SEO audit](/services/seo-specialist/) of your website and Google Business Profile to find out exactly what is holding you back.
 
 ## Frequently Asked Questions
 
