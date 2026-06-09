@@ -144,7 +144,7 @@ The report is done, the list is long, and people either freeze or start touching
 
 Knowing you need an audit is the easy part. Knowing what to fix first is where most businesses get stuck.
 
-If you want a second set of eyes on your site, I offer a free audit as part of my [SEO specialist service](/services/seo-specialist/) for businesses serious about improving their search performance. No pitch. Just a clear look at what is working, what is not, and where to start.
+If you want a second set of eyes on your site, I offer a free audit as part of my <a href="/services/seo-specialist/" target="_blank" rel="noopener">SEO specialist service</a> for businesses serious about improving their search performance. No pitch. Just a clear look at what is working, what is not, and where to start.
 
 Book your free SEO audit and let's figure out what your site actually needs.
 

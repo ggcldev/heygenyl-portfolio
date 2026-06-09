@@ -311,4 +311,4 @@ A website redesign does not need to cost rankings. Treat SEO as a launch require
 
 Audit before changes, map redirects completely, preserve metadata/content, test in staging, and monitor after launch.
 
-If you want a second review of your redesign plan, or traffic has already dropped after launch, get in touch for a free audit through my [WordPress SEO expert service](/services/wordpress-seo-expert/).
+If you want a second review of your redesign plan, or traffic has already dropped after launch, get in touch for a free audit through my <a href="/services/wordpress-seo-expert/" target="_blank" rel="noopener">WordPress SEO expert service</a>.

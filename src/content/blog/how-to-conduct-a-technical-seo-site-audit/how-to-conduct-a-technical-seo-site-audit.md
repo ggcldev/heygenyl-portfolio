@@ -336,7 +336,7 @@ Start with the crawl. Confirm indexation. Fix the blocks. Then work your way dow
 
 That is how you keep the audit from becoming another report that gets ignored.
 
-If you want a second set of eyes on your site, book a free audit through my [SEO specialist service](/services/seo-specialist/) and I will help you identify the issues that are actually worth fixing first.
+If you want a second set of eyes on your site, book a free audit through my <a href="/services/seo-specialist/" target="_blank" rel="noopener">SEO specialist service</a> and I will help you identify the issues that are actually worth fixing first.
 
 ## Frequently Asked Questions
 

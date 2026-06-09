@@ -132,7 +132,7 @@ If people are searching for what you offer, SEO applies. This includes:
 - Automotive and detailing
 - B2B services
 
-[Local SEO](/services/local-seo/) is the great equalizer. A well-optimized small business can outrank a large national brand in its own backyard because Google prioritizes relevance and proximity over size.
+<a href="/services/local-seo/" target="_blank" rel="noopener">Local SEO</a> is the great equalizer. A well-optimized small business can outrank a large national brand in its own backyard because Google prioritizes relevance and proximity over size.
 
 ## What Nobody Tells You About SEO
 
@@ -179,7 +179,7 @@ SEO is how you change that. It is how you show up first, build trust before the 
 
 It is not optional for businesses that want to grow. It is the foundation everything else sits on.
 
-Ready to stop losing leads to competitors? Start with a free [SEO audit](/services/seo-specialist/) of your website and Google Business Profile to find out exactly what is holding you back.
+Ready to stop losing leads to competitors? Start with a free <a href="/services/seo-specialist/" target="_blank" rel="noopener">SEO audit</a> of your website and Google Business Profile to find out exactly what is holding you back.
 
 ## Frequently Asked Questions
 

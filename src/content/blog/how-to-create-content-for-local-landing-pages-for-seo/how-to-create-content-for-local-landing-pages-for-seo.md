@@ -105,7 +105,7 @@ A local landing page sitting at position 40 with zero traffic is not contributin
 
 The businesses winning local search were built with intention. One keyword, one city, one intent. Structure before content, technical signals reinforcing what the page already says.
 
-If building out a service-area page plan from scratch is where this stalls, that is what my [local SEO service](/services/local-seo/) is for. Get your free SEO audit and find out which of your local pages are built to rank and which ones are holding your site back.
+If building out a service-area page plan from scratch is where this stalls, that is what my <a href="/services/local-seo/" target="_blank" rel="noopener">local SEO service</a> is for. Get your free SEO audit and find out which of your local pages are built to rank and which ones are holding your site back.
 
 ## Frequently Asked Questions
 

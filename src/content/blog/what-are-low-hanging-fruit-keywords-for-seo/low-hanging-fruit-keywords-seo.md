@@ -238,4 +238,4 @@ Low-hanging fruit keywords for SEO are the fastest path to organic traffic that 
 
 Find the terms your competitors overlook. Optimize the pages closest to page one. Track results consistently. You don't need a massive budget or a team of writers—you need a repeatable process and the patience to let rankings develop over 4–12 weeks.
 
-Start by pulling your positions 4 to 20 report in Google Search Console. Your next ranking opportunity is likely already there. If you want the opportunity mapping done with you, that is part of my [SEO specialist service](/services/seo-specialist/).
+Start by pulling your positions 4 to 20 report in Google Search Console. Your next ranking opportunity is likely already there. If you want the opportunity mapping done with you, that is part of my <a href="/services/seo-specialist/" target="_blank" rel="noopener">SEO specialist service</a>.
