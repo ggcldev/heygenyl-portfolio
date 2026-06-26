@@ -18,6 +18,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local-only AI content briefs (never committed, never rendered)
+src/data/content-briefs.md
+
 # macOS-specific files
 .DS_Store
 

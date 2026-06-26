@@ -34,7 +34,6 @@ export type ServicePage = {
   metaDescription: string;
   summary: string;
   chips: string[];
-  note: string;
   deliverables: Array<{ title: string; copy: string }>;
   idealFor: string[];
   outcomes: string[];
@@ -51,10 +50,8 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "Need a freelance SEO specialist who can audit, prioritize, and help ship search improvements across content, technical fixes, and website structure?",
     summary:
-      "This page is your core service offer: broad enough to rank for the head term, specific enough to tell clients exactly how you work.",
+      "Get a freelance SEO specialist who audits your site, prioritizes what actually moves rankings, and helps ship the technical, on-page, and content work that turns search traffic into qualified leads.",
     chips: ["Search strategy", "Content architecture", "Technical triage"],
-    note:
-      "Use this as the parent service page that funnels internal links to more specific offers like local SEO, audits, and technical SEO.",
     deliverables: [
       {
         title: "Opportunity mapping",
@@ -104,10 +101,8 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "Maps and GBP specialist support for service-area businesses that need stronger map visibility, cleaner service pages, and more qualified local leads.",
     summary:
-      "A local SEO specialist page should speak directly to service businesses that need cleaner service-area targeting, GBP support, and pages that convert local intent.",
+      "Stronger map visibility and sharper service-area pages for local businesses — Google Business Profile alignment, better-targeted location pages, and a clearer path from nearby searches to calls and form fills.",
     chips: ["GBP support", "Service areas", "Local landing pages"],
-    note:
-      "Use this page to connect your local SEO offer with niche case studies such as plumbing, detailing, gutters, and law.",
     deliverables: [
       {
         title: "Service-area architecture",
@@ -157,10 +152,8 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "Technical SEO support for crawl issues, indexation problems, site migrations, Core Web Vitals concerns, and template-level fixes.",
     summary:
-      "This is the service page for the work hidden beneath rankings: crawl paths, canonical signals, rendering issues, internal architecture, and template QA.",
+      "Fix the issues hiding beneath your rankings — crawl errors, indexation problems, messy templates, and risky migrations — with focused technical SEO that gives your content a clean foundation to perform.",
     chips: ["Crawl health", "Indexation", "Template QA"],
-    note:
-      "Keep this page implementation-focused. Clients hiring technical SEO want clarity on risk, sequencing, and what actually gets fixed.",
     deliverables: [
       {
         title: "Technical issue triage",
@@ -210,10 +203,8 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "SEO audit service for service businesses and B2B sites that need a prioritized action plan instead of a generic checklist export.",
     summary:
-      "This page should sell the value of a sharper audit: not more screenshots, but clearer decisions about what to fix, publish, or consolidate next.",
+      "An SEO audit built for decisions, not screenshots: a prioritized action plan that tells you exactly what to fix, publish, or consolidate next — and why each move matters for your traffic and leads.",
     chips: ["Prioritized audit", "Opportunity sizing", "Action plan"],
-    note:
-      "If you use this offer in proposals, keep the audit framed as a decision document, not a giant spreadsheet.",
     deliverables: [
       {
         title: "Executive summary",
@@ -263,10 +254,8 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "WordPress website design for search-first service sites that need sharper messaging, better structure, and performance-aware layouts.",
     summary:
-      "Use this page for clients who need a WordPress designer that understands search intent, information architecture, and lead generation instead of design alone.",
+      "WordPress design for service businesses that need more than a fresh look — search-first structure, conversion-aware layouts, and a redesign plan that protects the search equity you already have.",
     chips: ["Search-first UX", "Service pages", "Conversion layout"],
-    note:
-      "This page is strongest when it positions design as a business system, not just a visual refresh.",
     deliverables: [
       {
         title: "Message-first wireframes",
@@ -316,10 +305,8 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "WordPress SEO expert support for search-focused service websites, technical fixes, template cleanup, and conversion-aware page implementation.",
     summary:
-      "This page bridges strategy and implementation for clients who need search-focused WordPress updates that improve rankings, UX, and lead generation.",
+      "One person to connect SEO strategy with real WordPress implementation — template fixes, search-ready landing pages, and a steadier publishing workflow that lifts rankings, UX, and lead generation together.",
     chips: ["WordPress SEO", "Template implementation", "Page builds"],
-    note:
-      "Use this page when clients need one person who can connect SEO direction with real WordPress implementation.",
     deliverables: [
       {
         title: "Template adjustments",
@@ -380,7 +367,6 @@ export type CaseStudyPage = {
   metaTitle: string;
   metaDescription: string;
   summary: string;
-  note: string;
   chips: string[];
   snapshot: Array<{ label: string; value: string }>;
   challengeTitle: string;
@@ -401,8 +387,6 @@ export const caseStudies: CaseStudyPage[] = [
       "Desert I.T. Solutions MSP case study covering SEO positioning, service-page structure, and lead-quality improvements for a Las Vegas managed IT provider.",
     summary:
       "Desert I.T. Solutions is a Las Vegas-based managed IT company that helps businesses stay ahead of IT issues through proactive system monitoring, vulnerability management, and ongoing technical support. Their managed services model keeps client environments secure, stable, and ready to scale.",
-    note:
-      "Client-sensitive metrics are anonymized for now. Replace with exact rank, traffic, and lead-quality numbers before publishing publicly.",
     chips: ["B2B services", "Managed IT", "SEO strategy"],
     snapshot: [
       { label: "Primary focus", value: "Managed IT intent mapping" },
@@ -450,8 +434,6 @@ export const caseStudies: CaseStudyPage[] = [
       "Starter auto detailing SEO case study structure focused on service intent, packages, local visibility, and stronger conversion paths.",
     summary:
       "The Works Auto Center is a veteran-owned auto detailing and body shop in Albany, NY, offering everything from paint protection film and ceramic coatings to full body repair and insurance-approved bodywork.",
-    note:
-      "If this becomes a public case study, add the service package names, city targets, and the exact pages that improved.",
     chips: ["Local service brand", "Package positioning", "Lead-gen UX"],
     snapshot: [
       { label: "Primary focus", value: "Package clarity" },
@@ -498,9 +480,7 @@ export const caseStudies: CaseStudyPage[] = [
     metaDescription:
       "Starter law firm SEO case study structure for practice-area pages, authority signals, and local + service intent separation.",
     summary:
-      "Law firm SEO case studies should foreground trust, specificity, and page intent because the wrong site structure can waste valuable queries fast.",
-    note:
-      "If you anonymize the client, keep the practice areas and the conversion problem specific. Vague legal SEO case studies are easy to forget.",
+      "Everything Probate needed its practice-area pages to map cleanly to client intent — separating probate and estate services, reinforcing authority signals, and turning broad legal queries into better-qualified consultations.",
     chips: ["Legal SEO", "Practice-area pages", "Authority signals"],
     snapshot: [
       { label: "Primary focus", value: "Practice intent" },
