@@ -52,7 +52,7 @@ const schema = [
 ---
 
 <BaseLayout title={service.metaTitle} description={service.metaDescription} schema={schema}>
-  <div class="services-page">
+  <div class="services-page svc-detail">
     <PageHero
       eyebrow="Service page"
       title={service.title}
@@ -66,85 +66,90 @@ const schema = [
     />
 
     <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-          <h2 class="text-sm 2xl:text-xl font-bold uppercase">What I handle</h2>
-          <p class="text-sm text-muted mt-2">
-            Execution, prioritization, and the handoff your site actually needs.
-          </p>
+      <div class="handle">
+        <div class="handle__head">
+          <h2>What I handle</h2>
+          <p>Execution, prioritization, and the handoff your site actually needs.</p>
         </div>
-
-        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-          {service.deliverables.map((item) => (
-            <article class="card">
-              <p class="eyebrow">{item.title}</p>
-              <p class="text-sm 2xl:text-lg text-muted">{item.copy}</p>
-            </article>
+        <ul class="tile-grid">
+          {service.deliverables.map((item, index) => (
+            <li class:list={["tile", index === 1 && "tile--accent"]}>
+              <h3 class="tile__title">{item.title}</h3>
+              <p class="tile__copy">{item.copy}</p>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
 
     <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Best fit</h2>
+      <div class="svc-block">
+        <div class="svc-block__label">
+          <h2>Best fit</h2>
+          <p>Who this is for, and what you walk away with.</p>
         </div>
-
-        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
-          <article class="card">
+        <div class="svc-block__body fit-grid">
+          <div class="fit-col">
             <p class="eyebrow">Ideal if you need</p>
-            <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+            <ul class="check-list">
               {service.idealFor.map((item) => (
                 <li>{item}</li>
               ))}
             </ul>
-          </article>
-
-          <article class="card">
+          </div>
+          <div class="fit-col">
             <p class="eyebrow">Likely outcomes</p>
-            <ul class="m-0 pl-5 text-sm 2xl:text-lg text-muted grid gap-2">
+            <ul class="check-list">
               {service.outcomes.map((item) => (
                 <li>{item}</li>
               ))}
             </ul>
-          </article>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24" style="border-color: var(--color-border);">
-        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-          <h2 class="text-sm 2xl:text-xl font-bold uppercase">Process</h2>
+      <div class="svc-block">
+        <div class="svc-block__label">
+          <h2>Process</h2>
+          <p>How we go from audit to results, step by step.</p>
         </div>
-
-        <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
-          {service.process.map((step, index) => (
-            <article class="card">
-              <p class="eyebrow">Step {index + 1}</p>
-              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{step.title}</h3>
-              <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
-            </article>
-          ))}
+        <div class="svc-block__body">
+          <ol class="steps">
+            {service.process.map((step, index) => (
+              <li class="step">
+                <span class="step__num">{String(index + 1).padStart(2, "0")}</span>
+                <div class="step__content">
+                  <h3 class="step__title">{step.title}</h3>
+                  <p class="step__copy">{step.copy}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
 
     <section class="content-shell">
-      <div class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24">
-        <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-          <h2 class="text-sm 2xl:text-xl font-bold uppercase">FAQ</h2>
+      <div class="svc-block svc-block--last">
+        <div class="svc-block__label">
+          <h2>FAQ</h2>
+          <p>The questions buyers ask before getting started.</p>
         </div>
-
-        <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
-          {service.faq.map((item) => (
-            <article class="card">
-              <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{item.question}</h3>
-              <p class="text-sm 2xl:text-lg text-muted mt-2">{item.answer}</p>
-            </article>
-          ))}
-          <div class="page-nav">
+        <div class="svc-block__body">
+          <div class="faq-list">
+            {service.faq.map((item) => (
+              <details class="faq">
+                <summary class="faq__q">
+                  <span>{item.question}</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </summary>
+                <p class="faq__a">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+          <div class="page-nav svc-cta">
             <a class="button primary" href="/contact/">Book a project intro</a>
           </div>
         </div>
@@ -152,3 +157,323 @@ const schema = [
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  .svc-block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: clamp(2.75rem, 6vw, 5.5rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .svc-block--last {
+    border-bottom: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .svc-block {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    .svc-block__label {
+      position: sticky;
+      top: 6.5rem;
+    }
+  }
+
+  .svc-block__label h2 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .svc-block__label p {
+    margin: 0.55rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+    max-width: 26ch;
+  }
+
+  /* What I handle — bold tile grid */
+  .handle {
+    padding-block: clamp(2.75rem, 6vw, 5.5rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .handle__head {
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .handle__head h2 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .handle__head p {
+    margin: 0.55rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+    max-width: 46ch;
+  }
+
+  .tile-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(0.75rem, 1.4vw, 1.1rem);
+  }
+
+  @media (min-width: 640px) {
+    .tile-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .tile-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+    min-height: clamp(300px, 32vw, 400px);
+    padding: clamp(1.75rem, 2.4vw, 2.5rem);
+    border-radius: var(--radius-card);
+    /* Fixed light fill in BOTH light and dark themes (matches reference) */
+    background: #f3f3f4;
+    transition: transform 200ms ease;
+  }
+
+  .tile:hover {
+    transform: translateY(-4px);
+  }
+
+  .tile__title {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: #161616;
+  }
+
+  .tile__copy {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #5f5f63;
+  }
+
+  .tile--accent {
+    background: var(--color-accent);
+  }
+
+  .tile--accent .tile__title {
+    color: color-mix(in oklab, #000 74%, var(--color-accent));
+  }
+
+  .tile--accent .tile__copy {
+    color: color-mix(in oklab, #000 54%, var(--color-accent));
+  }
+
+  /* Best fit — two checklist columns */
+  .fit-grid {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.25rem);
+  }
+
+  @media (min-width: 768px) {
+    .fit-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .fit-col .eyebrow {
+    display: block;
+    margin-bottom: 1.1rem;
+  }
+
+  .check-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .check-list li {
+    position: relative;
+    padding-left: 1.7rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+
+  .check-list li::before {
+    content: "";
+    position: absolute;
+    left: 0.15rem;
+    top: 0.12em;
+    width: 0.36rem;
+    height: 0.66rem;
+    border: solid var(--color-accent);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  /* Process — ghosted step numbers, divided timeline */
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.25rem;
+    padding-block: clamp(1.25rem, 2.4vw, 1.85rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .step:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .step__num {
+    font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in oklab, var(--color-ink) 20%, transparent);
+  }
+
+  .step__title {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .step__copy {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 62ch;
+  }
+
+  /* FAQ — accordion, no boxes */
+  .faq-list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .faq {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    list-style: none;
+    cursor: pointer;
+    padding-block: clamp(1rem, 1.9vw, 1.35rem);
+    font-weight: 600;
+    font-size: clamp(1rem, 1.25vw, 1.1rem);
+    color: var(--color-ink);
+    transition: color 150ms ease;
+  }
+
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__q:hover {
+    color: var(--color-accent);
+  }
+
+  .faq__q:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-accent) 55%, transparent);
+    outline-offset: 4px;
+  }
+
+  .faq__icon {
+    position: relative;
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .faq__icon::before,
+  .faq__icon::after {
+    content: "";
+    position: absolute;
+    background: var(--color-accent);
+    transition: transform 200ms ease;
+  }
+
+  .faq__icon::before {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+
+  .faq__icon::after {
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    transform: translateX(-50%);
+  }
+
+  .faq[open] .faq__icon::after {
+    transform: translateX(-50%) scaleY(0);
+  }
+
+  .faq__a {
+    margin: 0;
+    padding-bottom: clamp(1rem, 1.9vw, 1.4rem);
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    max-width: 72ch;
+  }
+
+  .svc-cta {
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__icon::before,
+    .faq__icon::after,
+    .faq__q,
+    .tile {
+      transition: none;
+    }
+
+    .tile:hover {
+      transform: none;
+    }
+  }
+</style>

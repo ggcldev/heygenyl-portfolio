@@ -50,46 +50,121 @@ export const servicePages: ServicePage[] = [
     metaDescription:
       "Need a freelance SEO specialist who can audit, prioritize, and help ship search improvements across content, technical fixes, and website structure?",
     summary:
-      "Get a freelance SEO specialist who audits your site, prioritizes what actually moves rankings, and helps ship the technical, on-page, and content work that turns search traffic into qualified leads.",
-    chips: ["Search strategy", "Content architecture", "Technical triage"],
+      "Hire a freelance SEO specialist who works like part of your team, not a faceless agency. I audit your site, prioritize the fixes that actually move rankings, and ship the technical, on-page, and content work that turns search traffic into qualified leads and booked calls — then report on the numbers that affect revenue, not vanity metrics. You deal with one accountable person from strategy through to implementation, so nothing gets lost between departments.",
+    chips: ["Audit-first approach", "On-page & technical SEO", "Reporting tied to leads"],
     deliverables: [
       {
-        title: "Opportunity mapping",
+        title: "SEO audit & opportunity map",
         copy:
-          "Keyword clusters, page intent mapping, and a clearer picture of which pages should drive leads versus educate traffic.",
+          "A full audit of your rankings, content, and technical health, paired with a prioritized map of the keywords and pages most likely to bring in qualified leads — so you know exactly where the next win is and why it matters. You finish with a short list of the highest-impact moves to make first, and a clear sense of what each one is worth.",
       },
       {
-        title: "Implementation roadmap",
+        title: "Keyword & search-intent strategy",
         copy:
-          "A prioritized SEO plan with technical, on-page, and content tasks grouped by urgency and business value.",
+          "Keyword clusters built around real buyer intent and mapped to the right pages, so your service and money pages stop competing with each other and start ranking for the terms that actually convert. The result is less duplicate, cannibalizing content and more pages earning rankings for searches with genuine commercial intent.",
       },
       {
-        title: "Cross-team translation",
+        title: "On-page & content optimization",
         copy:
-          "Briefs that make sense to designers, developers, and writers instead of generic audit language that stalls delivery.",
+          "Titles, headings, internal links, and page copy rewritten around search intent and conversion, turning thin or unfocused pages into ones that rank and move visitors toward contacting you. Every change is made with both search engines and the visitor's next step in mind, so better rankings translate into more enquiries.",
+      },
+      {
+        title: "Technical SEO fixes",
+        copy:
+          "Crawl, indexation, speed, and template issues fixed directly or handed off as clear developer briefs, so search engines can reach, understand, and reward your most important pages. You also get a plain-language explanation of what was wrong and why it was quietly costing you visibility.",
+      },
+      {
+        title: "Internal linking & site structure",
+        copy:
+          "A cleaner architecture and internal-link plan that points authority at your highest-value pages, helps Google understand what you do, and guides visitors toward the pages that generate enquiries.",
+      },
+      {
+        title: "Reporting tied to leads, not vanity metrics",
+        copy:
+          "Plain-English monthly reporting focused on rankings, qualified traffic, and conversions — the numbers that affect revenue — instead of a dashboard export you are left to decode yourself.",
       },
     ],
     idealFor: [
-      "Businesses with an existing site that needs clearer SEO ownership",
-      "Teams that want freelance support without hiring a full in-house department",
-      "Lead-generation sites where traffic quality matters more than vanity metrics",
+      "An existing website that should be generating far more leads than it currently does",
+      "A freelance SEO specialist you can hire directly, without agency overhead or account managers",
+      "Someone who can both set the strategy and do, or direct, the hands-on work",
+      "Search results tied to revenue and qualified enquiries, not vanity traffic",
+      "One accountable point of contact for both SEO strategy and execution",
     ],
     outcomes: [
-      "Cleaner priority pages for service and category keywords",
-      "Less crawl waste and fewer pages competing with each other",
-      "A portfolio-ready reporting narrative tied to business intent",
+      "Priority service and money pages that rank for the terms buyers actually search",
+      "Fewer pages competing with each other and far less wasted crawl budget",
+      "A steadier pipeline of qualified organic visitors instead of one-off traffic spikes",
+      "A clear reporting story that ties every SEO change back to leads and revenue",
+      "One specialist who owns the result instead of passing you between departments",
     ],
-    process: processSteps,
-    faq: [
+    process: [
       {
-        question: "Do you only work on technical SEO?",
-        answer:
-          "No. The point of this offer is range: technical fixes, content direction, internal links, local visibility, and page-level recommendations all sit under the same strategy umbrella.",
+        title: "Discovery & audit",
+        copy:
+          "We start with a paid audit. I dig into your rankings, analytics, competitors, and site health to pinpoint what is holding you back and where the fastest qualified-lead gains are hiding.",
       },
       {
-        question: "Who implements the changes?",
+        title: "Strategy & roadmap",
+        copy:
+          "You get a prioritized SEO roadmap — technical, on-page, and content tasks ranked by impact and effort — so every hour of work goes toward the changes most likely to move revenue. Nothing on the list is busywork, and you can see exactly why each task earns its place.",
+      },
+      {
+        title: "Implementation & handoff",
+        copy:
+          "I ship the work directly or hand your team clear, specific briefs instead of vague audit jargon, so fixes actually get done rather than sitting in a backlog for months.",
+      },
+      {
+        title: "Reporting & iteration",
+        copy:
+          "Every month I track rankings, traffic quality, and conversions, report in plain English, and adjust the plan based on what the data shows is genuinely working. You always know what was done, what it moved, and what comes next.",
+      },
+    ],
+    faq: [
+      {
+        question: "How much does it cost to hire a freelance SEO specialist?",
         answer:
-          "That depends on the project. I can hand off clear implementation notes to your team, collaborate inside your workflow, or pair SEO work with WordPress updates directly.",
+          "Pricing is scoped after a short call and a paid audit, so you are never quoting blind. From there, work runs as a one-off project or a monthly retainer, depending on how much hands-on help your site needs. You pay for the SEO work your site actually requires, not an agency retainer you cannot fully use.",
+      },
+      {
+        question: "How soon will I see results from SEO?",
+        answer:
+          "Technical and on-page fixes can show movement within weeks, but meaningful ranking and lead gains usually take three to six months, depending on your competition and starting point. I focus the early work on the pages closest to converting, so you see qualified results as fast as is realistically possible.",
+      },
+      {
+        question: "Am I locked into a long contract?",
+        answer:
+          "No. Engagements stay flexible — project-based or month to month — so you continue because the work is paying off, not because a contract is keeping you there.",
+      },
+      {
+        question: "Who actually does the work, you or a team?",
+        answer:
+          "Me. You work directly with the specialist doing your SEO. When something needs a developer or designer, I write the exact briefs and coordinate the handoff so nothing is lost in translation.",
+      },
+      {
+        question: "Why hire a freelance SEO specialist instead of an agency?",
+        answer:
+          "You get senior, hands-on attention without paying for account managers, sales teams, and overhead. Communication is direct, decisions happen faster, and more of your budget goes into actual SEO work instead of agency margin. Because I am the one doing the work, you always know exactly who is accountable for your results.",
+      },
+      {
+        question: "Do you work with WordPress and other platforms?",
+        answer:
+          "Yes. WordPress is a core strength, from template and plugin fixes to speed and schema, and I also work across most common CMS and custom builds. If your site runs on WordPress, strategy and implementation can happen in one place instead of being split across two vendors.",
+      },
+      {
+        question: "What does a typical engagement include?",
+        answer:
+          "A prioritized audit, a clear roadmap, hands-on on-page and technical work or developer-ready briefs, and monthly reporting tied to leads and revenue. The exact mix is scoped to your site, your goals, and your team's capacity, so you are never paying for work that does not apply to you.",
+      },
+      {
+        question: "Do you offer one-off SEO audits, or only ongoing work?",
+        answer:
+          "Both. Some clients start with a standalone audit and roadmap they implement themselves, while others keep me on monthly to do the work and report on results. You can start small with an audit and scale up only once the engagement is clearly paying off.",
+      },
+      {
+        question: "What kind of businesses do you work with?",
+        answer:
+          "Mostly service businesses, local brands, and lead-generation sites that need qualified enquiries rather than raw traffic. If your site already has some history and you want it to generate more of the right leads, it is usually a strong fit — and I will tell you honestly if it is not.",
       },
     ],
   },
