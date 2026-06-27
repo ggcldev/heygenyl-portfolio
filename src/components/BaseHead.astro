@@ -52,7 +52,7 @@ const robots = noIndex
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
-<meta name="theme-color" content="#1E1E1E" />
+<meta name="theme-color" content="#050505" />
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="robots" content={robots} />
@@ -69,12 +69,8 @@ const robots = noIndex
   (() => {
     try {
       const stored = localStorage.getItem("theme");
-      const theme =
-        stored === "light" || stored === "dark"
-          ? stored
-          : window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
+      // Dark-first: default to dark unless the visitor explicitly chose light.
+      const theme = stored === "light" || stored === "dark" ? stored : "dark";
       document.documentElement.dataset.theme = theme;
     } catch {
       // Ignore access errors (private mode/blocked storage).

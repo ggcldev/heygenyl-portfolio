@@ -57,6 +57,7 @@ const schema = [
       eyebrow="Service page"
       title={service.title}
       intro={service.summary}
+      accentLead={service.heroAccentLead}
       compact
       chips={service.chips}
       actions={[
@@ -66,19 +67,44 @@ const schema = [
     />
 
     <section class="content-shell">
-      <div class="handle">
-        <div class="handle__head">
-          <h2>What I handle</h2>
-          <p>Execution, prioritization, and the handoff your site actually needs.</p>
-        </div>
-        <ul class="tile-grid">
+      <div class="focus" data-focus>
+        <header class="focus__head">
+          <p class="eyebrow focus__eyebrow">
+            <span class="focus__tick" aria-hidden="true"></span>Services
+          </p>
+          <h2 class="focus__title">
+            <span class="focus__title-accent">What I</span> handle
+          </h2>
+          <p class="focus__lead">
+            Execution, prioritization, and the handoff your site actually needs.
+          </p>
+        </header>
+        <ol class="focus__list">
           {service.deliverables.map((item, index) => (
-            <li class:list={["tile", index === 1 && "tile--accent"]}>
-              <h3 class="tile__title">{item.title}</h3>
-              <p class="tile__copy">{item.copy}</p>
+            <li class="focus__row" style={`--row-index:${index}`}>
+              <div class="focus__num">
+                <span class="focus__diamond" aria-hidden="true"></span>
+                <span class="focus__num-text">{String(index + 1).padStart(2, "0")}</span>
+              </div>
+              <div class="focus__thumb">
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt=""
+                    width="120"
+                    height="120"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span class="focus__thumb-placeholder" aria-hidden="true"></span>
+                )}
+              </div>
+              <h3 class="focus__row-title">{item.title}</h3>
+              <p class="focus__row-copy">{item.copy}</p>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
     </section>
 
@@ -200,96 +226,184 @@ const schema = [
     max-width: 26ch;
   }
 
-  /* What I handle — bold tile grid */
-  .handle {
+  /* What I handle — Kudos "Our focus": left header column, right numbered list */
+  .focus {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 4vw, 3rem);
     padding-block: clamp(2.75rem, 6vw, 5.5rem);
     border-bottom: 1px solid var(--color-border);
   }
 
-  .handle__head {
-    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  @media (min-width: 1024px) {
+    .focus {
+      grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: start;
+    }
+
+    .focus__head {
+      position: sticky;
+      top: 6.5rem;
+    }
   }
 
-  .handle__head h2 {
+  .focus__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     margin: 0;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
   }
 
-  .handle__head p {
-    margin: 0.55rem 0 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
+  .focus__tick {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--color-accent);
+    transform: rotate(45deg);
+  }
+
+  .focus__title {
+    margin: 0.85rem 0 0;
+    font-size: clamp(2.25rem, 4vw, 2.85rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  .focus__title-accent {
+    color: var(--color-accent);
+  }
+
+  .focus__lead {
+    margin: 1.25rem 0 0;
     color: var(--color-muted);
-    max-width: 46ch;
+    font-size: clamp(0.95rem, 1.1vw, 1.02rem);
+    line-height: 1.5;
+    max-width: 32ch;
   }
 
-  .tile-grid {
+  .focus__list {
     list-style: none;
     margin: 0;
     padding: 0;
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .focus__row {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(0.75rem, 1.4vw, 1.1rem);
+    gap: 1rem 1.5rem;
+    padding-block: clamp(1.75rem, 3.5vw, 3rem);
+    border-top: 1px dashed var(--color-border);
   }
 
-  @media (min-width: 640px) {
-    .tile-grid {
-      grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 768px) {
+    .focus__row {
+      /* number → image → narrow title → flexible gap → narrower description */
+      grid-template-columns:
+        minmax(0, 0.5fr) auto minmax(0, 12rem) minmax(0, 0.35fr) minmax(0, 30rem);
+      align-items: center;
+      column-gap: clamp(1.5rem, 4vw, 4rem);
+      row-gap: 0.5rem;
+    }
+
+    /* Push the description into the last track so the 1fr spacer widens the gap */
+    .focus__row-copy {
+      grid-column: 5;
     }
   }
 
-  @media (min-width: 1024px) {
-    .tile-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  .focus__thumb {
+    width: clamp(5rem, 7vw, 7.5rem);
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--color-ink) 6%, transparent);
   }
 
-  .tile {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 2.5rem;
-    min-height: clamp(300px, 32vw, 400px);
-    padding: clamp(1.75rem, 2.4vw, 2.5rem);
-    border-radius: var(--radius-card);
-    /* Fixed light fill in BOTH light and dark themes (matches reference) */
-    background: #f3f3f4;
-    transition: transform 200ms ease;
+  .focus__thumb img,
+  .focus__thumb-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .tile:hover {
-    transform: translateY(-4px);
+  .focus__thumb-placeholder {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-accent) 65%, #050505),
+      color-mix(in oklab, var(--color-accent) 14%, #050505)
+    );
   }
 
-  .tile__title {
-    margin: 0;
-    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
-    font-weight: 600;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: #161616;
+  .focus__num {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
   }
 
-  .tile__copy {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.55;
-    color: #5f5f63;
-  }
-
-  .tile--accent {
+  .focus__diamond {
+    flex: 0 0 auto;
+    width: 0.5rem;
+    height: 0.5rem;
     background: var(--color-accent);
+    transform: rotate(45deg);
+    transition: transform 220ms ease;
   }
 
-  .tile--accent .tile__title {
-    color: color-mix(in oklab, #000 74%, var(--color-accent));
+  .focus__num-text {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+    transition: color 220ms ease;
   }
 
-  .tile--accent .tile__copy {
-    color: color-mix(in oklab, #000 54%, var(--color-accent));
+  .focus__row-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(1.2rem, 1.7vw, 1.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    text-wrap: balance;
+    transition: color 220ms ease;
+  }
+
+  .focus__row-copy {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: clamp(0.98rem, 1.15vw, 1.06rem);
+    line-height: 1.5;
+    max-width: 60ch;
+  }
+
+  .focus__row:hover .focus__row-title,
+  .focus__row:hover .focus__num-text {
+    color: var(--color-accent);
+  }
+
+  .focus__row:hover .focus__diamond {
+    transform: rotate(45deg) scale(1.3);
+  }
+
+  /* Staggered scroll reveal (enabled by JS; no-JS keeps content visible) */
+  .focus__row[data-reveal] {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .focus__row[data-reveal="in"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 600ms ease,
+      transform 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition-delay: calc(var(--row-index, 0) * 70ms);
   }
 
   /* Best fit — two checklist columns */
@@ -468,12 +582,44 @@ const schema = [
     .faq__icon::before,
     .faq__icon::after,
     .faq__q,
-    .tile {
+    .focus__diamond,
+    .focus__num-text,
+    .focus__row-title {
       transition: none;
     }
 
-    .tile:hover {
+    .focus__row[data-reveal],
+    .focus__row[data-reveal="in"] {
+      opacity: 1;
       transform: none;
+      transition: none;
     }
   }
 </style>
+
+<script>
+  // Staggered scroll-reveal for the "What I handle" rows.
+  // Content stays visible without JS; we only opt into the animation here.
+  const prefersReduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const focus = document.querySelector<HTMLElement>("[data-focus]");
+
+  if (focus && !prefersReduced && "IntersectionObserver" in window) {
+    const rows = focus.querySelectorAll<HTMLElement>(".focus__row");
+    rows.forEach((row) => row.setAttribute("data-reveal", ""));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.setAttribute("data-reveal", "in");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
+    );
+
+    rows.forEach((row) => observer.observe(row));
+  }
+</script>

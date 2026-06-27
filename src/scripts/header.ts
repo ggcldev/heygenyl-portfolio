@@ -5,12 +5,11 @@ const getPreferredTheme = (): "light" | "dark" => {
     const stored = localStorage.getItem(THEME_STORAGE_KEY);
     if (stored === "light" || stored === "dark") return stored;
   } catch {
-    // Ignore storage access errors and fall through to media query.
+    // Ignore storage access errors and fall through to the default.
   }
 
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  // Dark-first: default to dark unless the visitor explicitly chose light.
+  return "dark";
 };
 
 const applyTheme = (theme: "light" | "dark") => {

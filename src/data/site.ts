@@ -34,7 +34,8 @@ export type ServicePage = {
   metaDescription: string;
   summary: string;
   chips: string[];
-  deliverables: Array<{ title: string; copy: string }>;
+  heroAccentLead?: string;
+  deliverables: Array<{ title: string; copy: string; image?: string }>;
   idealFor: string[];
   outcomes: string[];
   process: Array<{ title: string; copy: string }>;
@@ -46,6 +47,7 @@ export const servicePages: ServicePage[] = [
     slug: "seo-specialist",
     shortTitle: "SEO specialist",
     title: "Freelance SEO Specialist for Hire",
+    heroAccentLead: "Freelance SEO",
     metaTitle: "Freelance SEO Specialist for Hire | Hey Genyl",
     metaDescription:
       "Need a freelance SEO specialist who can audit, prioritize, and help ship search improvements across content, technical fixes, and website structure?",
@@ -56,32 +58,32 @@ export const servicePages: ServicePage[] = [
       {
         title: "SEO audit & opportunity map",
         copy:
-          "A full audit of your rankings, content, and technical health, paired with a prioritized map of the keywords and pages most likely to bring in qualified leads — so you know exactly where the next win is and why it matters. You finish with a short list of the highest-impact moves to make first, and a clear sense of what each one is worth.",
+          "A full audit of your rankings, content, and technical health, paired with a prioritized map of the highest-impact moves to make first — so you know exactly where the next win is and why it matters.",
       },
       {
         title: "Keyword & search-intent strategy",
         copy:
-          "Keyword clusters built around real buyer intent and mapped to the right pages, so your service and money pages stop competing with each other and start ranking for the terms that actually convert. The result is less duplicate, cannibalizing content and more pages earning rankings for searches with genuine commercial intent.",
+          "Keyword clusters built around real buyer intent and mapped to the right pages, so your money pages stop competing with each other and start ranking for the terms that actually convert.",
       },
       {
         title: "On-page & content optimization",
         copy:
-          "Titles, headings, internal links, and page copy rewritten around search intent and conversion, turning thin or unfocused pages into ones that rank and move visitors toward contacting you. Every change is made with both search engines and the visitor's next step in mind, so better rankings translate into more enquiries.",
+          "Titles, headings, links, and copy rewritten around search intent and conversion — turning thin, unfocused pages into ones that rank and move visitors toward contacting you.",
       },
       {
         title: "Technical SEO fixes",
         copy:
-          "Crawl, indexation, speed, and template issues fixed directly or handed off as clear developer briefs, so search engines can reach, understand, and reward your most important pages. You also get a plain-language explanation of what was wrong and why it was quietly costing you visibility.",
+          "Crawl, indexation, speed, and template issues fixed or handed off as clear developer briefs, so search engines can reach, understand, and reward your most important pages.",
       },
       {
         title: "Internal linking & site structure",
         copy:
-          "A cleaner architecture and internal-link plan that points authority at your highest-value pages, helps Google understand what you do, and guides visitors toward the pages that generate enquiries.",
+          "A cleaner architecture and internal-link plan that points authority at your highest-value pages and guides visitors toward the ones that generate enquiries.",
       },
       {
         title: "Reporting tied to leads, not vanity metrics",
         copy:
-          "Plain-English monthly reporting focused on rankings, qualified traffic, and conversions — the numbers that affect revenue — instead of a dashboard export you are left to decode yourself.",
+          "Plain-English monthly reporting on rankings, qualified traffic, and conversions — the numbers that affect revenue — not a dashboard export you're left to decode.",
       },
     ],
     idealFor: [

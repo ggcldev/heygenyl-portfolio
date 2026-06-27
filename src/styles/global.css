@@ -89,6 +89,7 @@
 	--color-base-500: color-mix(in oklab, var(--color-ink) 52%, transparent);
 	--color-base-200: var(--color-border);
 	--color-accent: #2EBAC1;
+	--color-accent-2: #ff4400;
 	--radius-card: 24px;
 	--grid-line: color-mix(in oklab, var(--color-ink) 10%, transparent);
 }
@@ -106,17 +107,21 @@
 		--grid-cell-y: var(--grid-cell);
 		--content-columns: 19;
 		--content-width: calc(var(--grid-cell) * var(--content-columns));
+		/* Global page width cap (header, services, case studies, contact, blog, home) */
+		--page-max: 1920px;
 	}
 
 	:root[data-theme="dark"] {
 		color-scheme: dark;
-		--color-ink: #f5f5f5;
-		--color-muted: color-mix(in oklab, var(--color-ink) 70%, transparent);
-		--color-paper: #0d0d10;
-		--color-surface: #131318;
-		--color-accent: #2EBAC1;
-		--color-border: color-mix(in oklab, var(--color-ink) 16%, transparent);
-		--grid-line: color-mix(in oklab, var(--color-ink) 10%, transparent);
+		/* Kudos palette: near-black canvas, white text, electric mint accent */
+		--color-ink: #ffffff;
+		--color-muted: color-mix(in oklab, var(--color-ink) 64%, transparent);
+		--color-paper: #050505;
+		--color-surface: #0f0f0f;
+		--color-accent: #00ffc8;
+		--color-accent-2: #ff4400;
+		--color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
+		--grid-line: color-mix(in oklab, var(--color-ink) 8%, transparent);
 	}
 
 	*,
@@ -340,8 +345,8 @@
 	}
 
 	.site-header__inner {
-		width: min(100%, 1440px);
-		max-width: 1440px;
+		width: min(100%, var(--page-max));
+		max-width: var(--page-max);
 		margin-inline: auto;
 		min-width: 0;
 	}
@@ -524,14 +529,55 @@
 		max-width: 780px;
 	}
 
+	/* Service hero — Kudos "We design brands people remember" treatment (left-aligned) */
 	.services-page .hero {
-		padding-top: clamp(1.2rem, 3.5vh, 2.25rem);
+		padding-top: clamp(2.5rem, 7vh, 6rem);
+		padding-bottom: clamp(2rem, 4vw, 3.5rem);
 		max-width: 100%;
+		justify-items: start;
+		text-align: left;
+		gap: clamp(1rem, 2vw, 1.5rem);
 	}
 
-	.services-page .hero h1,
+	.services-page .hero .eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.services-page .hero .eyebrow::before {
+		content: "";
+		width: 0.5rem;
+		height: 0.5rem;
+		background: var(--color-accent);
+		transform: rotate(45deg);
+	}
+
+	.services-page .hero h1 {
+		max-width: 20ch;
+		font-size: clamp(2.75rem, 6vw, 4.5rem);
+		font-weight: 800;
+		line-height: 0.95;
+		letter-spacing: -0.02em;
+	}
+
 	.services-page .hero p {
-		max-width: 780px;
+		max-width: 60ch;
+		font-size: clamp(1.02rem, 1.3vw, 1.18rem);
+		line-height: 1.5;
+	}
+
+	.services-page .hero .post-meta {
+		font-family: var(--font-mono);
+		letter-spacing: 0.02em;
+	}
+
+	.services-page .hero .page-nav {
+		justify-content: flex-start;
+	}
+
+	.hero-title-accent {
+		color: var(--color-accent);
 	}
 
 	.services-scroll-hub {
@@ -639,8 +685,8 @@
 
 	.case-studies-page .hero {
 		padding-top: clamp(2rem, 5.2vh, 3.1rem);
-		width: min(100%, 1440px);
-		max-width: 1440px;
+		width: min(100%, var(--page-max));
+		max-width: var(--page-max);
 		margin-inline: auto;
 		border-bottom: 0;
 	}
@@ -663,7 +709,7 @@
 
 	.case-study-rows {
 		margin-top: clamp(0.5rem, 1.2vw, 1rem);
-		width: min(100%, 1440px);
+		width: min(100%, var(--page-max));
 		margin-inline: auto;
 		border-bottom: 1px solid var(--color-border);
 	}
@@ -1110,8 +1156,8 @@
 	}
 
 	.blog-hub-hero {
-		width: min(100%, 1440px);
-		max-width: 1440px;
+		width: min(100%, var(--page-max));
+		max-width: var(--page-max);
 	}
 
 	.blog-hub-hero .eyebrow {
@@ -1379,8 +1425,8 @@
 	.contact-page .content-shell,
 	.blog-page-view.content-shell,
 	.blog-page-view .content-shell {
-		width: min(100%, 1440px);
-		max-width: 1440px;
+		width: min(100%, var(--page-max));
+		max-width: var(--page-max);
 		margin-inline: auto;
 		padding-inline: clamp(1rem, 2.4vw, 1.5rem);
 	}

@@ -18,6 +18,7 @@ interface Props {
   actions?: Action[];
   noteTitle?: string;
   noteCopy?: string;
+  accentLead?: string | undefined;
 }
 
 const {
@@ -29,13 +30,23 @@ const {
   actions = [],
   noteTitle,
   noteCopy,
+  accentLead,
 } = Astro.props;
+
+const hasAccentLead = Boolean(accentLead && title.startsWith(accentLead));
+const accentRest = hasAccentLead ? title.slice(accentLead!.length) : title;
 ---
 
 <section class="content-shell">
   <div class="hero">
     <span class="eyebrow">{eyebrow}</span>
-    <h1 style={compact ? "max-width: 16ch;" : undefined}>{title}</h1>
+    <h1 style={compact && !hasAccentLead ? "max-width: 16ch;" : undefined}>
+      {hasAccentLead ? (
+        <><span class="hero-title-accent">{accentLead}</span>{accentRest}</>
+      ) : (
+        title
+      )}
+    </h1>
     <p>{intro}</p>
 
     {chips.length > 0 && <p class="post-meta">{chips.join(" / ")}</p>}
