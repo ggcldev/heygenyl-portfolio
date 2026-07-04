@@ -276,6 +276,75 @@
 		color: var(--color-ink);
 	}
 
+	/* Nested submenu: SEO / Web Design open a flyout of their child services */
+	.nav-subdropdown {
+		position: relative;
+	}
+
+	.nav-subdropdown-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.nav-subdropdown-caret {
+		display: inline-flex;
+		align-items: center;
+		color: color-mix(in oklab, var(--color-ink) 52%, transparent);
+		transition:
+			transform 160ms ease,
+			color 160ms ease;
+	}
+
+	.nav-subdropdown:hover .nav-subdropdown-caret,
+	.nav-subdropdown:focus-within .nav-subdropdown-caret {
+		transform: translateX(2px);
+		color: var(--color-ink);
+	}
+
+	/* Divider between the two hub groups */
+	.nav-subdropdown + .nav-subdropdown > .nav-subdropdown-toggle {
+		border-top: 1px solid color-mix(in oklab, var(--color-ink) 10%, transparent);
+	}
+
+	.nav-subdropdown-menu {
+		position: absolute;
+		top: -1px;
+		left: 100%;
+		z-index: 90;
+		min-width: 13rem;
+		display: grid;
+		border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
+		background: var(--color-paper);
+		opacity: 0;
+		transform: translateX(6px);
+		pointer-events: none;
+		transition:
+			opacity 140ms ease,
+			transform 140ms ease;
+	}
+
+	.nav-subdropdown:hover .nav-subdropdown-menu,
+	.nav-subdropdown:focus-within .nav-subdropdown-menu {
+		opacity: 1;
+		transform: translateX(0);
+		pointer-events: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nav-subdropdown-caret,
+		.nav-subdropdown-menu {
+			transition: none;
+		}
+	}
+
+	/* Mobile: child services sit one level deeper than their hub */
+	.mobile-nav__subsublink {
+		font-size: 0.74rem;
+		opacity: 0.82;
+	}
+
 	.theme-toggle {
 		display: inline-flex;
 		align-items: center;

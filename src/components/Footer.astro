@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from "../data/site";
+import { siteConfig, activeServicePages } from "../data/site";
 ---
 
 <footer class="py-10 md:py-12">
@@ -23,15 +23,14 @@ import { siteConfig } from "../data/site";
             Services
           </p>
           <div class="grid gap-2">
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/services/local-seo/">
-              Local SEO
-            </a>
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/services/seo-specialist/">
-              SEO Specialist
-            </a>
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/services/wordpress-seo-expert/">
-              WordPress SEO Expert
-            </a>
+            {activeServicePages.map((service) => (
+              <a
+                class="w-fit text-sm text-muted hover:text-ink"
+                href={`/services/${service.slug}/`}
+              >
+                {service.navLabel ?? service.shortTitle}
+              </a>
+            ))}
           </div>
         </nav>
 

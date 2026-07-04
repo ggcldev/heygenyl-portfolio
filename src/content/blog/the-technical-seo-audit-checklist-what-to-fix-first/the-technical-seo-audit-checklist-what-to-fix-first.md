@@ -406,7 +406,7 @@ A technical SEO audit is not a one-time project. Google updates its requirements
 
 Work through this checklist in order. Start with crawlability and schema, then address Core Web Vitals and content issues. Treat the audit as a quarterly process, not a task you complete once.
 
-If you want a second set of eyes on your site, book a free audit through my <a href="/services/seo-specialist/" target="_blank" rel="noopener">SEO specialist service</a> and I will help you find the issues that are actually worth fixing first.
+If you want a second set of eyes on your site, book a free audit through my <a href="/services/seo/" target="_blank" rel="noopener">SEO specialist service</a> and I will help you find the issues that are actually worth fixing first.
 
 ## Frequently Asked Questions
 

@@ -4,15 +4,25 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 const allowedServicePaths = new Set([
-  "/services/seo-specialist/",
-  "/services/local-seo/",
-  "/services/wordpress-seo-expert/",
+  "/services/seo/",
+  "/services/seo/local-seo/",
+  "/services/seo/technical-seo/",
+  "/services/seo/wordpress-seo/",
+  "/services/web-design/",
+  "/services/web-design/wordpress-web-design/",
 ]);
 
 export default defineConfig({
   site: "https://heygenyl.com",
   output: "static",
   trailingSlash: "always",
+  // Legacy service URLs → new /services/seo/ + /services/web-design/ structure.
+  // Production 301s are enforced by public/.htaccess; these keep dev/preview in sync.
+  redirects: {
+    "/services/seo-specialist/": "/services/seo/",
+    "/services/local-seo/": "/services/seo/local-seo/",
+    "/services/wordpress-seo-expert/": "/services/seo/wordpress-seo/",
+  },
   build: {
     inlineStylesheets: "always",
   },

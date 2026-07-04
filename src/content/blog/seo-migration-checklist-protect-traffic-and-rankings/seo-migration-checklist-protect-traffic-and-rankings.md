@@ -270,7 +270,7 @@ A well-planned SEO migration is a growth event. A poorly planned one can cost a 
 
 Add AI visibility to your checklist while you are at it. It takes ten minutes to update robots.txt and confirm your schema carried over. It takes months to recover from a hangover caused by skipping that step.
 
-If you have a site migration on the horizon, book a free audit through my <a href="/services/seo-specialist/" target="_blank" rel="noopener">SEO specialist service</a> and I will help you protect your traffic and rankings before launch.
+If you have a site migration on the horizon, book a free audit through my <a href="/services/seo/" target="_blank" rel="noopener">SEO specialist service</a> and I will help you protect your traffic and rankings before launch.
 
 ## Frequently Asked Questions
 

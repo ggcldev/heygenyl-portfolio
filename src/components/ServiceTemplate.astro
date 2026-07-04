@@ -1,6 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { siteConfig, type ServicePage } from "../data/site";
+import {
+  siteConfig,
+  servicePages,
+  getChildServices,
+  type ServicePage,
+} from "../data/site";
 import PageHero from "./PageHero.astro";
 
 interface Props {
@@ -9,6 +14,29 @@ interface Props {
 
 const { service } = Astro.props;
 const serviceUrl = new URL(`/services/${service.slug}/`, siteConfig.url).toString();
+
+// Nested services (e.g. "seo/local-seo") get a parent-hub crumb in the breadcrumb.
+const parentSlug = service.slug.includes("/")
+  ? service.slug.slice(0, service.slug.lastIndexOf("/"))
+  : null;
+const parentService = parentSlug
+  ? servicePages.find((item) => item.slug === parentSlug)
+  : null;
+
+// Hub pages (SEO, Web Design) list their direct child services.
+const childServices = getChildServices(service.slug);
+
+const breadcrumbTrail = [
+  { name: "Home", item: new URL("/", siteConfig.url).toString() },
+  { name: "Services", item: new URL("/services/", siteConfig.url).toString() },
+];
+if (parentService) {
+  breadcrumbTrail.push({
+    name: parentService.shortTitle,
+    item: new URL(`/services/${parentService.slug}/`, siteConfig.url).toString(),
+  });
+}
+breadcrumbTrail.push({ name: service.shortTitle, item: serviceUrl });
 
 const schema = [
   {
@@ -27,26 +55,12 @@ const schema = [
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: new URL("/", siteConfig.url).toString(),
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Services",
-        item: new URL("/services/", siteConfig.url).toString(),
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: service.shortTitle,
-        item: serviceUrl,
-      },
-    ],
+    itemListElement: breadcrumbTrail.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.item,
+    })),
   },
 ];
 ---
@@ -107,6 +121,30 @@ const schema = [
         </ol>
       </div>
     </section>
+
+    {childServices.length > 0 && (
+      <section class="content-shell">
+        <div class="svc-block svc-children">
+          <div class="svc-block__label">
+            <h2>Explore</h2>
+            <p>Specialized {service.navLabel ?? service.shortTitle} services under this area.</p>
+          </div>
+          <div class="svc-block__body">
+            <ul class="svc-children__list">
+              {childServices.map((child) => (
+                <li>
+                  <a class="svc-children__card" href={`/services/${child.slug}/`}>
+                    <span class="svc-children__title">{child.navLabel ?? child.shortTitle}</span>
+                    <span class="svc-children__copy">{child.summary}</span>
+                    <span class="svc-children__cta" aria-hidden="true">View service →</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    )}
 
     <section class="content-shell">
       <div class="svc-block">
@@ -576,6 +614,70 @@ const schema = [
 
   .svc-cta {
     margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  /* Explore — hub pages link out to their child services */
+  .svc-children__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .svc-children__card {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: clamp(1.25rem, 2.4vw, 1.85rem);
+    border-bottom: 1px solid var(--color-border);
+    transition: padding-left 200ms ease;
+  }
+
+  .svc-children__card:hover,
+  .svc-children__card:focus-visible {
+    padding-left: 0.5rem;
+    outline: none;
+  }
+
+  .svc-children__card:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-accent) 55%, transparent);
+    outline-offset: 4px;
+  }
+
+  .svc-children__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--color-ink);
+    transition: color 200ms ease;
+  }
+
+  .svc-children__card:hover .svc-children__title,
+  .svc-children__card:focus-visible .svc-children__title {
+    color: var(--color-accent);
+  }
+
+  .svc-children__copy {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    max-width: 64ch;
+  }
+
+  .svc-children__cta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-children__card {
+      transition: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

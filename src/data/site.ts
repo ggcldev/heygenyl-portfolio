@@ -28,6 +28,7 @@ export const processSteps = [
 
 export type ServicePage = {
   slug: string;
+  navLabel?: string;
   shortTitle: string;
   title: string;
   metaTitle: string;
@@ -44,7 +45,8 @@ export type ServicePage = {
 
 export const servicePages: ServicePage[] = [
   {
-    slug: "seo-specialist",
+    slug: "seo",
+    navLabel: "SEO",
     shortTitle: "SEO specialist",
     title: "Freelance SEO Specialist for Hire",
     heroAccentLead: "Freelance SEO",
@@ -171,7 +173,8 @@ export const servicePages: ServicePage[] = [
     ],
   },
   {
-    slug: "local-seo",
+    slug: "seo/local-seo",
+    navLabel: "Local SEO",
     shortTitle: "Maps & GBP Specialist",
     title: "Maps & GBP Specialist",
     metaTitle: "Maps & GBP Specialist | Hey Genyl",
@@ -222,7 +225,8 @@ export const servicePages: ServicePage[] = [
     ],
   },
   {
-    slug: "technical-seo",
+    slug: "seo/technical-seo",
+    navLabel: "Technical SEO",
     shortTitle: "Technical SEO specialist",
     title: "Technical SEO Specialist",
     metaTitle: "Technical SEO Specialist | Hey Genyl",
@@ -324,7 +328,8 @@ export const servicePages: ServicePage[] = [
     ],
   },
   {
-    slug: "wordpress-design",
+    slug: "web-design/wordpress-web-design",
+    navLabel: "WordPress Web Design",
     shortTitle: "WordPress website designer",
     title: "WordPress Website Designer",
     metaTitle: "WordPress Website Designer | Hey Genyl",
@@ -375,7 +380,8 @@ export const servicePages: ServicePage[] = [
     ],
   },
   {
-    slug: "wordpress-seo-expert",
+    slug: "seo/wordpress-seo",
+    navLabel: "WordPress SEO",
     shortTitle: "WordPress SEO expert",
     title: "WordPress SEO Expert",
     metaTitle: "WordPress SEO Expert | Hey Genyl",
@@ -425,17 +431,96 @@ export const servicePages: ServicePage[] = [
       },
     ],
   },
+  {
+    slug: "web-design",
+    navLabel: "Web Design",
+    shortTitle: "Web design",
+    title: "Web Design for Service Businesses",
+    heroAccentLead: "Web Design",
+    metaTitle: "Web Design for Service Businesses | Hey Genyl",
+    metaDescription:
+      "Search-first web design for service businesses — conversion-focused layouts, clean site structure, and builds that protect and grow your organic visibility.",
+    summary:
+      "Web design built to rank and convert, not just look good. I plan pages around search intent and buyer decisions, structure content so it is easy to scan and act on, and keep the build technically clean so design choices support your SEO instead of undermining it — with redirect and content mapping baked in whenever we touch an existing site.",
+    chips: ["Search-first UX", "Conversion layouts", "SEO-safe builds"],
+    deliverables: [
+      {
+        title: "Message-first page structure",
+        copy:
+          "Every page is planned around the intent, proof, and next action a visitor needs, so layout decisions support the search and conversion goal instead of fighting it.",
+      },
+      {
+        title: "Conversion-aware layouts",
+        copy:
+          "Clear hierarchy, obvious calls to action, visible internal links, and scannable sections that move visitors toward contacting you.",
+      },
+      {
+        title: "SEO-safe build & handoff",
+        copy:
+          "Clean templates, sensible URL structure, and redirect plus content mapping whenever we rework an existing site, so you keep the search equity you already have.",
+      },
+      {
+        title: "Performance-minded delivery",
+        copy:
+          "Lightweight, fast-loading pages with the technical fundamentals in place, because speed and stability are part of both UX and rankings.",
+      },
+    ],
+    idealFor: [
+      "Service businesses whose current site looks dated or converts poorly",
+      "Owners planning a redesign who cannot afford to lose existing rankings",
+      "Projects that need design and SEO thinking handled by one person",
+    ],
+    outcomes: [
+      "A modern site built around how your buyers actually search and decide",
+      "Stronger continuity between design decisions and search performance",
+      "A cleaner base for publishing, internal linking, and future content work",
+    ],
+    process: processSteps,
+    faq: [
+      {
+        question: "Can you redesign my site without hurting my rankings?",
+        answer:
+          "Yes. Redirect mapping, content preservation, metadata checks, and technical QA are part of the process, so the new design launches without throwing away the search equity you already have.",
+      },
+      {
+        question: "Do you build on WordPress or another platform?",
+        answer:
+          "WordPress is the usual home for these builds, and there is a dedicated WordPress web design service for that. If a different platform fits your goals better, we can talk it through before committing.",
+      },
+    ],
+  },
 ];
 
-export const activeServiceSlugSet = new Set([
-  "seo-specialist",
-  "local-seo",
-  "wordpress-seo-expert",
-]);
+export const activeServiceOrder = [
+  "seo",
+  "seo/local-seo",
+  "seo/technical-seo",
+  "seo/wordpress-seo",
+  "web-design",
+  "web-design/wordpress-web-design",
+] as const;
 
-export const activeServicePages = servicePages.filter((service) =>
-  activeServiceSlugSet.has(service.slug),
+export const activeServiceSlugSet = new Set<string>(activeServiceOrder);
+
+export const activeServicePages = activeServiceOrder.map((slug) => {
+  const service = servicePages.find((item) => item.slug === slug);
+  if (!service) {
+    throw new Error(`Unknown active service slug: ${slug}`);
+  }
+  return service;
+});
+
+// Category hubs only (slugs without a nested segment): SEO, Web Design.
+export const topLevelServicePages = activeServicePages.filter(
+  (service) => !service.slug.includes("/"),
 );
+
+// Direct child services of a hub, e.g. getChildServices("seo") -> local/technical/wordpress SEO.
+export const getChildServices = (parentSlug: string) =>
+  activeServicePages.filter((service) => {
+    if (!service.slug.startsWith(`${parentSlug}/`)) return false;
+    return !service.slug.slice(parentSlug.length + 1).includes("/");
+  });
 
 export type CaseStudyPage = {
   slug: string;
@@ -500,7 +585,7 @@ export const caseStudies: CaseStudyPage[] = [
           "Navigation and internal-link flows reduced friction between first click and consultation intent.",
       },
     ],
-    serviceHref: "/services/seo-specialist/",
+    serviceHref: "/services/seo/",
   },
   {
     slug: "the-works-auto-center-car-detailing",
@@ -547,7 +632,7 @@ export const caseStudies: CaseStudyPage[] = [
           "Use scroll depth, clicks, or inquiry quality if you track them. Those metrics fit this niche better than impressions alone.",
       },
     ],
-    serviceHref: "/services/wordpress-seo-expert/",
+    serviceHref: "/services/seo/wordpress-seo/",
   },
   {
     slug: "everything-probate-legal-firm",
@@ -594,7 +679,7 @@ export const caseStudies: CaseStudyPage[] = [
           "Use supporting behavior such as attorney bio views, FAQ interaction, or form progression if you have it.",
       },
     ],
-    serviceHref: "/services/seo-specialist/",
+    serviceHref: "/services/seo/",
   },
 ];
 

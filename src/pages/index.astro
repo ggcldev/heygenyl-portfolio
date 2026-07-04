@@ -11,7 +11,7 @@ import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-
 import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
 import { getBlogPostSlug } from "../utils/blog";
 import {
-  activeServicePages,
+  topLevelServicePages,
   caseStudies,
   siteConfig,
 } from "../data/site";
@@ -80,18 +80,15 @@ const approachSteps = [
 ];
 
 const serviceCardTitleBySlug: Record<string, string> = {
-  "seo-specialist": "SEO",
-  "local-seo": "Local SEO",
-  "wordpress-seo-expert": "WordPress",
+  seo: "SEO",
+  "web-design": "Web Design",
 };
 
 const serviceCardSummaryBySlug: Record<string, string> = {
-  "seo-specialist":
+  seo:
     "Technical SEO, on-page optimization, and site audits that improve rankings and drive organic traffic to your website.",
-  "wordpress-seo-expert":
-    "Custom WordPress websites built for speed, search visibility, and conversions. Designed to rank from day one.",
-  "local-seo":
-    "GBP optimization, map pack rankings, and local search strategies that put your business in front of nearby customers.",
+  "web-design":
+    "Conversion-focused WordPress web design built for speed, search visibility, and turning visitors into leads.",
 };
 
 const homeFaqs = [
@@ -353,7 +350,7 @@ const homeSchema = [
         </div>
 
         <div class="md:col-span-2 w-full min-w-0 services-feature-grid">
-          {activeServicePages.map((service) => (
+          {topLevelServicePages.map((service) => (
             <a
               class="flat-panel service-skew-card"
               href={`/services/${service.slug}/`}
@@ -361,7 +358,7 @@ const homeSchema = [
               <div class="service-skew-card__inner">
                 <div class="service-skew-card__head">
                   <p class="flat-panel__kicker">{service.shortTitle}</p>
-                  {service.slug === "seo-specialist" && (
+                  {service.slug === "seo" && (
                     <span class="service-skew-card__service-icon-wrap service-skew-card__service-icon-wrap--seo" aria-hidden="true">
                       <svg class="service-skew-card__service-icon service-icon--seo" viewBox="0 0 24 24" focusable="false">
                         <circle class="service-icon__seo-lens" cx="11" cy="11" r="6.5"></circle>
@@ -370,15 +367,7 @@ const homeSchema = [
                       </svg>
                     </span>
                   )}
-                  {service.slug === "local-seo" && (
-                    <span class="service-skew-card__service-icon-wrap service-skew-card__service-icon-wrap--local" aria-hidden="true">
-                      <svg class="service-skew-card__service-icon service-icon--local" viewBox="0 0 24 24" focusable="false">
-                        <path class="service-icon__local-pin" d="M12 21c-3.5-3.1-5.5-6.2-5.5-9a5.5 5.5 0 1 1 11 0c0 2.8-2 5.9-5.5 9Z"></path>
-                        <circle class="service-icon__local-dot" cx="12" cy="10.2" r="2.1"></circle>
-                      </svg>
-                    </span>
-                  )}
-                  {service.slug === "wordpress-seo-expert" && (
+                  {service.slug === "web-design" && (
                     <span class="service-skew-card__service-icon-wrap service-skew-card__service-icon-wrap--wp" aria-hidden="true">
                       <svg class="service-skew-card__service-icon service-icon--wp" viewBox="0 0 24 24" focusable="false">
                         <rect class="service-icon__wp-frame" x="4" y="5.5" width="16" height="13" rx="2"></rect>

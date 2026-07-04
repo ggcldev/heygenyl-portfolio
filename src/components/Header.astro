@@ -1,13 +1,7 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-import { activeServicePages } from "../data/site";
-
-const serviceNavLabelBySlug: Record<string, string> = {
-  "seo-specialist": "SEO",
-  "local-seo": "Local SEO",
-  "wordpress-seo-expert": "WordPress",
-};
+import { topLevelServicePages, getChildServices } from "../data/site";
 ---
 
 <header class="site-header">
@@ -39,15 +33,42 @@ const serviceNavLabelBySlug: Record<string, string> = {
       <div class="nav-dropdown">
         <HeaderLink class="nav-link text-[0.82rem] 2xl:text-base text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/services/">Services</HeaderLink>
         <div class="nav-dropdown-menu" aria-label="Services links">
-          {activeServicePages.map((service) => (
-            <HeaderLink
-              class="nav-dropdown-link"
-              activeClass="nav-dropdown-link-active"
-              href={`/services/${service.slug}/`}
-            >
-              {serviceNavLabelBySlug[service.slug] ?? service.shortTitle}
-            </HeaderLink>
-          ))}
+          {topLevelServicePages.map((service) => {
+            const children = getChildServices(service.slug);
+            return children.length > 0 ? (
+              <div class="nav-subdropdown">
+                <HeaderLink
+                  class="nav-dropdown-link nav-subdropdown-toggle"
+                  activeClass="nav-dropdown-link-active"
+                  href={`/services/${service.slug}/`}
+                >
+                  <span>{service.navLabel ?? service.shortTitle}</span>
+                  <span class="nav-subdropdown-caret" aria-hidden="true">
+                    <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4.5 2.5L8 6l-3.5 3.5" /></svg>
+                  </span>
+                </HeaderLink>
+                <div class="nav-subdropdown-menu" aria-label={`${service.navLabel ?? service.shortTitle} services`}>
+                  {children.map((child) => (
+                    <HeaderLink
+                      class="nav-dropdown-link"
+                      activeClass="nav-dropdown-link-active"
+                      href={`/services/${child.slug}/`}
+                    >
+                      {child.navLabel ?? child.shortTitle}
+                    </HeaderLink>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <HeaderLink
+                class="nav-dropdown-link"
+                activeClass="nav-dropdown-link-active"
+                href={`/services/${service.slug}/`}
+              >
+                {service.navLabel ?? service.shortTitle}
+              </HeaderLink>
+            );
+          })}
         </div>
       </div>
       <HeaderLink class="nav-link text-[0.82rem] 2xl:text-base text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
@@ -76,10 +97,17 @@ const serviceNavLabelBySlug: Record<string, string> = {
       </button>
       <div class="mobile-nav__list flex flex-col gap-2 items-start">
         <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/services/">Services</HeaderLink>
-        {activeServicePages.map((service) => (
-          <a class="mobile-nav__sublink pl-4 text-muted hover:text-base-500 font-bold uppercase" href={`/services/${service.slug}/`}>
-            {serviceNavLabelBySlug[service.slug] ?? service.shortTitle}
-          </a>
+        {topLevelServicePages.map((service) => (
+          <>
+            <a class="mobile-nav__sublink pl-4 text-muted hover:text-base-500 font-bold uppercase" href={`/services/${service.slug}/`}>
+              {service.navLabel ?? service.shortTitle}
+            </a>
+            {getChildServices(service.slug).map((child) => (
+              <a class="mobile-nav__sublink mobile-nav__subsublink pl-8 text-muted hover:text-base-500 font-bold uppercase" href={`/services/${child.slug}/`}>
+                {child.navLabel ?? child.shortTitle}
+              </a>
+            ))}
+          </>
         ))}
         <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
         <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/blog/">Blog</HeaderLink>
