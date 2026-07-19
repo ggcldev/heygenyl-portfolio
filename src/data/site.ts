@@ -36,6 +36,8 @@ export type ServicePage = {
   summary: string;
   chips: string[];
   heroAccentLead?: string;
+  /** When true, the page renders meta robots noindex and is excluded from the sitemap. */
+  noIndex?: boolean;
   deliverables: Array<{ title: string; copy: string; image?: string }>;
   idealFor: string[];
   outcomes: string[];
@@ -174,6 +176,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "seo/local-seo",
+    noIndex: true,
     navLabel: "Local SEO",
     shortTitle: "Maps & GBP Specialist",
     title: "Maps & GBP Specialist",
@@ -226,6 +229,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "seo/technical-seo",
+    noIndex: true,
     navLabel: "Technical SEO",
     shortTitle: "Technical SEO specialist",
     title: "Technical SEO Specialist",
@@ -329,6 +333,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "web-design/wordpress-web-design",
+    noIndex: true,
     navLabel: "WordPress Web Design",
     shortTitle: "WordPress website designer",
     title: "WordPress Website Designer",
@@ -381,6 +386,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "seo/wordpress-seo",
+    noIndex: true,
     navLabel: "WordPress SEO",
     shortTitle: "WordPress SEO expert",
     title: "WordPress SEO Expert",
@@ -433,6 +439,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "web-design",
+    noIndex: true,
     navLabel: "Web Design",
     shortTitle: "Web design",
     title: "Web Design for Service Businesses",

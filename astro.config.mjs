@@ -3,14 +3,11 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-const allowedServicePaths = new Set([
-  "/services/seo/",
-  "/services/seo/local-seo/",
-  "/services/seo/technical-seo/",
-  "/services/seo/wordpress-seo/",
-  "/services/web-design/",
-  "/services/web-design/wordpress-web-design/",
-]);
+// Only the SEO hub is indexable right now; every other /services/ page is
+// noindex (see `noIndex` flags in src/data/site.ts + services/index.astro),
+// so it is deliberately kept out of the sitemap to avoid a noindex/sitemap
+// conflict in Search Console.
+const allowedServicePaths = new Set(["/services/seo/"]);
 
 export default defineConfig({
   site: "https://heygenyl.com",

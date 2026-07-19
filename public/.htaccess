@@ -57,4 +57,11 @@ RewriteRule ^services/wordpress-seo-expert/?$ /services/seo/wordpress-seo/ [R=30
   <FilesMatch "\.(css|js|mjs|json|svg|ico|png|jpe?g|webp|avif|woff2?|ttf|otf)$">
     Header set Cache-Control "public, max-age=2592000"
   </FilesMatch>
+
+  # Sitemaps change whenever content changes; keep their cache short so search
+  # engines and any CDN that respects origin headers pick up updates quickly
+  # instead of serving a weeks-old copy.
+  <FilesMatch "^sitemap.*\.xml$">
+    Header set Cache-Control "public, max-age=600, must-revalidate"
+  </FilesMatch>
 </IfModule>

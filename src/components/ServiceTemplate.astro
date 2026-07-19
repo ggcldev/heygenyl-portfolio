@@ -65,7 +65,7 @@ const schema = [
 ];
 ---
 
-<BaseLayout title={service.metaTitle} description={service.metaDescription} schema={schema}>
+<BaseLayout title={service.metaTitle} description={service.metaDescription} noIndex={service.noIndex ?? false} schema={schema}>
   <div class="services-page svc-detail">
     <PageHero
       eyebrow="Service page"
