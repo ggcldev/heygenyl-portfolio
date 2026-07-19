@@ -97,6 +97,9 @@
 @layer base {
 	:root {
 		color-scheme: light;
+		/* Guard against any stray horizontal overflow (e.g. nav flyouts).
+		   clip (not hidden) preserves the sticky header. */
+		overflow-x: clip;
 		background-color: var(--color-paper);
 		--font-sans: "InterLocal", "Inter", "Helvetica Neue", "Segoe UI", "Arial", sans-serif;
 		--font-heading: "Space Grotesk", sans-serif;
@@ -235,7 +238,7 @@
 		top: 100%;
 		left: 0;
 		z-index: 80;
-		min-width: 15.5rem;
+		min-width: 11rem;
 		display: grid;
 		border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
 		background: var(--color-paper);
@@ -292,8 +295,6 @@
 		display: inline-flex;
 		align-items: center;
 		color: color-mix(in oklab, var(--color-ink) 52%, transparent);
-		/* Submenu opens to the left, so the chevron points that way */
-		transform: rotate(180deg);
 		transition:
 			transform 160ms ease,
 			color 160ms ease;
@@ -301,7 +302,7 @@
 
 	.nav-subdropdown:hover .nav-subdropdown-caret,
 	.nav-subdropdown:focus-within .nav-subdropdown-caret {
-		transform: rotate(180deg) translateX(2px);
+		transform: translateX(2px);
 		color: var(--color-ink);
 	}
 
@@ -313,15 +314,15 @@
 	.nav-subdropdown-menu {
 		position: absolute;
 		top: -1px;
-		right: 100%;
-		left: auto;
+		left: 100%;
+		right: auto;
 		z-index: 90;
-		min-width: 13rem;
+		min-width: 12rem;
 		display: grid;
 		border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
 		background: var(--color-paper);
 		opacity: 0;
-		transform: translateX(-6px);
+		transform: translateX(6px);
 		pointer-events: none;
 		transition:
 			opacity 140ms ease,
