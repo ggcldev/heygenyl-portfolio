@@ -77,6 +77,11 @@ if (featuredSections.length > 0) {
       section.style.setProperty("--featured-copy-height", "0px");
     }
 
+    // Lets the CSS pin the stage near the viewport bottom (see
+    // --featured-stage-height usage in home.css) so the scroll runway sits
+    // above the cards instead of as dead space below them.
+    section.style.setProperty("--featured-stage-height", `${stage.offsetHeight}px`);
+
     // Stop once the last card is fully visible — scrolling further than that
     // (e.g. to the last card's left edge) only inflates the vertical runway
     // and leaves dead space under the section.

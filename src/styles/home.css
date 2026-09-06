@@ -1468,9 +1468,15 @@
 
 	.featured-projects-scroll.is-enhanced .featured-projects-stage {
 		position: sticky;
-		top: calc(
-			var(--featured-stick-top) + var(--featured-copy-height) +
-				var(--featured-copy-gap)
+		/* Pin the card row near the viewport bottom (but never above the sticky
+		   header copy), so the scroll runway hides behind the pinned stage
+		   instead of showing as dead space under the cards. */
+		top: max(
+			calc(
+				var(--featured-stick-top) + var(--featured-copy-height) +
+					var(--featured-copy-gap)
+			),
+			calc(100vh - var(--featured-stage-height, 60vh) - 2.5rem)
 		);
 		z-index: 1;
 		overflow: hidden;
@@ -1504,7 +1510,6 @@
 		}
 
 		.featured-projects-scroll.is-enhanced .featured-projects-stage {
-			top: var(--featured-stick-top);
 			overflow: hidden;
 		}
 
