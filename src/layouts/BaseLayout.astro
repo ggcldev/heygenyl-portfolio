@@ -57,6 +57,9 @@ const headProps = {
     <Footer />
     <CookieConsent />
     <script>
+      import "../scripts/smooth-scroll";
+    </script>
+    <script>
       document.querySelectorAll<HTMLAnchorElement>("a[data-ml]").forEach((a) => {
         const [user, domain] = (a.dataset.ml ?? "").split("|");
         if (user && domain) {

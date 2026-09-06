@@ -74,6 +74,9 @@ implemented in `src/styles/global.css` and the components; treat the code as the
   add class `band-light` to a homepage section to re-scope tokens to the light palette
   (`.band-light` in `global.css`). Homepage also has a sticky-hero "curtain reveal"
   (`.home-page .hero-shell` in `home.css`) and `+` eyebrow glyphs via `.section-eyebrow`.
+- Smooth scrolling: Lenis (`src/scripts/smooth-scroll.ts`, loaded in `BaseLayout.astro`).
+  Desktop fine-pointer only; disabled for `prefers-reduced-motion`; touch stays native.
+  Glide feel is tuned by `duration` there.
 - 20-division viewport grid (`--grid-cell`), card radius 24px, site-shell radius 28px,
   `--page-max: 1920px`.
 - Big bold left-aligned hero type (clamp to 4.5rem, weight 800, line-height ~0.95). Uppercase
