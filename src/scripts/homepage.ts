@@ -14,9 +14,9 @@ if (featuredSections.length > 0) {
   const FEATURED_NARROW_BREAKPOINT = 900;
   const FEATURED_DESKTOP_BREAKPOINT = 1024;
   const FEATURED_VERTICAL_SCROLL_RATIO_NARROW = 0.72;
-  const FEATURED_VERTICAL_SCROLL_RATIO_DESKTOP = 1;
+  const FEATURED_VERTICAL_SCROLL_RATIO_DESKTOP = 0.65;
   const FEATURED_END_HOLD_NARROW_PX = 96;
-  const FEATURED_END_HOLD_DESKTOP_PX = 180;
+  const FEATURED_END_HOLD_DESKTOP_PX = 80;
   const FEATURED_SCROLL_EASE = 0.14;
   const FEATURED_EASE_EPSILON = 0.001;
   const featuredState = new WeakMap<HTMLElement, FeaturedState>();
@@ -77,14 +77,10 @@ if (featuredSections.length > 0) {
       section.style.setProperty("--featured-copy-height", "0px");
     }
 
-    const maxShiftByViewport = Math.max(track.scrollWidth - stage.clientWidth, 0);
-    const items = Array.from(
-      track.querySelectorAll<HTMLElement>(".featured-project-item"),
-    );
-    const lastItem = items.at(-1);
-    const maxShiftToLastCardStart =
-      lastItem instanceof HTMLElement ? Math.max(lastItem.offsetLeft, 0) : 0;
-    const maxShift = Math.max(maxShiftByViewport, maxShiftToLastCardStart);
+    // Stop once the last card is fully visible — scrolling further than that
+    // (e.g. to the last card's left edge) only inflates the vertical runway
+    // and leaves dead space under the section.
+    const maxShift = Math.max(track.scrollWidth - stage.clientWidth, 0);
     const stageOffset = shell.offsetTop + stage.offsetTop;
     const stageBlockHeight = stageOffset + stage.offsetHeight;
     const naturalHeight = section.scrollHeight;
