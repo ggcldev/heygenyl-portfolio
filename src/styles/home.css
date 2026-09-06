@@ -1492,6 +1492,21 @@
 		background: var(--color-paper);
 	}
 
+	/* Curtain above the sticky header: when the pin releases, the card row
+	   slides up past the heading — this full-bleed mask hides it so cards
+	   never peek out above "Featured Projects". */
+	.featured-projects-scroll.is-enhanced .featured-projects-copy::before {
+		content: "";
+		position: absolute;
+		left: 50%;
+		bottom: 100%;
+		width: 100vw;
+		height: 100vh;
+		transform: translateX(-50%);
+		background: var(--color-paper);
+		pointer-events: none;
+	}
+
 	.featured-projects-scroll.is-enhanced .featured-projects-track {
 		width: auto;
 		padding-bottom: 0;
