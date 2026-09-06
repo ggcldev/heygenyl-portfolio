@@ -65,18 +65,6 @@ const robots = noIndex
   title={`${siteName} Blog`}
   href={new URL("/rss.xml", baseUrl).toString()}
 />
-<script is:inline>
-  (() => {
-    try {
-      const stored = localStorage.getItem("theme");
-      // Dark-first: default to dark unless the visitor explicitly chose light.
-      const theme = stored === "light" || stored === "dark" ? stored : "dark";
-      document.documentElement.dataset.theme = theme;
-    } catch {
-      // Ignore access errors (private mode/blocked storage).
-    }
-  })();
-</script>
 <link
   rel="preload"
   as="font"

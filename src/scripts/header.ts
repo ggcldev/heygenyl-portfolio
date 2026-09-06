@@ -1,49 +1,3 @@
-const THEME_STORAGE_KEY = "theme";
-
-const getPreferredTheme = (): "light" | "dark" => {
-  try {
-    const stored = localStorage.getItem(THEME_STORAGE_KEY);
-    if (stored === "light" || stored === "dark") return stored;
-  } catch {
-    // Ignore storage access errors and fall through to the default.
-  }
-
-  // Dark-first: default to dark unless the visitor explicitly chose light.
-  return "dark";
-};
-
-const applyTheme = (theme: "light" | "dark") => {
-  document.documentElement.dataset.theme = theme;
-  const buttons = document.querySelectorAll<HTMLElement>("[data-theme-toggle]");
-  buttons.forEach((button) =>
-    button.setAttribute("aria-label", `Toggle theme (current: ${theme})`),
-  );
-};
-
-const toggleTheme = () => {
-  const current =
-    document.documentElement.dataset.theme === "light" ||
-    document.documentElement.dataset.theme === "dark"
-      ? document.documentElement.dataset.theme
-      : getPreferredTheme();
-  const next = current === "dark" ? "light" : "dark";
-
-  try {
-    localStorage.setItem(THEME_STORAGE_KEY, next);
-  } catch {
-    // Ignore storage access errors.
-  }
-
-  applyTheme(next);
-};
-
-applyTheme(
-  document.documentElement.dataset.theme === "light" ||
-    document.documentElement.dataset.theme === "dark"
-    ? document.documentElement.dataset.theme
-    : getPreferredTheme(),
-);
-
 const navButton = document.getElementById("nav-toggle");
 const mobileNav = document.getElementById("mobile-nav");
 const mobileClose = document.getElementById("mobile-close");
@@ -206,14 +160,6 @@ window.addEventListener("keydown", (event) => {
     event.preventDefault();
     firstFocusable.focus();
   }
-});
-
-document.addEventListener("click", (event) => {
-  const target = event.target;
-  if (!(target instanceof Element)) return;
-  if (!target.closest("[data-theme-toggle]")) return;
-  event.preventDefault();
-  toggleTheme();
 });
 
 if (navElement instanceof HTMLElement) {

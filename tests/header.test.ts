@@ -11,7 +11,6 @@ describe("header navigation", () => {
     vi.resetModules();
     installMatchMedia();
     installImmediateAnimationFrame();
-    document.documentElement.dataset.theme = "light";
     document.body.innerHTML = `
       <header class="site-header">
         <nav>
@@ -33,7 +32,6 @@ describe("header navigation", () => {
           >
             <button id="mobile-close">Close</button>
             <a href="/services/">Services</a>
-            <button data-theme-toggle>Theme</button>
           </div>
         </nav>
       </header>
@@ -46,7 +44,6 @@ describe("header navigation", () => {
     vi.restoreAllMocks();
     document.body.innerHTML = "";
     delete document.documentElement.dataset.nav;
-    delete document.documentElement.dataset.theme;
   });
 
   it("opens and closes the mobile nav with dialog semantics", async () => {

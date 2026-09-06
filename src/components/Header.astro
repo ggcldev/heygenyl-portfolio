@@ -1,6 +1,5 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
-import ThemeToggle from "./ThemeToggle.astro";
 import { topLevelServicePages, getChildServices } from "../data/site";
 ---
 
@@ -12,8 +11,6 @@ import { topLevelServicePages, getChildServices } from "../data/site";
     >
       Hey Genyl
     </a>
-
-    <ThemeToggle class="hidden md:inline-flex absolute left-1/2 -translate-x-1/2" />
 
     <button
       id="nav-toggle"
@@ -112,7 +109,6 @@ import { topLevelServicePages, getChildServices } from "../data/site";
         <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/case-studies/">Case Studies</HeaderLink>
         <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/blog/">Blog</HeaderLink>
         <HeaderLink class="mobile-nav__link nav-link text-base-900 hover:text-base-500 font-bold uppercase" activeClass="text-ink nav-link-active" href="/contact/">Contact</HeaderLink>
-        <ThemeToggle />
       </div>
     </div>
   </nav>

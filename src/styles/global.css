@@ -352,40 +352,31 @@
 		opacity: 0.82;
 	}
 
-	.theme-toggle {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 2rem;
-		height: 2rem;
-		padding: 0;
-		border: 0;
-		border-radius: 0;
-		background: transparent;
-		color: color-mix(in oklab, var(--color-ink) 62%, transparent);
-		cursor: pointer;
-		transition: color 180ms ease;
+	/* Kudos-style alternating section band: re-scopes the color tokens to the
+	   light palette and paints a full-bleed background behind a max-width
+	   section (box-shadow + clip-path full-bleed technique). */
+	.band-light {
+		color-scheme: light;
+		--color-ink: #050505;
+		--color-muted: color-mix(in oklab, var(--color-ink) 64%, transparent);
+		--color-paper: #fafafa;
+		--color-surface: #ffffff;
+		--color-accent: color-mix(in oklab, #00ffc8 58%, #003326 42%);
+		--color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
+		--grid-line: color-mix(in oklab, var(--color-ink) 8%, transparent);
+		background: var(--color-paper);
+		box-shadow: 0 0 0 100vmax var(--color-paper);
+		clip-path: inset(0 -100vmax);
+		color: var(--color-ink);
 	}
 
-	.theme-toggle:hover {
-		color: color-mix(in oklab, var(--color-ink) 82%, transparent);
-	}
-
-	.theme-toggle:focus-visible {
-		outline: 1px solid color-mix(in oklab, var(--color-ink) 35%, transparent);
-		outline-offset: 2px;
-	}
-
-	.theme-toggle__icon {
-		width: 1rem;
-		height: 1rem;
-		fill: none;
-		stroke: currentColor;
-		stroke-width: 1.7;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		shape-rendering: geometricPrecision;
-		vector-effect: non-scaling-stroke;
+	/* Kudos-style eyebrow: small accent "+" glyph before uppercase section labels */
+	.section-eyebrow::before {
+		content: "+";
+		display: inline-block;
+		margin-right: 0.55em;
+		color: var(--color-accent);
+		font-weight: 700;
 	}
 
 	.site-shell {

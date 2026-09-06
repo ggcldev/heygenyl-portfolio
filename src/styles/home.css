@@ -11,6 +11,27 @@
 		padding-inline: clamp(1rem, 2.4vw, 1.5rem);
 	}
 
+	/* Kudos-style curtain reveal: the hero pins to the top while the next
+	   sections scroll up and cover it. Every post-hero section paints a
+	   full-bleed opaque background so the hero never peeks through. */
+	.home-page {
+		position: relative;
+	}
+
+	.home-page .hero-shell {
+		position: sticky;
+		top: 0;
+		z-index: 0;
+	}
+
+	.home-page > section:not(.hero-shell) {
+		position: relative;
+		z-index: 1;
+		background: var(--color-paper);
+		box-shadow: 0 0 0 100vmax var(--color-paper);
+		clip-path: inset(0 -100vmax);
+	}
+
 	.services-feature-grid {
 		display: grid;
 		gap: 0;

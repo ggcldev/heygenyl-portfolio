@@ -69,6 +69,11 @@ implemented in `src/styles/global.css` and the components; treat the code as the
   darkened via `color-mix(in oklab, #00ffc8 58%, #003326 42%)` for contrast on light surfaces.
 - Dark theme ("Kudos palette", dark-first): canvas `#050505`, surface `#0f0f0f`, white text,
   accent mint `#00ffc8`, accent-2 orange `#ff4400`.
+- **No theme toggle.** The site is hard-coded dark (`<html data-theme="dark">` in
+  `BaseLayout.astro`). Light appears only as Kudos-style alternating full-bleed section bands:
+  add class `band-light` to a homepage section to re-scope tokens to the light palette
+  (`.band-light` in `global.css`). Homepage also has a sticky-hero "curtain reveal"
+  (`.home-page .hero-shell` in `home.css`) and `+` eyebrow glyphs via `.section-eyebrow`.
 - 20-division viewport grid (`--grid-cell`), card radius 24px, site-shell radius 28px,
   `--page-max: 1920px`.
 - Big bold left-aligned hero type (clamp to 4.5rem, weight 800, line-height ~0.95). Uppercase
