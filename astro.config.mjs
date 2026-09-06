@@ -21,7 +21,7 @@ export default defineConfig({
     "/services/wordpress-seo-expert/": "/services/seo/wordpress-seo/",
   },
   build: {
-    inlineStylesheets: "always",
+    inlineStylesheets: "never",
   },
   integrations: [
     mdx(),
