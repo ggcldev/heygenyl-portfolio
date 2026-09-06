@@ -1476,7 +1476,7 @@
 				var(--featured-stick-top) + var(--featured-copy-height) +
 					var(--featured-copy-gap)
 			),
-			calc((100vh - var(--featured-stage-height, 60vh)) * 0.72)
+			calc((100vh - var(--featured-stage-height, 60vh)) * 0.85)
 		);
 		z-index: 1;
 		overflow: hidden;
