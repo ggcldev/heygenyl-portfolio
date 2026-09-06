@@ -1289,7 +1289,7 @@
 		margin: 0;
 		grid-column: var(--testimonial-active-column);
 		justify-self: center;
-		width: min(34ch, calc(100% - 1.5rem));
+		width: min(40ch, calc(100% - 1.5rem));
 		font-size: clamp(1rem, 1.45vw, 1.4rem);
 		line-height: 1.36;
 		letter-spacing: -0.01em;
@@ -1316,7 +1316,7 @@
 		border-right: 1px solid var(--color-border);
 		padding: 0.76rem 0.82rem 0.84rem;
 		background: transparent;
-		color: color-mix(in oklab, #fff 72%, transparent);
+		color: color-mix(in oklab, var(--color-ink) 55%, transparent);
 		cursor: pointer;
 		transition:
 			color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -1329,11 +1329,15 @@
 
 	.testimonial-tab:hover,
 	.testimonial-tab:focus-visible {
-		color: #fff;
+		color: var(--color-ink);
 		outline: none;
 	}
 
 	.testimonial-tab[aria-selected="true"] {
+		color: var(--color-ink);
+	}
+
+	.testimonial-tab[aria-selected="true"] .testimonial-tab__role {
 		color: var(--color-accent);
 	}
 
