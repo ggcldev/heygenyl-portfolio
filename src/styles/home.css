@@ -1340,21 +1340,6 @@
 		max-width: 56ch;
 	}
 
-	/* Kudos h2 scale: 64px / 800 / 0.9 line-height / -2% tracking */
-	.featured-projects-title {
-		margin: 0;
-		font-size: clamp(2.2rem, 4vw, 4rem);
-		font-weight: 800;
-		line-height: 0.9;
-		letter-spacing: -0.02em;
-	}
-
-	.featured-projects-title::before {
-		font-size: 0.42em;
-		vertical-align: 0.55em;
-		margin-right: 0.8em;
-	}
-
 	.featured-projects-stage {
 		overflow-x: auto;
 		overflow-y: hidden;
