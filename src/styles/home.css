@@ -355,10 +355,25 @@
 	}
 
 	.approach-flow__detail {
+		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
 		gap: 1.5rem 3rem;
 		padding: 2rem 0 3.25rem;
+	}
+
+	/* Kudos-style diamond marker at the left margin of each step's details */
+	@media (min-width: 768px) {
+		.approach-flow__detail::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 2.45rem;
+			width: 0.42rem;
+			height: 0.42rem;
+			background: var(--color-ink);
+			transform: rotate(45deg);
+		}
 	}
 
 	.approach-flow__copy {
@@ -376,7 +391,7 @@
 
 	@media (min-width: 768px) {
 		.approach-flow__detail {
-			padding-left: 22%;
+			padding-left: 12%;
 		}
 	}
 
