@@ -674,7 +674,7 @@
 		position: absolute;
 		inset: 0;
 		background: #000;
-		opacity: 0.26;
+		opacity: 0.42;
 		pointer-events: none;
 		transition: opacity 220ms ease;
 		z-index: 1;
@@ -682,14 +682,14 @@
 
 	.insight-card:hover .insight-card__media::after,
 	.insight-card:focus-visible .insight-card__media::after {
-		opacity: 0.12;
+		opacity: 0.18;
 	}
 
 	.insight-card__media img {
 		display: block;
 		width: 100%;
 		height: auto;
-		aspect-ratio: 4 / 5;
+		aspect-ratio: 4 / 3;
 		object-fit: cover;
 		filter: grayscale(0.15);
 		transition:
