@@ -136,6 +136,45 @@
 		box-sizing: border-box;
 	}
 
+	/* Kudos backdrop: dashed vertical column guides + film grain.
+	   Fixed, non-interactive overlays; the mid-gray line color stays subtle
+	   on both the dark canvas and the light bands. */
+	:root {
+		--backdrop-col-dash: repeating-linear-gradient(
+			180deg,
+			rgb(128 128 128 / 0.24) 0 5px,
+			transparent 5px 13px
+		);
+	}
+
+	body::before {
+		content: "";
+		position: fixed;
+		inset: 0;
+		margin-inline: auto;
+		width: min(100%, var(--page-max));
+		pointer-events: none;
+		z-index: 3;
+		background-image: var(--backdrop-col-dash), var(--backdrop-col-dash),
+			var(--backdrop-col-dash);
+		background-size: 1px 13px;
+		background-repeat: repeat-y;
+		background-position:
+			25% 0,
+			50% 0,
+			75% 0;
+	}
+
+	body::after {
+		content: "";
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 4;
+		opacity: 0.04;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+
 	body {
 		margin: 0;
 		min-height: 100vh;
