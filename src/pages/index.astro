@@ -261,17 +261,17 @@ const homeSchema = [
 
     <section class="content-shell band-light">
       <div
-        class="grid grid-cols-1 gap-y-24 md:grid-cols-3 md:gap-x-12 lg:gap-x-16 border-b py-24"
+        class="border-b py-24"
         style="border-color: var(--color-border);"
       >
-        <div class="md:sticky md:top-24 self-start">
+        <div class="approach-header">
           <h2 class="section-eyebrow">My Approach to SEO</h2>
-          <p class="text-sm text-muted mt-2">
+          <p class="approach-header__intro">
             Four focused steps from market research to honest reporting.
           </p>
         </div>
 
-        <div class="md:col-span-2 w-full min-w-0">
+        <div class="w-full min-w-0">
           <ol class="approach-flow">
             {approachSteps.map((step, index) => (
               <li
