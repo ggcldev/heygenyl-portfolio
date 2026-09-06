@@ -66,10 +66,12 @@ implemented in `src/styles/global.css` and the components; treat the code as the
 
 - Fonts: Space Grotesk (headings), IBM Plex Mono (meta, time, eyebrows), Inter (blog body).
 - Light theme (Kudos light bands): ink `#050505`, paper `#EDEDED` (Kudos greyish-white,
-  sampled from the template), surface `#FAFAFA`, accent = mint `#00ffc8`
-  darkened via `color-mix(in oklab, #00ffc8 58%, #003326 42%)` for contrast on light surfaces.
+  sampled from the template), surface `#FAFAFA`.
 - Dark theme ("Kudos palette", dark-first): canvas `#050505`, surface `#0f0f0f`, white text,
-  accent mint `#00ffc8`, accent-2 orange `#ff4400`.
+  accent-2 orange `#ff4400`.
+- **Universal accent green: `#43d39e`** (deeper seafoam; the owner found raw `#00ffc8` harsh).
+  Same value in both themes and both bands — always use `var(--color-accent)`, never a
+  hard-coded green.
 - **No theme toggle.** The site is hard-coded dark (`<html data-theme="dark">` in
   `BaseLayout.astro`). Light appears only as Kudos-style alternating full-bleed section bands:
   add class `band-light` to a homepage section to re-scope tokens to the light palette

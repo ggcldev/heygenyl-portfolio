@@ -436,7 +436,7 @@
 	.value-card__mark {
 		width: 0.5rem;
 		height: 0.5rem;
-		background: #00ffc8;
+		background: var(--color-accent);
 		transform: rotate(45deg);
 	}
 
@@ -481,8 +481,8 @@
 
 	.value-card__chip:hover,
 	.value-card__chip:focus-visible {
-		border-color: #00ffc8;
-		color: #00ffc8;
+		border-color: var(--color-accent);
+		color: var(--color-accent);
 	}
 
 	.value-card__cta {
@@ -509,9 +509,7 @@
 	.value-card--mint {
 		--color-ink: #050505;
 		--color-muted: color-mix(in oklab, #050505 68%, transparent);
-		/* Kudos card mint, sampled from the template: softened #6CEDC2,
-		   not the raw #00FFC8 accent (too harsh as a large surface). */
-		background: #6cedc2;
+		background: var(--color-accent);
 		border-color: transparent;
 		color: #050505;
 	}
