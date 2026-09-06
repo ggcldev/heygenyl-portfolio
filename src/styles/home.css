@@ -517,7 +517,7 @@
 		.service-skew-card:focus-visible .flat-panel__title,
 		.service-skew-card:focus-visible .flat-panel__copy,
 		.service-skew-card:focus-visible .service-skew-card__cta {
-			color: #fff;
+			color: #050505;
 		}
 	}
 

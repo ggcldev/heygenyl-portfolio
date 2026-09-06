@@ -79,19 +79,22 @@
 }
 
 @theme {
-	--color-ink: #1E1E1E;
-	--color-muted: color-mix(in oklab, var(--color-ink) 72%, transparent);
-	--color-paper: #ffffff;
+	/* Kudos palette (light): near-black ink on off-white paper, mint accent.
+	   Accent is darkened on light surfaces — pure #00ffc8 text fails contrast
+	   on paper; the full-strength mint lives in the dark theme. */
+	--color-ink: #050505;
+	--color-muted: color-mix(in oklab, var(--color-ink) 64%, transparent);
+	--color-paper: #FAFAFA;
 	--color-surface: #ffffff;
-	--color-border: color-mix(in oklab, var(--color-ink) 14%, transparent);
+	--color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
 	--color-base-900: var(--color-ink);
 	--color-base-600: var(--color-muted);
 	--color-base-500: color-mix(in oklab, var(--color-ink) 52%, transparent);
 	--color-base-200: var(--color-border);
-	--color-accent: #2EBAC1;
+	--color-accent: color-mix(in oklab, #00ffc8 58%, #003326 42%);
 	--color-accent-2: #ff4400;
 	--radius-card: 24px;
-	--grid-line: color-mix(in oklab, var(--color-ink) 10%, transparent);
+	--grid-line: color-mix(in oklab, var(--color-ink) 8%, transparent);
 }
 
 @layer base {

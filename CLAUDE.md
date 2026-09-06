@@ -65,7 +65,8 @@ type, and motion, while keeping the site's own structure and content. The design
 implemented in `src/styles/global.css` and the components; treat the code as the source of truth.
 
 - Fonts: Space Grotesk (headings), IBM Plex Mono (meta, time, eyebrows), Inter (blog body).
-- Light theme: ink `#1E1E1E`, paper `#fff`, accent `#2EBAC1`.
+- Light theme (Kudos light bands): ink `#050505`, paper `#FAFAFA`, accent = mint `#00ffc8`
+  darkened via `color-mix(in oklab, #00ffc8 58%, #003326 42%)` for contrast on light surfaces.
 - Dark theme ("Kudos palette", dark-first): canvas `#050505`, surface `#0f0f0f`, white text,
   accent mint `#00ffc8`, accent-2 orange `#ff4400`.
 - 20-division viewport grid (`--grid-cell`), card radius 24px, site-shell radius 28px,
