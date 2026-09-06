@@ -1337,7 +1337,22 @@
 	}
 
 	.featured-projects-copy__text {
-		max-width: 46ch;
+		max-width: 56ch;
+	}
+
+	/* Kudos-style display heading ("Who we are" scale, restrained) */
+	.featured-projects-title {
+		margin: 0;
+		font-size: clamp(2.2rem, 3.6vw, 3.4rem);
+		font-weight: 800;
+		line-height: 0.95;
+		letter-spacing: -0.02em;
+	}
+
+	.featured-projects-title::before {
+		font-size: 0.42em;
+		vertical-align: 0.55em;
+		margin-right: 0.8em;
 	}
 
 	.featured-projects-stage {
