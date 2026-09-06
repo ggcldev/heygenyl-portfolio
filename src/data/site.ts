@@ -736,6 +736,54 @@ export const caseStudies: CaseStudyPage[] = [
     ],
     serviceHref: "/services/seo/technical-seo/",
   },
+  {
+    slug: "legitfit-fitness-software",
+    shortTitle: "Fitness SaaS",
+    title: "LegitFit Case Study",
+    metaTitle: "LegitFit Case Study | Hey Genyl",
+    metaDescription:
+      "SaaS SEO case study for LegitFit, a gym and studio management platform: content strategy, feature-page intent, and organic growth for a fitness software brand.",
+    summary:
+      "LegitFit is an award-winning gym and studio management platform that helps fitness businesses handle bookings, payments, client management, and growth from one system — serving personal trainers, gyms, and studios across Ireland, the UK, and beyond.",
+    chips: ["SaaS SEO", "Content strategy", "Fitness software"],
+    snapshot: [
+      { label: "Primary focus", value: "SaaS content strategy" },
+      { label: "Main fix", value: "Feature and comparison intent" },
+      { label: "Best proof", value: "Organic signups" },
+      { label: "Support page", value: "SEO specialist" },
+    ],
+    challengeTitle:
+      "A competitive SaaS category where generic fitness content does not convert.",
+    challenge: [
+      "Feature pages and blog content chased broad fitness terms instead of software-buyer intent",
+      "Comparison and alternative queries — where buyers actually decide — were underserved",
+      "Content lacked a clear path from informational reads to demo and pricing pages",
+    ],
+    strategyTitle: "Rank for the searches gym owners make when they are ready to switch.",
+    strategy: [
+      "Map content to the software-buying journey: features, comparisons, pricing intent",
+      "Build topical depth around gym management workflows the platform actually solves",
+      "Tighten internal links from blog content toward demo, pricing, and feature pages",
+    ],
+    proofPoints: [
+      {
+        title: "Signup-intent visibility",
+        copy:
+          "Track rankings and clicks for software-buyer terms — gym management software, booking system queries — rather than broad fitness topics.",
+      },
+      {
+        title: "Content-to-demo path",
+        copy:
+          "Note whether blog and comparison readers progress to demo and pricing pages once the internal linking is aligned.",
+      },
+      {
+        title: "Topical coverage",
+        copy:
+          "Use the growing share of gym-workflow queries the site appears for as the content clusters fill out.",
+      },
+    ],
+    serviceHref: "/services/seo/",
+  },
 ];
 
 export const getServiceBySlug = (slug: string) => {

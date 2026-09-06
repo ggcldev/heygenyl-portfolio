@@ -10,6 +10,7 @@ import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/dese
 import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-center/the-works-auto-center-site.jpg";
 import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everwood-legal-site.jpg";
 import tinkRecruitmentFeaturedImage from "../assets/case-studies/tink-recruitment/tink-recruitment-img-1-desktop.jpg";
+import legitfitFeaturedImage from "../assets/case-studies/legitfit/legitfit-site.jpg";
 import { getBlogPostSlug } from "../utils/blog";
 import {
   topLevelServicePages,
@@ -45,6 +46,11 @@ const featuredProjects = [
     slug: "tink-recruitment-real-estate",
     asset: tinkRecruitmentFeaturedImage,
     alt: "Tink Recruitment case study preview",
+  },
+  {
+    slug: "legitfit-fitness-software",
+    asset: legitfitFeaturedImage,
+    alt: "LegitFit case study preview",
   },
 ].map((item) => {
   const study = caseStudies.find((entry) => entry.slug === item.slug);
@@ -204,7 +210,7 @@ const homeSchema = [
           <div class="featured-projects-copy__text">
             <h2 class="section-eyebrow featured-projects-title">Featured Projects</h2>
             <p class="text-sm text-muted mt-2">
-              Four selected projects are highlighted here. The rest stay in the
+              Five selected projects are highlighted here. The rest stay in the
               dedicated case-studies page.
             </p>
           </div>
