@@ -272,66 +272,13 @@ const homeSchema = [
         </div>
 
         <div class="md:col-span-2 w-full min-w-0">
-          <div class="approach-tabs" data-approach-tabs>
-          <div class="approach-tablist" role="tablist" aria-label="SEO process steps">
-            {approachSteps.map((step, index) => {
-              const tabId = `approach-tab-${step.id}`;
-              const panelId = `approach-panel-${step.id}`;
-              const isActive = index === 0;
-
-              return (
-                <>
-                  <button
-                    id={tabId}
-                    type="button"
-                    class="approach-tab"
-                    role="tab"
-                    aria-controls={panelId}
-                    aria-selected={isActive ? "true" : "false"}
-                    tabindex={isActive ? "0" : "-1"}
-                    data-tab-id={step.id}
-                    aria-label={`Step ${index + 1}: ${step.title}`}
-                  >
-                    <span class="approach-tab__step">Step {index + 1}</span>
-                  </button>
-                  {index < approachSteps.length - 1 && (
-                    <span class="approach-tab-separator" aria-hidden="true">
-                      <svg
-                        class="approach-tab-separator__icon"
-                        viewBox="0 0 10 16"
-                        width="10"
-                        height="16"
-                        focusable="false"
-                        aria-hidden="true"
-                      >
-                        <path d="M8 1L2 15" />
-                      </svg>
-                    </span>
-                  )}
-                </>
-              );
-            })}
-          </div>
-
-          <div class="approach-panels">
-            {approachSteps.map((step, index) => {
-              const tabId = `approach-tab-${step.id}`;
-              const panelId = `approach-panel-${step.id}`;
-              const isActive = index === 0;
-
-              return (
-                <div
-                  id={panelId}
-                  class="approach-panel"
-                  role="tabpanel"
-                  aria-labelledby={tabId}
-                  data-panel-id={step.id}
-                  hidden={!isActive}
-                >
-                  <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">
-                    {step.title}
-                  </h3>
-                  <p class="text-sm 2xl:text-lg text-muted mt-2">{step.copy}</p>
+          <ol class="approach-flow">
+            {approachSteps.map((step, index) => (
+              <li class="approach-flow__row">
+                <p class="approach-flow__num">0{index + 1}</p>
+                <div class="approach-flow__body">
+                  <h3 class="approach-flow__title">{step.title}</h3>
+                  <p class="approach-flow__copy">{step.copy}</p>
                   <div class="approach-tools">
                     <p class="approach-tools__label">Tools</p>
                     <ul class="approach-tools__list">
@@ -344,10 +291,9 @@ const homeSchema = [
                     </ul>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
