@@ -662,8 +662,27 @@
 	}
 
 	.insight-card__media {
+		position: relative;
 		overflow: hidden;
+		isolation: isolate;
 		margin-bottom: 0.45rem;
+	}
+
+	/* Same darkening layer as the featured-project cards; lifts on hover */
+	.insight-card__media::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: #000;
+		opacity: 0.26;
+		pointer-events: none;
+		transition: opacity 220ms ease;
+		z-index: 1;
+	}
+
+	.insight-card:hover .insight-card__media::after,
+	.insight-card:focus-visible .insight-card__media::after {
+		opacity: 0.12;
 	}
 
 	.insight-card__media img {
