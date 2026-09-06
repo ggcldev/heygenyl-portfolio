@@ -411,53 +411,51 @@ const homeSchema = [
 
     <section class="content-shell band-light">
       <div
-        class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24"
+        class="border-b py-24"
         style="border-color: var(--color-border);"
       >
-        <div class="md:sticky md:top-24 self-start">
-          <h2 class="section-eyebrow">Recent Posts</h2>
-          <p class="text-sm text-muted mt-2">
+        <div class="insights-header">
+          <p class="insights-eyebrow">Insights</p>
+          <h2 class="insights-title">
+            <span class="insights-title__accent">Recent</span> Posts
+          </h2>
+          <p class="insights-intro">
             Insights and guides on SEO, WordPress, and Local SEO from hands-on
             experience.
           </p>
         </div>
 
-        <div class="md:col-span-2 w-full min-w-0">
-          <div class="recent-posts-box">
-            {posts.map((post) => {
-              const postSlug = getBlogPostSlug(post);
-              const previewImage = post.data.image ?? gutterFeaturedImage;
-              return (
-                <a class="recent-post-row" href={`/blog/${postSlug}/`}>
-                  <div class="recent-post-media">
-                    <Picture
-                      src={previewImage}
-                      alt={post.data.imageAlt ?? `${post.data.title} post cover`}
-                      formats={["avif", "webp"]}
-                      fallbackFormat="webp"
-                      widths={[320, 480, 640]}
-                      sizes="(max-width: 639px) 100vw, (max-width: 1023px) 44vw, 360px"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div class="recent-post-content">
-                    <p class="recent-post-date">
-                      {post.data.pubDate
-                        .toLocaleDateString("en-US", {
-                          month: "short",
-                          year: "numeric",
-                        })
-                        .toUpperCase()}
-                    </p>
-                    <h3 class="recent-post-title">{post.data.title}</h3>
-                    <p class="recent-post-excerpt">{post.data.excerpt}</p>
-                    <CtaArrow label="Read post" className="recent-post-cta" />
-                  </div>
-                </a>
-              );
-            })}
-          </div>
+        <div class="insights-grid">
+          {posts.map((post) => {
+            const postSlug = getBlogPostSlug(post);
+            const previewImage = post.data.image ?? gutterFeaturedImage;
+            return (
+              <a class="insight-card" href={`/blog/${postSlug}/`}>
+                <div class="insight-card__media">
+                  <Picture
+                    src={previewImage}
+                    alt={post.data.imageAlt ?? `${post.data.title} post cover`}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="webp"
+                    widths={[320, 480, 640]}
+                    sizes="(max-width: 639px) 100vw, (max-width: 1023px) 44vw, 320px"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <p class="insight-card__date">
+                  {post.data.pubDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
+                <h3 class="insight-card__title">{post.data.title}</h3>
+                <p class="insight-card__excerpt">{post.data.excerpt}</p>
+                <span class="insight-card__more">Read more</span>
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
