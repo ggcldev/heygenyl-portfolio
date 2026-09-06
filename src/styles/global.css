@@ -84,8 +84,8 @@
 	   on paper; the full-strength mint lives in the dark theme. */
 	--color-ink: #050505;
 	--color-muted: color-mix(in oklab, var(--color-ink) 64%, transparent);
-	--color-paper: #FAFAFA;
-	--color-surface: #ffffff;
+	--color-paper: #EDEDED;
+	--color-surface: #fafafa;
 	--color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
 	--color-base-900: var(--color-ink);
 	--color-base-600: var(--color-muted);
@@ -359,8 +359,8 @@
 		color-scheme: light;
 		--color-ink: #050505;
 		--color-muted: color-mix(in oklab, var(--color-ink) 64%, transparent);
-		--color-paper: #fafafa;
-		--color-surface: #ffffff;
+		--color-paper: #ededed;
+		--color-surface: #fafafa;
 		--color-accent: color-mix(in oklab, #00ffc8 58%, #003326 42%);
 		--color-border: color-mix(in oklab, var(--color-ink) 10%, transparent);
 		--grid-line: color-mix(in oklab, var(--color-ink) 8%, transparent);
