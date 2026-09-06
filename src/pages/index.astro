@@ -14,6 +14,7 @@ import legitfitFeaturedImage from "../assets/case-studies/legitfit/legitfit-site
 import { getBlogPostSlug } from "../utils/blog";
 import {
   topLevelServicePages,
+  getChildServices,
   caseStudies,
   siteConfig,
 } from "../data/site";
@@ -307,55 +308,40 @@ const homeSchema = [
     </section>
 
     <section class="content-shell">
-      <div
-        class="grid grid-cols-1 gap-y-24 md:grid-cols-3 py-24"
-      >
-        <div class="md:sticky md:top-24 self-start">
+      <div class="py-24">
+        <div class="approach-header">
           <h2 class="section-eyebrow">Services</h2>
-          <p class="text-sm text-muted mt-2">
+          <p class="approach-header__intro">
             Get found on Google. Look good when they do.
           </p>
         </div>
 
-        <div class="md:col-span-2 w-full min-w-0 services-feature-grid">
-          {topLevelServicePages.map((service) => (
-            <a
-              class="flat-panel service-skew-card"
-              href={`/services/${service.slug}/`}
-            >
-              <div class="service-skew-card__inner">
-                <div class="service-skew-card__head">
-                  <p class="flat-panel__kicker">{service.shortTitle}</p>
-                  {service.slug === "seo" && (
-                    <span class="service-skew-card__service-icon-wrap service-skew-card__service-icon-wrap--seo" aria-hidden="true">
-                      <svg class="service-skew-card__service-icon service-icon--seo" viewBox="0 0 24 24" focusable="false">
-                        <circle class="service-icon__seo-lens" cx="11" cy="11" r="6.5"></circle>
-                        <path class="service-icon__seo-handle" d="M16 16L20 20"></path>
-                        <path class="service-icon__seo-check" d="M8.5 12.2L10.4 10.3L12.1 12L14.8 9.3"></path>
-                      </svg>
-                    </span>
-                  )}
-                  {service.slug === "web-design" && (
-                    <span class="service-skew-card__service-icon-wrap service-skew-card__service-icon-wrap--wp" aria-hidden="true">
-                      <svg class="service-skew-card__service-icon service-icon--wp" viewBox="0 0 24 24" focusable="false">
-                        <rect class="service-icon__wp-frame" x="4" y="5.5" width="16" height="13" rx="2"></rect>
-                        <path class="service-icon__wp-bar" d="M4 9h16"></path>
-                        <circle cx="7.5" cy="7.2" r="0.65" fill="currentColor" stroke="none"></circle>
-                        <circle cx="10" cy="7.2" r="0.65" fill="currentColor" stroke="none"></circle>
-                        <path class="service-icon__wp-bolt" d="M11.2 11.7L10 14.2H12l-1.3 3.5 3.6-5h-2.1l1-1.2"></path>
-                      </svg>
-                    </span>
-                  )}
-                </div>
-                <h3 class="flat-panel__title">
-                  {serviceCardTitleBySlug[service.slug] ?? service.title}
-                </h3>
-                <p class="flat-panel__copy">
-                  {serviceCardSummaryBySlug[service.slug] ?? service.summary}
-                </p>
-                <CtaArrow label="View Service" className="service-skew-card__cta" />
-              </div>
-            </a>
+        <div class="services-value-grid">
+          {topLevelServicePages.map((service, index) => (
+            <article class={`value-card${index % 2 === 1 ? " value-card--mint" : ""}`}>
+              <span class="value-card__mark" aria-hidden="true"></span>
+              <h3 class="value-card__title">
+                {serviceCardTitleBySlug[service.slug] ?? service.title}
+              </h3>
+              <p class="value-card__copy">
+                {serviceCardSummaryBySlug[service.slug] ?? service.summary}
+              </p>
+              <ul class="value-card__chips">
+                {getChildServices(service.slug).map((child) => (
+                  <li>
+                    <a class="value-card__chip" href={`/services/${child.slug}/`}>
+                      {child.navLabel ?? child.shortTitle}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <a class="value-card__cta" href={`/services/${service.slug}/`}>
+                <CtaArrow label="View Service" className="value-card__cta-arrow" />
+              </a>
+              <span class="value-card__word" aria-hidden="true">
+                {service.slug === "seo" ? "RANK" : "BUILD"}
+              </span>
+            </article>
           ))}
         </div>
       </div>
