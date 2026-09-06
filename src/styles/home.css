@@ -246,8 +246,9 @@
 		}
 	}
 
-	/* Kudos "Process" style: numbered rows with hairline dividers,
-	   mono index in accent, large row titles. */
+	/* Kudos "Process" style: each step is a black progress bar (mono index +
+	   title) that grows wider per step, with a tick-stripe "loading" pattern
+	   filling the remaining width. Details sit below each bar. */
 	.approach-flow {
 		list-style: none;
 		margin: 0;
@@ -255,44 +256,79 @@
 		display: grid;
 	}
 
-	.approach-flow__row {
-		display: grid;
-		grid-template-columns: 3.5rem minmax(0, 1fr);
-		gap: 1rem;
-		padding: 2rem 0 2.25rem;
-		border-top: 1px solid var(--color-border);
+	.approach-flow__bar {
+		display: flex;
+		align-items: stretch;
+		width: 100%;
+		height: 2.1rem;
 	}
 
-	.approach-flow__row:last-child {
-		border-bottom: 1px solid var(--color-border);
+	.approach-flow__bar-fill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.85rem;
+		width: var(--flow-progress, 50%);
+		min-width: max-content;
+		padding-inline: 0.9rem 1.4rem;
+		background: var(--color-ink);
+		color: var(--color-paper);
 	}
 
 	.approach-flow__num {
-		margin: 0;
-		padding-top: 0.5rem;
 		font-family: var(--font-mono);
-		font-size: 0.85rem;
+		font-size: 0.82rem;
 		font-weight: 500;
-		color: var(--color-accent);
+		color: color-mix(in oklab, var(--color-paper) 68%, transparent);
 	}
 
 	.approach-flow__title {
 		margin: 0;
-		font-size: clamp(1.5rem, 2.3vw, 2.35rem);
+		font-size: 1.02rem;
 		font-weight: 700;
 		line-height: 1;
-		letter-spacing: -0.02em;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+	}
+
+	.approach-flow__ticks {
+		flex: 1;
+		background: repeating-linear-gradient(
+			90deg,
+			var(--color-ink) 0 2px,
+			transparent 2px 7px
+		);
+	}
+
+	.approach-flow__detail {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+		gap: 1.5rem 3rem;
+		padding: 2rem 0 3.25rem;
 	}
 
 	.approach-flow__copy {
-		margin: 0.85rem 0 0;
-		max-width: 62ch;
+		margin: 0;
+		max-width: 46ch;
+		font-size: clamp(1.05rem, 1.35vw, 1.35rem);
+		line-height: 1.45;
+		font-weight: 600;
 		color: var(--color-muted);
 	}
 
+	.approach-flow .approach-tools {
+		margin-top: 0;
+	}
+
+	@media (min-width: 768px) {
+		.approach-flow__detail {
+			padding-left: 22%;
+		}
+	}
+
 	@media (max-width: 639px) {
-		.approach-flow__row {
-			grid-template-columns: 2.5rem minmax(0, 1fr);
+		.approach-flow__detail {
+			grid-template-columns: 1fr;
+			padding: 1.5rem 0 2.5rem;
 		}
 	}
 

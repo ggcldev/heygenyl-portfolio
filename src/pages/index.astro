@@ -274,10 +274,18 @@ const homeSchema = [
         <div class="md:col-span-2 w-full min-w-0">
           <ol class="approach-flow">
             {approachSteps.map((step, index) => (
-              <li class="approach-flow__row">
-                <p class="approach-flow__num">0{index + 1}</p>
-                <div class="approach-flow__body">
-                  <h3 class="approach-flow__title">{step.title}</h3>
+              <li
+                class="approach-flow__row"
+                style={`--flow-progress: ${Math.round(((index + 1) / approachSteps.length) * 100)}%;`}
+              >
+                <div class="approach-flow__bar" aria-hidden="false">
+                  <span class="approach-flow__bar-fill">
+                    <span class="approach-flow__num">0{index + 1}</span>
+                    <h3 class="approach-flow__title">{step.title}</h3>
+                  </span>
+                  <span class="approach-flow__ticks" aria-hidden="true"></span>
+                </div>
+                <div class="approach-flow__detail">
                   <p class="approach-flow__copy">{step.copy}</p>
                   <div class="approach-tools">
                     <p class="approach-tools__label">Tools</p>
