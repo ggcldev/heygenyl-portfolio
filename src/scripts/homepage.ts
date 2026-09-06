@@ -348,6 +348,30 @@ if (featuredSections.length > 0) {
   });
 }
 
+/* Approach flow: grow each step's progress bar when it scrolls into view */
+
+const approachFlowRows = Array.from(
+  document.querySelectorAll<HTMLElement>(".approach-flow__row"),
+);
+
+if (approachFlowRows.length > 0) {
+  if ("IntersectionObserver" in window) {
+    const flowObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-loaded");
+          flowObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -18% 0px", threshold: 0.1 },
+    );
+    approachFlowRows.forEach((row) => flowObserver.observe(row));
+  } else {
+    approachFlowRows.forEach((row) => row.classList.add("is-loaded"));
+  }
+}
+
 function initTabGroup(
   group: HTMLElement,
   tabAttr: string,

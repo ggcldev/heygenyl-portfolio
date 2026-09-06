@@ -295,6 +295,16 @@
 		padding-inline: 0.9rem 1.4rem;
 		background: var(--color-ink);
 		color: var(--color-paper);
+		transition: width 1.1s cubic-bezier(0.44, 0, 0.56, 1);
+	}
+
+	/* Scroll-triggered load: the bar starts collapsed to its label and grows
+	   to the step's progress width once the row scrolls into view
+	   (.is-loaded added by homepage.ts). */
+	@media (prefers-reduced-motion: no-preference) {
+		.approach-flow__row:not(.is-loaded) .approach-flow__bar-fill {
+			width: 0%;
+		}
 	}
 
 	.approach-flow__num {
