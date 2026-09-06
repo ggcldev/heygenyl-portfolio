@@ -29,11 +29,21 @@ frontmatter and missing images.
 
 ## 2. Deploy and the cache trap
 
-- Push to `main` triggers `.github/workflows/deploy.yml`: build → FTPS upload of `dist/` to
-  Hostinger `public_html/` → purge Cloudflare (`purge_everything`). No manual upload needed.
+- **Deploy is fully automatic. Every push to `main` deploys the site and purges Cloudflare.**
+  `.github/workflows/deploy.yml` runs: `npm ci` (Node 22) → `npm run build` → FTPS upload of
+  `dist/` to Hostinger `public_html/` (`SamKirkland/FTP-Deploy-Action@v4.3.5`) → a final step
+  that POSTs `{"purge_everything":true}` to
+  `https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache` with a Bearer
+  token. Never upload by hand and never add a manual "purge after deploy" step; it already exists.
+  The workflow also supports `workflow_dispatch` for manual re-runs.
+- Secrets live in GitHub Actions, not the repo: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`,
+  `CLOUDFLARE_ZONE_ID`, `CLOUDFLARE_API_TOKEN`, plus the variable `PUBLIC_TURNSTILE_SITE_KEY`.
+  A fresh clone deploys with zero local setup.
+- `scripts/purge-cache.sh` (tracked in git) is the on-demand local Cloudflare purge. It sources
+  `.env` from the repo root and requires `CLOUDFLARE_ZONE_ID` and `CLOUDFLARE_API_TOKEN`
+  (see `.env.example`). `.env` is gitignored, so on a new machine copy `.env.example` to `.env`
+  and fill those two values before running it. Same API call as the workflow's final step.
 - The `deploy` branch on origin is an old build-output branch. Ignore it. Never merge it.
-- Secrets live in GitHub Actions (FTP creds, Cloudflare token/zone). Locally, `.env` is
-  gitignored and only needed for `scripts/purge-cache.sh`.
 
 **The site sits behind TWO CDN layers:** Cloudflare in front, Hostinger's own CDN underneath
 (`x-hcdn-cache-status` header). The deploy purges only Cloudflare. Hostinger's CDN caches static

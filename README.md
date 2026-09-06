@@ -56,19 +56,53 @@ The contact page works out of the box on static hosting by posting to FormSubmit
 
 Leave `PUBLIC_CONTACT_FORM_AJAX_ENDPOINT` unset if you want FormSubmit's native verification flow. Set it only if you explicitly want AJAX submissions.
 
-## Deployment for Hostinger shared hosting
+## Deployment (automatic on every push to `main`)
 
-1. Run `npm run build`.
-2. Upload the contents of `dist/` to `public_html/`.
-3. Make sure your live domain matches the `site` value in `astro.config.mjs`.
-4. If you keep the default FormSubmit integration on the contact page, approve the first live verification email FormSubmit sends to `siteConfig.email`.
-5. Verify:
-   - `https://yourdomain.com/robots.txt`
-   - `https://yourdomain.com/sitemap-index.xml`
-   - blog pages
-   - service pages
-   - case study pages
-   - contact form submission and `/contact/thanks/`
+You do not upload anything by hand. Every commit pushed to `main` runs
+`.github/workflows/deploy.yml`, which:
+
+1. Installs dependencies with `npm ci` on Node 22.
+2. Runs `npm run build` (Astro check + build into `dist/`).
+3. Uploads `dist/` to Hostinger `public_html/` over FTPS
+   (`SamKirkland/FTP-Deploy-Action`).
+4. **Purges the Cloudflare cache automatically** (`purge_everything`) so the new build
+   is served right away.
+
+The workflow can also be triggered manually from the GitHub Actions tab
+(`workflow_dispatch`).
+
+Secrets it needs, stored in GitHub → Settings → Secrets and variables → Actions:
+
+- `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (Hostinger FTP account)
+- `CLOUDFLARE_ZONE_ID`, `CLOUDFLARE_API_TOKEN` (token needs Zone → Cache Purge permission)
+- Variable `PUBLIC_TURNSTILE_SITE_KEY` (contact form Turnstile)
+
+These live on GitHub, not in the repo, so a fresh clone deploys without any local setup.
+
+### Manual Cloudflare purge
+
+`scripts/purge-cache.sh` purges Cloudflare on demand from your machine. It reads
+`CLOUDFLARE_ZONE_ID` and `CLOUDFLARE_API_TOKEN` from a local `.env` (copy `.env.example`,
+fill in the two values; `.env` is gitignored).
+
+```sh
+bash scripts/purge-cache.sh
+```
+
+### If the live site still looks stale after a deploy
+
+heygenyl.com sits behind two CDN layers: Cloudflare, and Hostinger's own CDN underneath it.
+The deploy purges only Cloudflare. If a page or `sitemap-0.xml` is still old after a green
+deploy, purge Hostinger's layer first (hPanel → Websites → Manage → Advanced → Cache Manager →
+Purge all), then run the Cloudflare purge script or re-run the deploy workflow. Full notes are in
+`CLAUDE.md`.
+
+After deploying, verify:
+
+- `https://heygenyl.com/robots.txt`
+- `https://heygenyl.com/sitemap-index.xml`
+- blog, service, and case study pages
+- contact form submission and `/contact/thanks/`
 
 ## Important note
 
