@@ -292,11 +292,33 @@
 
 	.approach-flow__ticks {
 		flex: 1;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.approach-flow__ticks::before {
+		content: "";
+		position: absolute;
+		inset: 0 -7px 0 0;
 		background: repeating-linear-gradient(
 			90deg,
 			var(--color-ink) 0 2px,
 			transparent 2px 7px
 		);
+		animation: approach-flow-ticks 0.55s linear infinite;
+		will-change: transform;
+	}
+
+	@keyframes approach-flow-ticks {
+		to {
+			transform: translateX(-7px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.approach-flow__ticks::before {
+			animation: none;
+		}
 	}
 
 	.approach-flow__detail {
