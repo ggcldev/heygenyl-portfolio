@@ -18,8 +18,6 @@ pnpm-debug.log*
 .env
 .env.production
 
-# local-only AI content briefs (never committed, never rendered)
-src/data/content-briefs.md
 
 # local-only design reference material (guides only, never committed or shipped)
 .reference/
