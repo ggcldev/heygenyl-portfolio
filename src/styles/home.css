@@ -425,14 +425,18 @@
 		min-height: clamp(400px, 46vh, 540px);
 		padding: 2.1rem 2.1rem 6.5rem;
 		border-radius: 6px;
-		border: 1px solid var(--color-border);
-		background: var(--color-surface);
+		border: 1px solid transparent;
+		/* Black card on the light band (Kudos "Design that drives growth") */
+		--color-ink: #ffffff;
+		--color-muted: color-mix(in oklab, #ffffff 70%, transparent);
+		background: #050505;
+		color: #ffffff;
 	}
 
 	.value-card__mark {
 		width: 0.5rem;
 		height: 0.5rem;
-		background: var(--color-accent);
+		background: #00ffc8;
 		transform: rotate(45deg);
 	}
 
@@ -477,8 +481,8 @@
 
 	.value-card__chip:hover,
 	.value-card__chip:focus-visible {
-		border-color: var(--color-accent);
-		color: var(--color-accent);
+		border-color: #00ffc8;
+		color: #00ffc8;
 	}
 
 	.value-card__cta {
@@ -505,7 +509,9 @@
 	.value-card--mint {
 		--color-ink: #050505;
 		--color-muted: color-mix(in oklab, #050505 68%, transparent);
-		background: var(--color-accent);
+		/* Kudos card mint, sampled from the template: softened #6CEDC2,
+		   not the raw #00FFC8 accent (too harsh as a large surface). */
+		background: #6cedc2;
 		border-color: transparent;
 		color: #050505;
 	}
