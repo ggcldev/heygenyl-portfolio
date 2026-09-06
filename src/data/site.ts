@@ -688,6 +688,54 @@ export const caseStudies: CaseStudyPage[] = [
     ],
     serviceHref: "/services/seo/",
   },
+  {
+    slug: "tink-recruitment-real-estate",
+    shortTitle: "Real Estate Recruitment",
+    title: "Tink Recruitment Case Study",
+    metaTitle: "Tink Recruitment Case Study | Hey Genyl",
+    metaDescription:
+      "Technical SEO case study for Tink Recruitment, a Sydney real estate and property recruitment agency: crawlability, site health, and role-page structure.",
+    summary:
+      "Tink Recruitment is a boutique, award-winning recruitment agency in Potts Point, Sydney, specialising in real estate, property, and development roles — from property managers and leasing consultants to sales agents and strata professionals across NSW.",
+    chips: ["Technical SEO", "Recruitment agency", "Site health"],
+    snapshot: [
+      { label: "Primary focus", value: "Technical site health" },
+      { label: "Main fix", value: "Crawlability and page structure" },
+      { label: "Best proof", value: "Indexation quality" },
+      { label: "Support page", value: "Technical SEO" },
+    ],
+    challengeTitle:
+      "A strong local brand whose site structure was holding back its search footprint.",
+    challenge: [
+      "Role and specialisation pages competed with each other for the same recruitment terms",
+      "Crawl paths and internal links did not prioritise the highest-value hiring pages",
+      "Technical debt from the theme and plugins weighed on page speed and rendering",
+    ],
+    strategyTitle: "Fix the foundations first, then let the content compete.",
+    strategy: [
+      "Audit crawlability, indexation, and duplicate-path issues across the role pages",
+      "Restructure specialised-role pages so each maps to one clear hiring intent",
+      "Tighten internal linking from the homepage and blog toward role and service pages",
+    ],
+    proofPoints: [
+      {
+        title: "Indexation quality",
+        copy:
+          "Track how many role and service pages Google indexes cleanly after the crawl fixes, versus the duplicate or thin paths that were trimmed.",
+      },
+      {
+        title: "Role-page visibility",
+        copy:
+          "Note which specialised-role pages start ranking for their own hiring terms once each page owns a single intent.",
+      },
+      {
+        title: "Site health trend",
+        copy:
+          "Use crawl-error counts, Core Web Vitals, and audit scores over time — the fitting proof for a technical engagement.",
+      },
+    ],
+    serviceHref: "/services/seo/technical-seo/",
+  },
 ];
 
 export const getServiceBySlug = (slug: string) => {

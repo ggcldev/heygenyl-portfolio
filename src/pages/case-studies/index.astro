@@ -3,9 +3,10 @@ import { Picture } from "astro:assets";
 import PageHero from "../../components/PageHero.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { caseStudies, siteConfig } from "../../data/site";
-import desertItSolutionsImage from "../../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
-import worksAutoCenterImage from "../../assets/case-studies/the-works-auto-center/the-works-auto-center-img-1-desktop.webp";
-import everythingProbateImage from "../../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
+import desertItSolutionsImage from "../../assets/case-studies/desert-it-solutions/desert-it-solutions-site.jpg";
+import worksAutoCenterImage from "../../assets/case-studies/the-works-auto-center/the-works-auto-center-site.jpg";
+import everythingProbateImage from "../../assets/case-studies/everything-probate/everwood-legal-site.jpg";
+import tinkRecruitmentImage from "../../assets/case-studies/tink-recruitment/tink-recruitment-img-1-desktop.jpg";
 
 const caseStudyCardMedia = {
   "desert-it-solutions-msp": {
@@ -19,6 +20,10 @@ const caseStudyCardMedia = {
   "everything-probate-legal-firm": {
     src: everythingProbateImage,
     alt: "Everything Probate case study preview",
+  },
+  "tink-recruitment-real-estate": {
+    src: tinkRecruitmentImage,
+    alt: "Tink Recruitment case study preview",
   },
 } as const;
 

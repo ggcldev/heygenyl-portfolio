@@ -6,9 +6,10 @@ import CtaArrow from "../components/CtaArrow.astro";
 import ToolBrandIcon from "../components/ToolBrandIcon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/home.css";
-import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/desert-it-solutions-img-1-desktop.webp";
-import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-center/the-works-auto-center-img-1-desktop.webp";
-import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everything-probate-img-1-deskto.webp";
+import gutterFeaturedImage from "../assets/case-studies/desert-it-solutions/desert-it-solutions-site.jpg";
+import worksAutoCenterFeaturedImage from "../assets/case-studies/the-works-auto-center/the-works-auto-center-site.jpg";
+import everythingProbateFeaturedImage from "../assets/case-studies/everything-probate/everwood-legal-site.jpg";
+import tinkRecruitmentFeaturedImage from "../assets/case-studies/tink-recruitment/tink-recruitment-img-1-desktop.jpg";
 import { getBlogPostSlug } from "../utils/blog";
 import {
   topLevelServicePages,
@@ -39,6 +40,11 @@ const featuredProjects = [
     slug: "everything-probate-legal-firm",
     asset: everythingProbateFeaturedImage,
     alt: "Everything Probate case study preview",
+  },
+  {
+    slug: "tink-recruitment-real-estate",
+    asset: tinkRecruitmentFeaturedImage,
+    alt: "Tink Recruitment case study preview",
   },
 ].map((item) => {
   const study = caseStudies.find((entry) => entry.slug === item.slug);
@@ -198,7 +204,7 @@ const homeSchema = [
           <div class="featured-projects-copy__text">
             <h2 class="section-eyebrow featured-projects-title">Featured Projects</h2>
             <p class="text-sm text-muted mt-2">
-              Three selected projects are highlighted here. The rest stay in the
+              Four selected projects are highlighted here. The rest stay in the
               dedicated case-studies page.
             </p>
           </div>
