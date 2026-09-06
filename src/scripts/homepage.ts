@@ -488,6 +488,21 @@ testimonialTabGroups.forEach((group) => {
   if (!tabGroup) return;
 
   const { tabs, activateTab, hoverPointerQuery } = tabGroup;
+
+  // Reset to the first testimonial whenever the section scrolls out of view,
+  // so visitors always land on it pre-selected.
+  const firstTab = tabs[0];
+  if (firstTab && "IntersectionObserver" in window) {
+    const resetObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) return;
+        if (firstTab.getAttribute("aria-selected") !== "true") {
+          activateTab(firstTab);
+        }
+      });
+    });
+    resetObserver.observe(group);
+  }
   let hoverFrameId = 0;
   let pendingHoverIndex = -1;
 

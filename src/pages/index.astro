@@ -1,5 +1,6 @@
 ---
-import { Picture } from "astro:assets";
+import { Image, Picture } from "astro:assets";
+import liftedLogo from "../assets/testimonials/lifted-logo.png";
 import { getCollection } from "astro:content";
 import Hero from "../components/Hero.astro";
 import CtaArrow from "../components/CtaArrow.astro";
@@ -139,6 +140,7 @@ const testimonialItems = [
       "Genyl consistently delivers work aligned with what we need, especially around technical SEO monitoring and audits for both global and local. His communication is strong, he's open to feedback, and he's genuinely easy to work with. What stood out most was his attitude and dedication. His eagerness to understand the business helped speed up the work significantly.",
     name: "Lifted",
     role: "Upwork Company",
+    logo: liftedLogo,
   },
   {
     id: "local-service",
@@ -399,8 +401,20 @@ const homeSchema = [
                   tabindex={isActive ? "0" : "-1"}
                   data-testimonial-tab-id={item.id}
                 >
-                  <span class="testimonial-tab__name">{item.name}</span>
-                  <span class="testimonial-tab__role">{item.role}</span>
+                  {"logo" in item && item.logo && (
+                    <Image
+                      src={item.logo}
+                      alt={`${item.name} logo`}
+                      class="testimonial-tab__logo"
+                      width={48}
+                      height={48}
+                      loading="lazy"
+                    />
+                  )}
+                  <span class="testimonial-tab__meta">
+                    <span class="testimonial-tab__name">{item.name}</span>
+                    <span class="testimonial-tab__role">{item.role}</span>
+                  </span>
                 </button>
               );
             })}

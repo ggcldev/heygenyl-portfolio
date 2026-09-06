@@ -1529,8 +1529,9 @@
 	}
 
 	.testimonial-tab {
-		display: grid;
-		gap: 0.14rem;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
 		text-align: left;
 		border: 0;
 		border-right: 1px solid var(--color-border);
@@ -1559,6 +1560,18 @@
 
 	.testimonial-tab[aria-selected="true"] .testimonial-tab__role {
 		color: var(--color-accent);
+	}
+
+	.testimonial-tab__logo {
+		width: 1.7rem;
+		height: 1.7rem;
+		border-radius: 6px;
+		flex-shrink: 0;
+	}
+
+	.testimonial-tab__meta {
+		display: grid;
+		gap: 0.14rem;
 	}
 
 	.testimonial-tab__name {
