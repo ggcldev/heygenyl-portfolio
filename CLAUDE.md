@@ -91,6 +91,29 @@ implemented in `src/styles/global.css` and the components; treat the code as the
 A scraped snapshot of the template used to live in `.reference/kudos/` (gitignored, local-only,
 not on GitHub). It is optional; the live template URL is enough for reference.
 
+## 3.5 Kudos redesign status (as of 2026-09-07, session work — read before continuing)
+
+Homepage was rebuilt section-by-section to mirror https://kudos.framer.media/. All of this is
+in ~42 LOCAL commits on `main`, **deliberately not pushed yet** (push = live deploy). Done:
+
+- Hard-coded dark-first, theme toggle deleted; light appears via `.band-light` full-bleed bands.
+- Sticky hero curtain reveal; Lenis smooth scroll (desktop only); dashed column guides + grain
+  backdrop on body; universal h2 scale (64px, blog exempt); universal accent `#43d39e`.
+- Sections done Kudos-style: Featured Projects (pinned bottom-ish horizontal scroll, 5 cards,
+  live client-site screenshots, mono numbering), My Approach (black progress bars 25-100% +
+  animated tick stripes + scroll-grow), Services (black + seafoam value cards, RANK/BUILD
+  watermarks, sub-service chips), What Clients Say (light band, Lifted logo + reset-to-first
+  on scroll), Recent Posts ("Insights" 3-col header + 4 staggered cards, auto-newest-4),
+  FAQ (grouped categories, continuous numbering, dotted-plus).
+- CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
+- Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
+  blog images downscaled to 1600px cap, 3 font preloads.
+
+NOT yet done: closing CTA section + footer redesign; inner pages (services, case studies,
+contact, blog) still old design; push/deploy. New case studies added: Tink Recruitment
+(technical SEO) + LegitFit (SaaS) — proof points are metric-free placeholders awaiting real
+numbers. Testimonials 2 & 3 are "Your Name Here" placeholders.
+
 ## 4. Services information architecture
 
 Nested under two category hubs. Each page is a thin wrapper that calls
