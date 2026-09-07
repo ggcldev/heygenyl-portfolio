@@ -233,7 +233,9 @@ const homeSchema = [
             </p>
           </div>
           <div class="page-nav featured-projects-copy__cta">
-            <a class="button primary" href="/case-studies/">View all case studies</a>
+            <a class="button primary" href="/case-studies/">
+              <CtaArrow label="View All Case Studies" className="button-cta" />
+            </a>
           </div>
         </div>
 
@@ -438,7 +440,7 @@ const homeSchema = [
       </div>
     </section>
 
-    <section class="content-shell band-light">
+    <section class="content-shell">
       <div
         class="border-b py-24"
         style="border-color: var(--color-border);"
@@ -530,24 +532,28 @@ const homeSchema = [
         </div>
 
         <div class="page-nav mt-10">
-          <a class="button primary" href="/contact/">Ask about your project</a>
+          <a class="button primary" href="/contact/">
+            <CtaArrow label="Ask about your project" className="button-cta" />
+          </a>
         </div>
       </div>
     </section>
 
     <section class="content-shell">
-      <div class="border-t py-24" style="border-color: var(--color-border);">
-        <div class="mx-auto max-w-3xl text-center">
-          <h2>
-            Tired of Guessing Why Your Site Isn't Ranking?
-          </h2>
-          <p class="mx-auto mt-5 max-w-2xl text-base 2xl:text-xl text-muted">
-            I'll take a look at what's holding you back and tell you exactly what
-            needs to happen.
-          </p>
-          <div class="page-nav mt-8 justify-center">
-            <a class="button primary" href="/contact/">Let's Talk</a>
-          </div>
+      <div class="home-closing border-t" style="border-color: var(--color-border);">
+        <p class="section-eyebrow">Next Step</p>
+        <h2 class="home-closing__title">
+          <span class="insights-title__accent">Tired of guessing</span> why your
+          site isn't ranking?
+        </h2>
+        <p class="home-closing__intro">
+          I'll take a look at what's holding you back and tell you exactly what
+          needs to happen.
+        </p>
+        <div class="page-nav mt-10">
+          <a class="button primary accent" href="/contact/">
+            <CtaArrow label="Let's Talk" className="button-cta" />
+          </a>
         </div>
       </div>
     </section>

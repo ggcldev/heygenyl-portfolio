@@ -1234,3 +1234,22 @@
 		}
 	}
 }
+
+@layer components {
+	/* Kudos-style closing CTA: eyebrow, giant two-tone heading, arrow link. */
+	.home-closing {
+		padding: clamp(5rem, 10vw, 8rem) 0 clamp(2rem, 5vw, 4rem);
+	}
+
+	.home-closing__title {
+		margin: 1.5rem 0 0;
+		max-width: 16ch;
+	}
+
+	.home-closing__intro {
+		margin: 1.5rem 0 0;
+		max-width: 44ch;
+		color: var(--color-muted);
+	}
+
+}

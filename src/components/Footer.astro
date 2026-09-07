@@ -1,86 +1,84 @@
 ---
 import { siteConfig, activeServicePages } from "../data/site";
+
+const mainNav = [
+	{ label: "Home", href: "/" },
+	{ label: "Services", href: "/services/" },
+	{ label: "Case Studies", href: "/case-studies/" },
+	{ label: "Blog", href: "/blog/" },
+	{ label: "Contact", href: "/contact/" },
+];
 ---
 
-<footer class="py-10 md:py-12">
-  <div class="content-shell">
-    <div
-      class="border-t pt-8 md:pt-10"
-      style="border-color: var(--color-border);"
-    >
-      <div class="grid gap-10 md:grid-cols-2 xl:grid-cols-4">
-        <div class="grid gap-3">
-          <a
-            class="text-lg font-bold uppercase tracking-[0.08em] w-fit"
-            href="/"
-          >
-            {siteConfig.name}
-          </a>
-        </div>
+<footer class="site-footer">
+	<p class="site-footer__watermark" aria-hidden="true">HEYGENYL</p>
+	<div class="content-shell site-footer__shell">
+		<div class="site-footer__grid">
+			<div class="site-footer__left">
+				<p class="site-footer__statement">
+					I choose <span>audits over assumptions</span> and
+					<span>clarity over jargon</span>, because rankings you cannot
+					explain are rankings you cannot keep.
+				</p>
 
-        <nav class="grid gap-3" aria-label="Footer services">
-          <p class="m-0 text-xs font-bold uppercase tracking-[0.16em] text-subtle">
-            Services
-          </p>
-          <div class="grid gap-2">
-            {activeServicePages.map((service) => (
-              <a
-                class="w-fit text-sm text-muted hover:text-ink"
-                href={`/services/${service.slug}/`}
-              >
-                {service.navLabel ?? service.shortTitle}
-              </a>
-            ))}
-          </div>
-        </nav>
+				<p class="site-footer__meta">
+					SEO Specialist &amp; WordPress Designer<br />
+					Based in the Philippines
+				</p>
 
-        <nav class="grid gap-3" aria-label="Footer quick links">
-          <p class="m-0 text-xs font-bold uppercase tracking-[0.16em] text-subtle">
-            Quick Links
-          </p>
-          <div class="grid gap-2">
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/">Home</a>
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/blog/">Blog</a>
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/case-studies/">
-              Case Studies
-            </a>
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/contact/">Contact</a>
-            <a class="w-fit text-sm text-muted hover:text-ink" href="/privacy-policy/">
-              Privacy Policy
-            </a>
-            <a
-              class="w-fit text-sm text-muted hover:text-ink"
-              href="#"
-              data-site-consent-open
-            >
-              Cookie Settings
-            </a>
-          </div>
-        </nav>
+				<a
+					class="site-footer__email"
+					href="#"
+					data-ml="hi|heygenyl.com"
+					data-ml-label
+				>
+					Loading...
+				</a>
+			</div>
 
-        <div class="grid gap-3">
-          <p class="m-0 text-xs font-bold uppercase tracking-[0.16em] text-subtle">
-            Contact
-          </p>
-          <a
-            class="w-fit text-sm text-muted hover:text-ink"
-            href="#"
-            data-ml="hi|heygenyl.com"
-            data-ml-label
-          >
-            Loading...
-          </a>
-        </div>
-      </div>
+			<div class="site-footer__right">
+				<nav class="site-footer__nav" aria-label="Footer">
+					{mainNav.map((item) => (
+						<a class="site-footer__nav-link" href={item.href}>
+							{item.label}
+						</a>
+					))}
+				</nav>
 
-      <div
-        class="mt-8 border-t pt-4"
-        style="border-color: color-mix(in oklab, var(--color-ink) 10%, transparent);"
-      >
-        <p class="m-0 text-xs text-subtle">
-          © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-        </p>
-      </div>
-    </div>
-  </div>
+				<div class="site-footer__cols">
+					<nav class="site-footer__col" aria-label="Footer services">
+						<p class="site-footer__col-label">Services</p>
+						{activeServicePages.map((service) => (
+							<a
+								class="site-footer__col-link"
+								href={`/services/${service.slug}/`}
+							>
+								{service.navLabel ?? service.shortTitle}
+							</a>
+						))}
+					</nav>
+
+					<nav class="site-footer__col" aria-label="Footer legal">
+						<p class="site-footer__col-label">Legal</p>
+						<a class="site-footer__col-link" href="/privacy-policy/">
+							Privacy Policy
+						</a>
+						<a
+							class="site-footer__col-link"
+							href="#"
+							data-site-consent-open
+						>
+							Cookie Settings
+						</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="site-footer__bottom">
+			<p class="m-0">
+				© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+			</p>
+		</div>
+	</div>
 </footer>
