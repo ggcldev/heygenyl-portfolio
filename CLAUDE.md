@@ -108,9 +108,18 @@ in ~42 LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
 - CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
 - Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
   blog images downscaled to 1600px cap, 3 font preloads.
+- Footer redesigned Kudos-style (`Footer.astro` + `.site-footer__*` in global.css): cropped
+  HEYGENYL watermark, two-tone statement, mono meta, huge obfuscated email, big nav with
+  dotted leader line, Services/Legal mono columns.
+- Closing CTA redesigned: left-aligned two-tone heading + eyebrow + accent green button.
+- Kudos primary buttons (`.button.primary` in global.css): light gray `#e0e0e0` fill, corner
+  crop-mark ticks (::before), dotted-colon ornament (::after, auto-hidden via `:has(.cta-dots)`
+  when CtaArrow morph markup is embedded), `.accent` variant = seafoam fill. Homepage buttons
+  embed `<CtaArrow className="button-cta">` for the dots-to-arrow morph; cookie banner excluded.
+- Recent Posts section is now dark (band-light removed).
 
-NOT yet done: closing CTA section + footer redesign; inner pages (services, case studies,
-contact, blog) still old design; push/deploy. New case studies added: Tink Recruitment
+NOT yet done: inner pages (services, case studies, contact, blog) still old design;
+push/deploy. New case studies added: Tink Recruitment
 (technical SEO) + LegitFit (SaaS) — proof points are metric-free placeholders awaiting real
 numbers. Testimonials 2 & 3 are "Your Name Here" placeholders.
 
