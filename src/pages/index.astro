@@ -3,6 +3,7 @@ import { Image, Picture } from "astro:assets";
 import liftedLogo from "../assets/testimonials/lifted-logo.png";
 import { getCollection } from "astro:content";
 import Hero from "../components/Hero.astro";
+import AgencyLogos from "../components/AgencyLogos.astro";
 import CtaArrow from "../components/CtaArrow.astro";
 import ToolBrandIcon from "../components/ToolBrandIcon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -23,6 +24,33 @@ import {
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4);
+
+// Kudos Insights: card tops line up and each slot gets its own image shape
+// (width / height), giving the tall-short-tall-short rhythm.
+const insightRatios = [2 / 3, 1.68, 3 / 4, 3 / 2];
+const insightWidths = [320, 480, 640, 960, 1280, 1600];
+const insightCards = posts.map((post, index) => {
+  const image = post.data.image ?? gutterFeaturedImage;
+  const ratio = insightRatios[index % insightRatios.length] ?? 4 / 3;
+  // A tall crop of a wide image shows only its middle, so ask for a wider
+  // file to keep it sharp. Phones use a fixed 4:3 crop.
+  const sourceRatio = image.width / image.height;
+  const scale = Math.max(1, sourceRatio / ratio);
+  const phoneScale = Math.max(1, sourceRatio / (4 / 3));
+  const widths = insightWidths.filter((w) => w <= image.width);
+  return {
+    post,
+    image,
+    ratio,
+    widths: widths.length ? widths : [image.width],
+    sizes: [
+      `(max-width: 639px) ${Math.ceil(100 * phoneScale)}vw`,
+      `(max-width: 1023px) ${Math.ceil(50 * scale)}vw`,
+      `(min-width: 1920px) ${Math.ceil(480 * scale)}px`,
+      `${Math.ceil(25 * scale)}vw`,
+    ].join(", "),
+  };
+});
 
 const featuredProjects = [
   {
@@ -217,6 +245,8 @@ const homeSchema = [
         { label: "Contact", href: "/contact/" },
       ]}
     />
+
+    <AgencyLogos />
 
     <section
       class="content-shell band-light featured-projects-scroll"
@@ -457,33 +487,38 @@ const homeSchema = [
         </div>
 
         <div class="insights-grid">
-          {posts.map((post) => {
+          {insightCards.map(({ post, image, ratio, widths, sizes }) => {
             const postSlug = getBlogPostSlug(post);
-            const previewImage = post.data.image ?? gutterFeaturedImage;
             return (
-              <a class="insight-card" href={`/blog/${postSlug}/`}>
+              <a
+                class="insight-card"
+                href={`/blog/${postSlug}/`}
+                style={`--insight-ratio: ${ratio}`}
+              >
                 <div class="insight-card__media">
                   <Picture
-                    src={previewImage}
+                    src={image}
                     alt={post.data.imageAlt ?? `${post.data.title} post cover`}
                     formats={["avif", "webp"]}
                     fallbackFormat="webp"
-                    widths={[320, 480, 640]}
-                    sizes="(max-width: 639px) 100vw, (max-width: 1023px) 44vw, 320px"
+                    widths={widths}
+                    sizes={sizes}
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
-                <p class="insight-card__date">
-                  {post.data.pubDate.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </p>
-                <h3 class="insight-card__title">{post.data.title}</h3>
-                <p class="insight-card__excerpt">{post.data.excerpt}</p>
-                <CtaArrow label="Read more" className="insight-card__more" />
+                <div class="insight-card__body">
+                  <p class="insight-card__date">
+                    {post.data.pubDate.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <h3 class="insight-card__title">{post.data.title}</h3>
+                  <p class="insight-card__excerpt">{post.data.excerpt}</p>
+                  <CtaArrow label="Read more" className="insight-card__more" />
+                </div>
               </a>
             );
           })}
@@ -529,12 +564,6 @@ const homeSchema = [
               </div>
             </div>
           ))}
-        </div>
-
-        <div class="page-nav mt-10">
-          <a class="button primary" href="/contact/">
-            <CtaArrow label="Ask about your project" className="button-cta" />
-          </a>
         </div>
       </div>
     </section>

@@ -91,10 +91,10 @@ implemented in `src/styles/global.css` and the components; treat the code as the
 A scraped snapshot of the template used to live in `.reference/kudos/` (gitignored, local-only,
 not on GitHub). It is optional; the live template URL is enough for reference.
 
-## 3.5 Kudos redesign status (as of 2026-09-07, session work — read before continuing)
+## 3.5 Kudos redesign status (as of 2026-10-17, session work — read before continuing)
 
 Homepage was rebuilt section-by-section to mirror https://kudos.framer.media/. All of this is
-in ~42 LOCAL commits on `main`, **deliberately not pushed yet** (push = live deploy). Done:
+in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live deploy). Done:
 
 - Hard-coded dark-first, theme toggle deleted; light appears via `.band-light` full-bleed bands.
 - Sticky hero curtain reveal; Lenis smooth scroll (desktop only); dashed column guides + grain
@@ -103,8 +103,14 @@ in ~42 LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   live client-site screenshots, mono numbering), My Approach (black progress bars 25-100% +
   animated tick stripes + scroll-grow), Services (black + seafoam value cards, RANK/BUILD
   watermarks, sub-service chips), What Clients Say (light band, Lifted logo + reset-to-first
-  on scroll), Recent Posts ("Insights" 3-col header + 4 staggered cards, auto-newest-4),
-  FAQ (grouped categories, continuous numbering, dotted-plus).
+  on scroll), Recent Posts ("Insights" 3-col header + 4 top-aligned cards, auto-newest-4;
+  cards sit exactly between the dashed guides via `--shell-pad`, image shape per slot
+  2:3 / 1.68 / 3:4 / 3:2, phones 4:3), FAQ (grouped categories, continuous numbering,
+  dotted-plus, no CTA button — the closing CTA covers it).
+- Agency logo strip right after the hero (`AgencyLogos.astro`, logos in
+  `src/assets/agencies/`): Kudos ticker, label in the first guide column, 8 agency logos
+  scrolling, pause on hover, static for reduced motion. Logos are one-color on purpose
+  (`tone`: solid / invert / gray keeps inner details); Dealers United is only a 171px PNG.
 - CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
 - Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
   blog images downscaled to 1600px cap, 3 font preloads.

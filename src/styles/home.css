@@ -5,10 +5,13 @@
 
 @layer components {
 	.home-page .content-shell {
+		/* Shared so the Insights grid can line its columns up with the
+		   page-wide dashed guides. */
+		--shell-pad: clamp(1rem, 2.4vw, 1.5rem);
 		width: min(100%, var(--page-max));
 		max-width: var(--page-max);
 		margin-inline: auto;
-		padding-inline: clamp(1rem, 2.4vw, 1.5rem);
+		padding-inline: var(--shell-pad);
 	}
 
 	/* Kudos-style curtain reveal: the hero pins to the top while the next
@@ -30,6 +33,141 @@
 		background: var(--color-paper);
 		box-shadow: 0 0 0 100vmax var(--color-paper);
 		clip-path: inset(0 -100vmax);
+	}
+
+	/* Agency logo strip right after the hero (Kudos ticker): a slightly
+	   lifted band between dashed rules, the label in the first guide
+	   column, logos scrolling forever in the rest. */
+	.home-page > section.agency-strip {
+		--strip-dash: repeating-linear-gradient(
+			90deg,
+			rgb(128 128 128 / 0.24) 0 5px,
+			transparent 5px 13px
+		);
+		background:
+			var(--strip-dash) top / 100% 1px no-repeat,
+			var(--strip-dash) bottom / 100% 1px no-repeat,
+			var(--color-surface);
+		box-shadow: 0 0 0 100vmax var(--color-surface);
+	}
+
+	.agency-strip__inner {
+		display: grid;
+		padding-top: 1.75rem;
+	}
+
+	@media (min-width: 1024px) {
+		/* Same column maths as the Insights grid: the label column ends
+		   exactly on the 25% guide. */
+		.agency-strip__inner {
+			--edge: calc(var(--shell-pad) / 2);
+			grid-template-columns: calc(25% - var(--edge)) minmax(0, 1fr);
+			align-items: center;
+			padding-top: 0;
+		}
+	}
+
+	.agency-strip__viewport {
+		overflow: hidden;
+		padding-block: 1.5rem;
+		mask-image: linear-gradient(
+			90deg,
+			transparent,
+			#000 8%,
+			#000 92%,
+			transparent
+		);
+	}
+
+	@media (min-width: 1024px) {
+		.agency-strip__viewport {
+			padding-block: 2rem;
+		}
+	}
+
+	/* Two identical lists; sliding the pair left by half loops seamlessly. */
+	.agency-strip__track {
+		display: flex;
+		width: max-content;
+		animation: agency-marquee 45s linear infinite;
+	}
+
+	.agency-strip__viewport:hover .agency-strip__track {
+		animation-play-state: paused;
+	}
+
+	@keyframes agency-marquee {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	.agency-strip__list {
+		--logo-gap: 5rem;
+		display: flex;
+		align-items: center;
+		gap: var(--logo-gap);
+		margin: 0;
+		padding: 0 var(--logo-gap) 0 0;
+		list-style: none;
+	}
+
+	.agency-strip__logo {
+		display: block;
+		width: auto;
+		max-width: none;
+		height: calc(var(--logo-h) * var(--logo-scale, 1));
+		opacity: 0.72;
+		transition: opacity 200ms ease;
+	}
+
+	.agency-strip__item:hover .agency-strip__logo {
+		opacity: 1;
+	}
+
+	.agency-strip__logo--solid {
+		filter: brightness(0) invert(1);
+	}
+
+	.agency-strip__logo--invert {
+		filter: grayscale(1) invert(1);
+	}
+
+	.agency-strip__logo--gray {
+		filter: grayscale(1);
+	}
+
+	@media (max-width: 767px) {
+		.agency-strip {
+			--logo-scale: 0.75;
+		}
+
+		.agency-strip__list {
+			--logo-gap: 3rem;
+		}
+	}
+
+	/* Reduced motion: no scrolling, just the logos wrapped and centered. */
+	@media (prefers-reduced-motion: reduce) {
+		.agency-strip__track {
+			width: auto;
+			animation: none;
+		}
+
+		.agency-strip__viewport {
+			mask-image: none;
+		}
+
+		.agency-strip__list {
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 1.5rem 3rem;
+			padding: 0;
+		}
+
+		.agency-strip__list[aria-hidden="true"] {
+			display: none;
+		}
 	}
 
 
@@ -108,7 +246,7 @@
 
 	@media (max-width: 767px) {
 		.home-page .content-shell {
-			padding-inline: 1rem;
+			--shell-pad: 1rem;
 		}
 	}
 
@@ -396,7 +534,7 @@
 	}
 
 	/* Kudos "Insights": 3-col header (eyebrow / two-tone title / intro),
-	   then 4 staggered post cards. */
+	   then 4 top-aligned post cards with varied image heights. */
 	.insights-header {
 		display: grid;
 		gap: 1.25rem;
@@ -448,9 +586,12 @@
 		}
 	}
 
+	/* No column gap: each card fills the space between two dashed guides
+	   (body::before, at 25/50/75% of the page), like Kudos. */
 	.insights-grid {
 		display: grid;
-		gap: 2.25rem 1.5rem;
+		gap: 1.5rem 0;
+		align-items: start;
 	}
 
 	@media (min-width: 640px) {
@@ -460,36 +601,36 @@
 	}
 
 	@media (min-width: 1024px) {
+		/* The outer columns give up half the shell padding each, so the
+		   inner column edges land exactly on the guides. */
 		.insights-grid {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-		}
-
-		/* Kudos stagger: columns start at different heights */
-		.insight-card:nth-child(4n + 1) {
-			margin-top: 3.5rem;
-		}
-
-		.insight-card:nth-child(4n + 3) {
-			margin-top: 2rem;
-		}
-
-		.insight-card:nth-child(4n) {
-			margin-top: 1rem;
+			--edge: calc(var(--shell-pad) / 2);
+			grid-template-columns:
+				calc(25% - var(--edge)) calc(25% + var(--edge))
+				calc(25% + var(--edge)) calc(25% - var(--edge));
 		}
 	}
 
 	.insight-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.7rem;
 		min-width: 0;
+		padding-bottom: 3rem;
+		/* Dashed bottom rule, same dash and color as the column guides */
+		background: repeating-linear-gradient(
+				90deg,
+				rgb(128 128 128 / 0.24) 0 5px,
+				transparent 5px 13px
+			)
+			bottom / 100% 1px no-repeat;
 	}
 
 	.insight-card__media {
 		position: relative;
 		overflow: hidden;
 		isolation: isolate;
-		margin-bottom: 0.45rem;
+		margin-inline: 6px;
+		border-radius: 6px;
 	}
 
 	/* Same darkening layer as the featured-project cards; lifts on hover */
@@ -527,27 +668,46 @@
 		filter: grayscale(0);
 	}
 
+	/* Per-slot image shape (set inline from index.astro); phones keep 4:3
+	   so a tall crop never fills the whole screen. */
+	@media (min-width: 640px) {
+		.insight-card__media img {
+			aspect-ratio: var(--insight-ratio, 4 / 3);
+		}
+	}
+
+	.insight-card__body {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1.5rem;
+		padding: 1.5rem 1.5rem 0;
+	}
+
 	.insight-card__date {
 		margin: 0;
 		font-family: var(--font-mono);
-		font-size: 0.78rem;
+		font-size: 0.75rem;
 		font-weight: 500;
+		line-height: 1;
 		color: var(--color-muted);
 	}
 
 	.insight-card__title {
 		margin: 0;
-		font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+		font-size: 1.25rem;
 		font-weight: 700;
-		line-height: 1.2;
-		letter-spacing: -0.015em;
+		line-height: 1;
+		letter-spacing: -0.02em;
 	}
 
 	.insight-card__excerpt {
 		margin: 0;
 		color: var(--color-muted);
-		font-size: 0.95rem;
-		line-height: 1.45;
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
@@ -555,7 +715,6 @@
 	}
 
 	.insight-card__more {
-		margin-top: 0.25rem;
 		transition:
 			transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1),
 			color 220ms ease;

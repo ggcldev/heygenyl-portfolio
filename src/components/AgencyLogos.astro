@@ -1,0 +1,64 @@
+---
+import { Image } from "astro:assets";
+import fiftyOneBlocks from "../assets/agencies/51blocks.png";
+import dealersUnited from "../assets/agencies/dealers-united.png";
+import digDesigns from "../assets/agencies/dig-designs.png";
+import innovision from "../assets/agencies/innovision.png";
+import lifted from "../assets/agencies/lifted.svg";
+import rockStar from "../assets/agencies/rock-star-marketing.png";
+import techPro from "../assets/agencies/tech-pro-marketing.svg";
+import utahSeo from "../assets/agencies/utah-seo-experts.png";
+
+// Agencies Genyl has worked with, shown as a Kudos-style logo ticker.
+// `height` (px) balances the logos by eye: long wordmarks sit shorter,
+// stacked marks taller. `tone` is the one-color treatment that keeps each
+// logo's inner details visible on the dark band:
+//   solid:  turns the whole logo into one white shape
+//   invert: flips a dark-on-light logo to light-on-dark
+//   gray:   drops the color from a logo already made for dark backgrounds
+const agencies = [
+  { name: "51Blocks", logo: fiftyOneBlocks, height: 22, tone: "solid" },
+  { name: "Lifted", logo: lifted, height: 44, tone: "solid" },
+  { name: "Utah SEO Experts", logo: utahSeo, height: 54, tone: "solid" },
+  { name: "Tech Pro Marketing", logo: techPro, height: 26, tone: "invert" },
+  { name: "InnoVision SEO & Marketing", logo: innovision, height: 54, tone: "gray" },
+  { name: "Rock Star Marketing", logo: rockStar, height: 42, tone: "solid" },
+  { name: "Dig Designs", logo: digDesigns, height: 30, tone: "solid" },
+  { name: "Dealers United", logo: dealersUnited, height: 33, tone: "invert" },
+];
+---
+
+<section class="content-shell agency-strip" aria-labelledby="agency-strip-label">
+  <div class="agency-strip__inner">
+    <p class="insights-eyebrow agency-strip__label" id="agency-strip-label">
+      Agencies I've worked with
+    </p>
+    <div class="agency-strip__viewport">
+      <div class="agency-strip__track">
+        {
+          [0, 1].map((copy) => (
+            <ul
+              class="agency-strip__list"
+              aria-hidden={copy === 1 ? "true" : undefined}
+            >
+              {agencies.map((agency) => (
+                <li class="agency-strip__item">
+                  <Image
+                    src={agency.logo}
+                    alt={copy === 0 ? agency.name : ""}
+                    height={agency.height}
+                    densities={[1, 2]}
+                    class={`agency-strip__logo agency-strip__logo--${agency.tone}`}
+                    style={`--logo-h: ${agency.height}px`}
+                    loading="eager"
+                    decoding="async"
+                  />
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
