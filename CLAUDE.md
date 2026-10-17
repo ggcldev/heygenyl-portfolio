@@ -100,7 +100,8 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
 - Sticky hero curtain reveal; Lenis smooth scroll (desktop only); dashed column guides + grain
   backdrop on body; universal h2 scale (64px, blog exempt); universal accent `#43d39e`.
 - Sections done Kudos-style: Featured Projects (pinned bottom-ish horizontal scroll, 5 cards,
-  live client-site screenshots, mono numbering), My Approach (black progress bars 25-100% +
+  live client-site screenshots, mono numbering; owner KEEPS this own design — a full Kudos
+  "Created with clear purpose" rebuild was tried 2026-10-17 and rejected), My Approach (black progress bars 25-100% +
   animated tick stripes + scroll-grow), Services (black + seafoam value cards, RANK/BUILD
   watermarks, sub-service chips), What Clients Say (light band, Lifted logo + reset-to-first
   on scroll), Recent Posts ("Insights" 3-col header + 4 top-aligned cards, auto-newest-4;
@@ -108,9 +109,13 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   2:3 / 1.68 / 3:4 / 3:2, phones 4:3), FAQ (grouped categories, continuous numbering,
   dotted-plus, no CTA button — the closing CTA covers it).
 - Agency logo strip right after the hero (`AgencyLogos.astro`, logos in
-  `src/assets/agencies/`): Kudos ticker, label in the first guide column, 8 agency logos
-  scrolling, pause on hover, static for reduced motion. Logos are one-color on purpose
-  (`tone`: solid / invert / gray keeps inner details); Dealers United is only a 171px PNG.
+  `src/assets/agencies/`): top of the light band (`band-light`, same #ededed paper as
+  Featured Projects, dashed rule under it); Kudos ticker, label in the first guide column, 8 agency logos in their own
+  colors, pause on hover, static for reduced motion. Logo prep: 51Blocks' light-grey
+  "BLOCKS" darkened to #4a4a4a for the light band, Rock Star JPG keyed to transparent,
+  Rock Star + InnoVision taglines cropped, Dig Designs white PNG recolored to their site
+  colors (their SVG needs an unembedded font). Lifted + Tech Pro are svgo-optimized SVGs;
+  the rest are PNGs (Astro ships small WebP). Dealers United is only a 171px PNG.
 - CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
 - Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
   blog images downscaled to 1600px cap, 3 font preloads.

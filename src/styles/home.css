@@ -35,9 +35,10 @@
 		clip-path: inset(0 -100vmax);
 	}
 
-	/* Agency logo strip right after the hero (Kudos ticker): a slightly
-	   lifted band between dashed rules, the label in the first guide
-	   column, logos scrolling forever in the rest. */
+	/* Agency logo strip right after the hero (Kudos ticker): top of the
+	   light band, same paper as Featured Projects with a dashed rule under
+	   it, the label in the first guide column, logos in their own colors
+	   scrolling forever in the rest. */
 	.home-page > section.agency-strip {
 		--strip-dash: repeating-linear-gradient(
 			90deg,
@@ -45,10 +46,8 @@
 			transparent 5px 13px
 		);
 		background:
-			var(--strip-dash) top / 100% 1px no-repeat,
 			var(--strip-dash) bottom / 100% 1px no-repeat,
-			var(--color-surface);
-		box-shadow: 0 0 0 100vmax var(--color-surface);
+			var(--color-paper);
 	}
 
 	.agency-strip__inner {
@@ -117,24 +116,6 @@
 		width: auto;
 		max-width: none;
 		height: calc(var(--logo-h) * var(--logo-scale, 1));
-		opacity: 0.72;
-		transition: opacity 200ms ease;
-	}
-
-	.agency-strip__item:hover .agency-strip__logo {
-		opacity: 1;
-	}
-
-	.agency-strip__logo--solid {
-		filter: brightness(0) invert(1);
-	}
-
-	.agency-strip__logo--invert {
-		filter: grayscale(1) invert(1);
-	}
-
-	.agency-strip__logo--gray {
-		filter: grayscale(1);
 	}
 
 	@media (max-width: 767px) {
