@@ -101,7 +101,12 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   backdrop on body; universal h2 scale (64px, blog exempt); universal accent `#43d39e`.
 - Sections done Kudos-style: Featured Projects (pinned bottom-ish horizontal scroll, 5 cards,
   live client-site screenshots, mono numbering; owner KEEPS this own design — a full Kudos
-  "Created with clear purpose" rebuild was tried 2026-10-17 and rejected), My Approach (black progress bars 25-100% +
+  "Created with clear purpose" rebuild was tried 2026-10-17 and rejected). Cards are dark
+  Kudos "studio" cards with the screenshot on a CSS laptop (`.featured-project-device`,
+  76% wide, 86% on phones). On desktop the heading pins at 9vh and card width follows
+  screen height (`(91vh - 352px) * 1.6`, 600-960px) so the FULL description always fits
+  under the pinned card (owner approved on MacBook Air + 27"; don't clamp the text),
+  My Approach (black progress bars 25-100% +
   animated tick stripes + scroll-grow), Services (black + seafoam value cards, RANK/BUILD
   watermarks, sub-service chips), What Clients Say (light band, Lifted logo + reset-to-first
   on scroll), Recent Posts ("Insights" 3-col header + 4 top-aligned cards, auto-newest-4;

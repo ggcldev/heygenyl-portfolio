@@ -1211,15 +1211,94 @@
 	}
 
 	.featured-project-card {
-		border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
-		background: transparent;
+		overflow: hidden;
+		border-radius: 6px;
 	}
 
+	/* Kudos-style project shot: a dark studio card with the client's site
+	   on a laptop drawn in CSS (no mockup image to download). */
 	.featured-project-media {
-		display: block;
+		display: grid;
+		place-items: center;
 		position: relative;
 		overflow: hidden;
 		isolation: isolate;
+		aspect-ratio: 16 / 10;
+		background: radial-gradient(
+			130% 95% at 24% 6%,
+			#3b3b3b 0%,
+			#1a1a1a 44%,
+			#070707 100%
+		);
+	}
+
+	.featured-project-device {
+		width: 76%;
+		transition: transform 700ms cubic-bezier(0.44, 0, 0.56, 1);
+	}
+
+	@media (max-width: 639px) {
+		.featured-project-device {
+			width: 86%;
+		}
+	}
+
+	.featured-project-item:hover .featured-project-device,
+	.featured-project-item:focus-within .featured-project-device {
+		transform: scale(1.03);
+	}
+
+	/* Screen: black bezel with an aluminium edge and a soft drop shadow */
+	.featured-project-screen {
+		position: relative;
+		padding: 2.2% 2.2% 2.8%;
+		border-radius: 2.6% / 4%;
+		background: #0b0b0b;
+		box-shadow:
+			inset 0 0 0 1px rgb(255 255 255 / 0.16),
+			0 2rem 3.5rem -1.25rem rgb(0 0 0 / 0.75);
+	}
+
+	/* Camera notch */
+	.featured-project-screen::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		z-index: 1;
+		width: 11%;
+		aspect-ratio: 3 / 1;
+		transform: translateX(-50%);
+		border-radius: 0 0 6px 6px;
+		background: #0b0b0b;
+	}
+
+	/* Base: a lip wider than the screen, with the thumb scoop */
+	.featured-project-base {
+		position: relative;
+		width: 108%;
+		margin-left: -4%;
+		aspect-ratio: 42 / 1;
+		border-radius: 2px 2px 45% 45% / 2px 2px 100% 100%;
+		background: linear-gradient(
+			180deg,
+			#8c8c8c 0%,
+			#3f3f3f 32%,
+			#171717 70%,
+			#0a0a0a 100%
+		);
+	}
+
+	.featured-project-base::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: 15%;
+		height: 42%;
+		transform: translateX(-50%);
+		border-radius: 0 0 8px 8px;
+		background: linear-gradient(180deg, #262626, #4a4a4a);
 	}
 
 	.featured-project-media::after {
@@ -1249,6 +1328,8 @@
 		height: auto;
 		aspect-ratio: 16 / 10;
 		object-fit: cover;
+		object-position: top center;
+		border-radius: 3px;
 	}
 
 	.featured-project-content {
@@ -1339,20 +1420,21 @@
 		.featured-projects-scroll.is-enhanced .featured-project-media {
 			height: 100%;
 		}
-
-		.featured-projects-scroll.is-enhanced .featured-project-media picture {
-			height: 100%;
-		}
-
-		.featured-projects-scroll.is-enhanced .featured-project-media img {
-			height: 100%;
-			aspect-ratio: 16 / 10;
-		}
 	}
 
 	@media (min-width: 1024px) {
+		/* Heading pins a little higher on desktop to leave room for the
+		   cards below it. */
+		.featured-projects-scroll {
+			--featured-stick-top: clamp(4.5rem, 9vh, 12rem);
+		}
+
+		/* Cards grow with the screen height while the pinned row (heading,
+		   card, full description) still fits with room to spare:
+		   91vh - 352px is the card height left after the pin offset (9vh),
+		   the heading, the description block and a bottom margin. */
 		.featured-projects-scroll.is-enhanced .featured-project-item {
-			flex-basis: 700px;
+			flex-basis: min(100%, clamp(600px, calc((91vh - 352px) * 1.6), 960px));
 		}
 	}
 
@@ -1361,6 +1443,10 @@
 			transition: none;
 			opacity: 1 !important;
 			transform: none !important;
+		}
+
+		.featured-project-device {
+			transition: none;
 		}
 
 		.testimonial-panels,

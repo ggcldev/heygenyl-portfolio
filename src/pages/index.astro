@@ -278,17 +278,22 @@ const homeSchema = [
                     class="featured-project-media"
                     href={`/case-studies/${project.study.slug}/`}
                   >
-                    <Picture
-                      src={project.asset}
-                      alt={project.alt}
-                      formats={["avif", "webp"]}
-                      fallbackFormat="webp"
-                      widths={[640, 960, 1280, 1600]}
-                      sizes="(max-width: 767px) 88vw, (max-width: 1200px) 62vw, 960px"
-                      loading={index === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      fetchpriority={index === 0 ? "high" : "auto"}
-                    />
+                    <div class="featured-project-device">
+                      <div class="featured-project-screen">
+                        <Picture
+                          src={project.asset}
+                          alt={project.alt}
+                          formats={["avif", "webp"]}
+                          fallbackFormat="webp"
+                          widths={[640, 960, 1280, 1600]}
+                          sizes="(max-width: 767px) 88vw, (max-width: 1200px) 62vw, 700px"
+                          loading={index === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          fetchpriority={index === 0 ? "high" : "auto"}
+                        />
+                      </div>
+                      <div class="featured-project-base" aria-hidden="true"></div>
+                    </div>
                   </a>
                 </div>
                 <div class="featured-project-content">
