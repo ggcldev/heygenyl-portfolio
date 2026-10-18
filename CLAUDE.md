@@ -139,6 +139,12 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   HEYGENYL watermark, two-tone statement, mono meta, huge obfuscated email, big nav with
   dotted leader line, Services/Legal mono columns.
 - Closing CTA redesigned: left-aligned two-tone heading + eyebrow + accent green button.
+  Colors follow Kudos' newsletter (2026-10-18): light band one step darker than the FAQ
+  above, and the footer starts flush under it on the homepage (no 4rem dark gap, no top
+  border).
+- Darker light band `.band-light.band-shade` (global.css, paper #e8e8e8 vs #ededed; Kudos
+  #f5f5f5 vs #fafafa) on Services, What Clients Say and Next Step (owner's pick). Featured,
+  My Approach and FAQ stay #ededed.
 - Kudos primary buttons (`.button.primary` in global.css): light gray `#e0e0e0` fill, corner
   crop-mark ticks (::before), dotted-colon ornament (::after, auto-hidden via `:has(.cta-dots)`
   when CtaArrow morph markup is embedded), `.accent` variant = seafoam fill. Homepage buttons

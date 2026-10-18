@@ -1478,4 +1478,11 @@
 		color: var(--color-muted);
 	}
 
+	/* Next Step sits on the darker light band (.band-shade), so the footer starts right
+	   under it, no dark gap. */
+	main:has(> .home-page) + .site-footer {
+		margin-top: 0;
+		border-top: 0;
+	}
+
 }
