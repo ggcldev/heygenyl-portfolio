@@ -28,6 +28,7 @@ const { title, titleAccent, description, actions = [], role, location } =
   class="content-shell hero-shell"
   style="min-height: calc(100vh - (var(--grid-cell) / 2));"
 >
+  <canvas class="hero-shader" aria-hidden="true"></canvas>
   <div class="hero-shell__content">
     <div class="hero-headline-wrap grid gap-8 md:gap-10 pb-6 md:pb-10">
       <div class="flex flex-col lg:flex-row lg:justify-between items-start gap-8 md:gap-10">
@@ -81,3 +82,7 @@ const { title, titleAccent, description, actions = [], role, location } =
     </div>
   </div>
 </section>
+
+<script>
+  import "../scripts/hero-shader";
+</script>

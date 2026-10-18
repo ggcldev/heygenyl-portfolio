@@ -162,6 +162,32 @@ New case studies added: Tink Recruitment
 (technical SEO) + LegitFit (SaaS) — proof points are metric-free placeholders awaiting real
 numbers. Testimonials 2 & 3 are "Your Name Here" placeholders.
 
+### 3.5b Hero wave background (added 2026-10-18)
+
+Kudos' hero runs a heavy Framer WebGL shader: a turbulence field mapped onto 5 very dark greys
+(#050505..#1a1a1a, out of order so it reads as rolling waves), zoomed far in (scale 0.4),
+time x0.3, full resolution, 60 fps. Owner wanted a light version. Rejected rounds: high-contrast
+grey ribbons ("heavy"), still prism fan of spectrum light ("not moving"), spectrum-coloured
+ribbons ("too heavy, Kudos is more of a waves"); dark spectrum tints test muddy; a lighter
+2-layer variant ("awful, burning"); 4 simple options A-D (all rejected). CURRENT (owner:
+"exact Kudos copy but don't copy the whole thing"): the Kudos look rebuilt from scratch in our
+own GLSL with their published-look settings in `LOOK` (zoom 0.4, bend 0.4, wave 2, speed 0.3,
+five tones #050505..#1a1a1a blended by OKLab lightness, exposure/contrast 1.1); one turbulence
+pass read as three phase-shifted waves (1:2:1); our own seeds/angle. No Framer code copied.
+Owner then added (approved "great job"): a thin brand-colour rim (`EDGE` in hero-shader.ts:
+green #43d39e → teal → blue → violet, biased to green/teal) only where a wave rises into its
+crest, fading in toward the screen edges and kept out from behind the headline. Final build:
+script 6.8 KB (3.4 KB gzip), Lighthouse 99 mobile / 100 desktop, TBT 0.
+`src/scripts/hero-shader.ts` + `<canvas class="hero-shader">` in `Hero.astro`, ~5 KB, no
+library. LESSON: match the reference by reading its shader settings and sampling pixels first.
+Drawn at 0.34x resolution and stretched, 30 fps cap, paused when the next section
+covers the sticky hero or the tab is hidden, starts after load + idle, one still frame for
+reduced motion / data saver, cursor push on fine pointers, stops itself if early frames are
+slow. Grain comes from the existing body::after overlay. SKIPS ENTIRELY without a real GPU
+(probe canvas + renderer name): forced SwiftShader made Lighthouse block ~10 s as soon as any
+WebGL context existed. Normal Lighthouse (no WebGL, like PageSpeed) = 99, TBT 0. Headless
+test browsers have no GPU, so use `/?shader=force` on the dev server to see it (dev-only).
+
 ### 3.6 Free SEO audit (hero lead magnet, added 2026-10-18)
 
 Owner's spec: visitor enters a website, gets a `.xlsx` of their pages and issues (titles,

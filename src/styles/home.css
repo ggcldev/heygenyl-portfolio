@@ -27,6 +27,25 @@
 		z-index: 0;
 	}
 
+	/* Smoky silk background (src/scripts/hero-shader.ts): full-bleed behind the hero content,
+	   drawn small and stretched, fades in once the first frame is ready. */
+	.hero-shader {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		z-index: 0;
+		width: 100vw;
+		height: 100%;
+		transform: translateX(-50%);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 1.4s ease;
+	}
+
+	.hero-shader.is-ready {
+		opacity: 1;
+	}
+
 	.home-page > section:not(.hero-shell) {
 		position: relative;
 		z-index: 1;
