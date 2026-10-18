@@ -91,10 +91,11 @@ implemented in `src/styles/global.css` and the components; treat the code as the
 A scraped snapshot of the template used to live in `.reference/kudos/` (gitignored, local-only,
 not on GitHub). It is optional; the live template URL is enough for reference.
 
-## 3.5 Kudos redesign status (as of 2026-10-17, session work — read before continuing)
+## 3.5 Kudos redesign status (as of 2026-10-18, session work — read before continuing)
 
-Homepage was rebuilt section-by-section to mirror https://kudos.framer.media/. All of this is
-in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live deploy). Done:
+Homepage was rebuilt section-by-section to mirror https://kudos.framer.media/. It went LIVE
+2026-10-18 (pushed at `7c4177c` on the owner's go). Push = live deploy, so every push still
+needs the owner's explicit go. Done:
 
 - Hard-coded dark-first, theme toggle deleted; light appears via `.band-light` full-bleed bands.
 - Sticky hero curtain reveal; Lenis smooth scroll (desktop only); dashed column guides + grain
@@ -151,8 +152,10 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   embed `<CtaArrow className="button-cta">` for the dots-to-arrow morph; cookie banner excluded.
 - Recent Posts section is now dark (band-light removed).
 
-NOT yet done: inner pages (services, case studies, contact, blog) still old design;
-push/deploy. New case studies added: Tink Recruitment
+NOT yet done: inner pages (services, case studies, contact, blog) still old design.
+Hero role line is "SEO Specialist | Website Designer" (owner, 2026-10-18); the hero intro
+and homepage meta title still say "WordPress SEO expert" (SEO wording, owner's call).
+New case studies added: Tink Recruitment
 (technical SEO) + LegitFit (SaaS) — proof points are metric-free placeholders awaiting real
 numbers. Testimonials 2 & 3 are "Your Name Here" placeholders.
 
