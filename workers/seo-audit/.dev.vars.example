@@ -1,0 +1,5 @@
+# Copy to .dev.vars for `npm run audit:dev`. These are Cloudflare's public
+# Turnstile TEST keys (always pass); the real secret lives only in Cloudflare.
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+# Test tokens report hostname "example.com", so don't check hostnames locally.
+TURNSTILE_HOSTNAMES=

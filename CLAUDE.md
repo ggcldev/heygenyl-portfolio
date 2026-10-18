@@ -153,11 +153,45 @@ needs the owner's explicit go. Done:
 - Recent Posts section is now dark (band-light removed).
 
 NOT yet done: inner pages (services, case studies, contact, blog) still old design.
-Hero role line is "SEO Specialist | Website Designer" (owner, 2026-10-18); the hero intro
+Hero H1 is "Freelance SEO Specialist & Web Designer for Local Businesses and Agencies" (first
+half in accent green via Hero's `titleAccent` prop, "&" kept with "Web" by a no-break space,
+size lg 4.75rem / md 4.4rem / sm 7.3vw / 10vw, a touch smaller than before) and the
+role line "SEO Specialist | Website Designer" (owner, 2026-10-18); the hero intro
 and homepage meta title still say "WordPress SEO expert" (SEO wording, owner's call).
 New case studies added: Tink Recruitment
 (technical SEO) + LegitFit (SaaS) — proof points are metric-free placeholders awaiting real
 numbers. Testimonials 2 & 3 are "Your Name Here" placeholders.
+
+### 3.6 Free SEO audit (hero lead magnet, added 2026-10-18)
+
+Owner's spec: visitor enters a website, gets a `.xlsx` of their pages and issues (titles,
+descriptions, H1s, structured data...). No separate page, no keyword target (lead magnet,
+not a ranking page). Two steps in the hero row (owner's call): website + "Get my free audit"
+(the audit starts at once), then email + "Get my report" (download when both are done).
+No eyebrow, intro text or note under the form (owner removed them).
+
+- **Worker** `workers/seo-audit/` (Cloudflare Worker, route `heygenyl.com/api/seo-audit/*`,
+  owner picked it over PHP on Hostinger). `/start` {url, token}: Turnstile check, homepage +
+  robots.txt + sitemaps (index children, .gz), picks up to 50 pages homepage-first, falls
+  back to homepage links; returns a signed 20-min session (HMAC keyed off the secret).
+  `/pages` {session, urls<=5}: checks pages 2 at a time, same site only. Free-plan limits
+  shape it: 50 fetches per request (budget comment in index.ts), small CPU, so batches.
+  Only public domain names are fetched (no IPs, internal names, odd ports).
+- **Browser** `src/scripts/seo-audit.ts` + `SeoAuditForm.astro` (slot in `Hero.astro`):
+  batches, one slower retry of 429/503 pages, builds issues + Excel locally (report code is
+  a lazy chunk), downloads it, then emails the lead via FormSubmit AJAX to hi@ (dev logs it
+  to the console instead). The email never goes to the Worker.
+- **Shared, unit-tested** `src/lib/seo-audit/` (url, sitemap, extract, rules, xlsx, report),
+  `tests/seo-audit.test.ts`. The `.xlsx` writer is home-made (stored zip, inline strings,
+  styles, frozen header + filters); Excel opens it without repair (checked 2026-10-18).
+- **Local:** `npm run audit:dev` (port 8787, `workers/seo-audit/.dev.vars` from the
+  `.example`, Cloudflare test keys) + `npm run dev`. Don't test against heygenyl.com
+  repeatedly: Hostinger's CDN 429s your IP for a while (happened 2026-10-18).
+- **Deploy (separate from the site push):** owner runs `npx wrangler login` once, sets
+  `npx wrangler secret put TURNSTILE_SECRET --config workers/seo-audit/wrangler.toml`, then
+  `npm run audit:deploy`. Site needs `PUBLIC_TURNSTILE_SITE_KEY` (GitHub var exists) and
+  that Turnstile widget must allow heygenyl.com. First live lead may trigger a FormSubmit
+  "activate" email for the new form.
 
 ## 4. Services information architecture
 

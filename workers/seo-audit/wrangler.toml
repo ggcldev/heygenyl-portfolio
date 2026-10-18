@@ -1,0 +1,33 @@
+# Free SEO audit API for the homepage hero form.
+# Deploy: npm run audit:deploy   Local: npm run audit:dev (uses .dev.vars)
+# Secret (set once, never commit): npx wrangler secret put TURNSTILE_SECRET --config workers/seo-audit/wrangler.toml
+
+name = "heygenyl-seo-audit"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+workers_dev = false
+preview_urls = false
+
+routes = [
+  { pattern = "heygenyl.com/api/seo-audit/*", zone_name = "heygenyl.com" },
+]
+
+[vars]
+# Same-origin in production; only local dev calls cross-origin.
+ALLOWED_ORIGINS = "http://localhost:4321"
+# Turnstile tokens must come from the live site.
+TURNSTILE_HOSTNAMES = "heygenyl.com"
+
+# 3 audits a minute per visitor; page batches limited per visitor + site.
+[[ratelimits]]
+name = "START_LIMITER"
+namespace_id = "4101"
+simple = { limit = 3, period = 60 }
+
+[[ratelimits]]
+name = "PAGES_LIMITER"
+namespace_id = "4102"
+simple = { limit = 40, period = 60 }
+
+[observability]
+enabled = true

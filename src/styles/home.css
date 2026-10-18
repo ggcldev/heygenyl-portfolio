@@ -1485,4 +1485,207 @@
 		border-top: 0;
 	}
 
+	/* Free SEO audit form in the hero (SeoAuditForm.astro): Kudos newsletter row on dark.
+	   Two steps share one row: website, then email (data-step="site" | "email" | "done"). */
+	.seo-audit {
+		--audit-line: color-mix(in oklab, var(--color-ink) 18%, transparent);
+		width: min(100%, 44rem);
+		margin-top: clamp(0.5rem, 2vh, 1.25rem);
+	}
+
+	.seo-audit [hidden] {
+		display: none !important;
+	}
+
+	/* White field with dark text (owner's pick), green button attached on the right. */
+	.seo-audit__row {
+		--audit-line: rgb(5 5 5 / 0.12);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: stretch;
+		border: 1px solid #fff;
+		border-radius: 6px;
+		background: #fff;
+	}
+
+	/* Finished: only the result line, download link and "Audit another site" stay. */
+	.seo-audit[data-step="done"] .seo-audit__row {
+		display: none;
+	}
+
+	.seo-audit[data-step="done"] .seo-audit__status {
+		margin-top: 0;
+	}
+
+	.seo-audit__input {
+		min-width: 0;
+		height: 3.4rem;
+		padding: 0 1rem;
+		border: 0;
+		border-right: 1px dashed var(--audit-line);
+		border-radius: 6px 0 0 6px;
+		background: transparent;
+		color: #050505;
+		font: inherit;
+		font-size: 1rem;
+		outline: none;
+	}
+
+	.seo-audit__input::placeholder {
+		color: #7a7a7a;
+	}
+
+	.seo-audit__input:focus-visible {
+		box-shadow: inset 0 0 0 2px var(--color-accent);
+	}
+
+	.seo-audit__input[aria-invalid] {
+		box-shadow: inset 0 0 0 2px color-mix(in oklab, #ff6b5e 75%, transparent);
+	}
+
+	.seo-audit__input:disabled {
+		opacity: 0.6;
+	}
+
+	/* Fixed width so the field doesn't shift when the label changes between steps. */
+	.seo-audit .seo-audit__submit {
+		min-width: 14.75rem;
+		margin: -1px -1px -1px 0;
+		border-radius: 0 6px 6px 0;
+		white-space: nowrap;
+	}
+
+	.seo-audit .seo-audit__submit:disabled {
+		cursor: progress;
+		opacity: 0.75;
+	}
+
+	.seo-audit__turnstile:empty {
+		display: none;
+	}
+
+	.seo-audit__turnstile {
+		margin-top: 0.75rem;
+	}
+
+	.seo-audit__status {
+		margin-top: 0.9rem;
+	}
+
+	.seo-audit__progress {
+		position: relative;
+		height: 3px;
+		overflow: hidden;
+		border-radius: 3px;
+		background: color-mix(in oklab, var(--color-ink) 12%, transparent);
+	}
+
+	.seo-audit__progress span {
+		position: absolute;
+		inset: 0;
+		background: var(--color-accent);
+		transform: scaleX(var(--progress, 0));
+		transform-origin: left;
+		transition: transform 400ms ease;
+	}
+
+	.seo-audit__progress[data-indeterminate] span {
+		transform: none;
+		width: 30%;
+		animation: seo-audit-sweep 1.2s ease-in-out infinite;
+	}
+
+	@keyframes seo-audit-sweep {
+		from {
+			translate: -100% 0;
+		}
+
+		to {
+			translate: 340% 0;
+		}
+	}
+
+	.seo-audit__status[data-state="error"] .seo-audit__progress {
+		display: none;
+	}
+
+	.seo-audit__status-text {
+		margin: 0.6rem 0 0;
+		max-width: 62ch;
+		font-size: 0.92rem;
+		line-height: 1.5;
+		color: color-mix(in oklab, var(--color-ink) 82%, transparent);
+	}
+
+	.seo-audit__status[data-state="error"] .seo-audit__status-text {
+		margin-top: 0;
+		color: #ff8f85;
+	}
+
+	.seo-audit__links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.35rem 1.25rem;
+		margin-top: 0.35rem;
+	}
+
+	.seo-audit__links:not(:has(> :not([hidden]))) {
+		display: none;
+	}
+
+	.seo-audit__download {
+		font-size: 0.92rem;
+		font-weight: 600;
+		color: var(--color-accent);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.seo-audit__back {
+		padding: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		font-size: 0.92rem;
+		color: color-mix(in oklab, var(--color-ink) 62%, transparent);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		cursor: pointer;
+	}
+
+	.seo-audit__back:hover,
+	.seo-audit__back:focus-visible {
+		color: var(--color-ink);
+	}
+
+	@media (max-width: 767px) {
+		.seo-audit__row {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.seo-audit__input {
+			border-right: 0;
+			border-bottom: 1px dashed var(--audit-line);
+			border-radius: 6px 6px 0 0;
+		}
+
+		.seo-audit .seo-audit__submit {
+			margin: 0 -1px -1px;
+			border-radius: 0 0 6px 6px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.seo-audit__progress span {
+			transition: none;
+		}
+
+		.seo-audit__progress[data-indeterminate] span {
+			animation: none;
+			width: 100%;
+			opacity: 0.5;
+		}
+	}
+
 }

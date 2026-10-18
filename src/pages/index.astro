@@ -4,6 +4,7 @@ import liftedLogo from "../assets/testimonials/lifted-logo.png";
 import { getCollection } from "astro:content";
 import Hero from "../components/Hero.astro";
 import AgencyLogos from "../components/AgencyLogos.astro";
+import SeoAuditForm from "../components/SeoAuditForm.astro";
 import CtaArrow from "../components/CtaArrow.astro";
 import ToolBrandIcon from "../components/ToolBrandIcon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -237,14 +238,17 @@ const homeSchema = [
 >
   <div class="home-page">
     <Hero
-      title="Freelance SEO Specialist for Local Businesses and Agencies"
+      titleAccent={"Freelance SEO Specialist & Web Designer"}
+      title="for Local Businesses and Agencies"
       role="SEO Specialist | Website Designer"
       description="Tired of watching competitors outrank you? I'm a freelance SEO specialist and WordPress SEO expert from the Philippines. I find the opportunities your market is missing and build strategies that drive real rankings, traffic, and growth for your business."
       actions={[
         { label: "View services", href: "/services/" },
         { label: "Contact", href: "/contact/" },
       ]}
-    />
+    >
+      <SeoAuditForm />
+    </Hero>
 
     <AgencyLogos />
 

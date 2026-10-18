@@ -7,6 +7,8 @@ interface Action {
 
 interface Props {
   title: string;
+  /** Opening words of the headline, shown in the accent green before `title`. */
+  titleAccent?: string;
   description?: string;
   actions?: Action[];
   role?: string;
@@ -18,7 +20,7 @@ import { withBase } from "../utils/slugify";
 const isExternal = (path: string) =>
   /^[a-z][a-z0-9+.-]*:/i.test(path) || path.startsWith("//");
 
-const { title, description, actions = [], role, location } =
+const { title, titleAccent, description, actions = [], role, location } =
   Astro.props as Props;
 ---
 
@@ -30,11 +32,12 @@ const { title, description, actions = [], role, location } =
     <div class="hero-headline-wrap grid gap-8 md:gap-10 pb-6 md:pb-10">
       <div class="flex flex-col lg:flex-row lg:justify-between items-start gap-8 md:gap-10">
         <h1
-          class="text-[11vw] sm:text-[8vw] md:text-[4.8rem] lg:text-[5.2rem] leading-[0.9] font-extrabold tracking-normal max-w-5xl m-0"
+          class="text-[10vw] sm:text-[7.3vw] md:text-[4.4rem] lg:text-[4.75rem] leading-[0.9] font-extrabold tracking-normal max-w-5xl m-0"
         >
-          {title}
+          {titleAccent && <span class="hero-title-accent">{titleAccent}</span>}{titleAccent && " "}{title}
         </h1>
       </div>
+      <slot />
     </div>
 
     <div class="w-full mt-auto">

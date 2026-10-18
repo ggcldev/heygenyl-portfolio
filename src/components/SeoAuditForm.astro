@@ -1,0 +1,71 @@
+---
+// Free SEO audit lead magnet for the homepage hero, in two steps:
+// 1. website + "Get my free audit" (the audit starts right away),
+// 2. email + "Get my report" (the report downloads once both are done).
+// Logic: src/scripts/seo-audit.ts. API: workers/seo-audit (Cloudflare Worker at /api/seo-audit).
+import CtaArrow from "./CtaArrow.astro";
+import { siteConfig } from "../data/site";
+
+const endpoint =
+	import.meta.env.PUBLIC_SEO_AUDIT_ENDPOINT?.trim() ||
+	(import.meta.env.DEV ? "http://localhost:8787/api/seo-audit" : "/api/seo-audit");
+// Cloudflare's public test key (always passes) keeps local dev working without the real key.
+const siteKey =
+	import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || (import.meta.env.DEV ? "1x00000000000000000000AA" : "");
+---
+
+<form
+	class="seo-audit"
+	data-seo-audit
+	data-step="site"
+	data-endpoint={endpoint}
+	data-sitekey={siteKey}
+	data-contact-email={siteConfig.email}
+	data-lead-email={import.meta.env.DEV ? "" : siteConfig.email}
+	novalidate
+	aria-label="Free SEO audit"
+>
+	<div class="seo-audit__row">
+		<label class="sr-only" for="seo-audit-website">Your website</label>
+		<input
+			class="seo-audit__input"
+			id="seo-audit-website"
+			name="website"
+			type="text"
+			inputmode="url"
+			autocomplete="url"
+			autocapitalize="off"
+			spellcheck="false"
+			placeholder="yourwebsite.com"
+			required
+		/>
+		<label class="sr-only" for="seo-audit-email">Your email</label>
+		<input
+			class="seo-audit__input"
+			id="seo-audit-email"
+			name="email"
+			type="email"
+			autocomplete="email"
+			placeholder="Your email"
+			hidden
+		/>
+		<button class="button primary accent seo-audit__submit" type="submit">
+			<CtaArrow label="Get my free audit" className="button-cta" />
+		</button>
+	</div>
+
+	<div class="seo-audit__turnstile" data-turnstile></div>
+
+	<div class="seo-audit__status" data-status hidden>
+		<div class="seo-audit__progress" data-progress aria-hidden="true"><span></span></div>
+		<p class="seo-audit__status-text" data-status-text role="status"></p>
+		<div class="seo-audit__links">
+			<a class="seo-audit__download" data-download href="#" hidden>Download the report again</a>
+			<button class="seo-audit__back" type="button" data-back hidden>Change website</button>
+		</div>
+	</div>
+</form>
+
+<script>
+	import "../scripts/seo-audit";
+</script>

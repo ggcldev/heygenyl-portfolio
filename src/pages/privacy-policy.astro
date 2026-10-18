@@ -39,6 +39,13 @@ const schema = [
               address, website URL, selected service, and project details.
             </p>
             <p class="m-0">
+              When you use the free SEO audit on the homepage, we collect the
+              website address you enter and your email address, plus a summary of
+              the results (pages checked and issues found). The audit reads public
+              pages of that website; the report is created in your browser and
+              downloaded to your device, and we do not keep a copy of it.
+            </p>
+            <p class="m-0">
               We also collect limited technical data through analytics and
               security tools, such as browser/device information and approximate
               usage patterns.
@@ -52,6 +59,7 @@ const schema = [
             <p class="m-0">We use your information to:</p>
             <ul class="m-0 pl-5 grid gap-2">
               <li>Respond to inquiries and project requests</li>
+              <li>Follow up on free SEO audits you request</li>
               <li>Improve website performance and user experience</li>
               <li>Protect the site from spam and abuse</li>
             </ul>
@@ -77,8 +85,9 @@ const schema = [
           <div class="mt-3 grid gap-3 text-sm 2xl:text-lg text-muted">
             <ul class="m-0 pl-5 grid gap-2">
               <li><strong>Google Analytics 4 (GA4)</strong> for traffic and behavior analytics</li>
-              <li><strong>FormSubmit</strong> for contact form delivery</li>
-              <li><strong>Cloudflare Turnstile</strong> for spam/bot protection on the contact form</li>
+              <li><strong>FormSubmit</strong> for contact form and free SEO audit request delivery</li>
+              <li><strong>Cloudflare Turnstile</strong> for spam/bot protection on the contact form and free SEO audit</li>
+              <li><strong>Cloudflare Workers</strong> to run the free SEO audit</li>
             </ul>
             <p class="m-0">
               These providers may process data according to their own privacy policies.
