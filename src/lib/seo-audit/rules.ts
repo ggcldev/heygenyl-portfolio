@@ -12,7 +12,7 @@ export const SLOW_RESPONSE_MS = 2000;
 
 export const SEVERITY_ORDER: Record<Severity, number> = { High: 0, Medium: 1, Low: 2 };
 
-const isBlockedStatus = (status: number) => status === 401 || status === 403 || status === 429 || status === 503;
+const isBlockedStatus = (status: number) => status === 401 || status === 403 || status === 503;
 
 /** True when the page returned readable HTML. */
 export function isAuditable(page: PageData): boolean {
@@ -88,6 +88,18 @@ export function auditIssues(site: AuditSite, pages: PageData[]): AuditIssue[] {
 				url,
 				`Returns ${page.status}${page.redirectTo ? ` and redirects to ${page.redirectTo}` : ""}.`,
 				"List or link the final address directly so Google does not have to follow the redirect.",
+			);
+			continue;
+		}
+		if (page.status === 429) {
+			add(
+				"Low",
+				"Page not checked (site limits fast checks)",
+				url,
+				page.error?.startsWith("Not checked")
+					? "Skipped: the site was already refusing requests from our checker."
+					: "The server answered 429 (too many requests) to our checker.",
+				"Nothing to fix on this page itself. Run the audit again later for it. If your host's bot protection is very strict, make sure it doesn't slow down Googlebot.",
 			);
 			continue;
 		}

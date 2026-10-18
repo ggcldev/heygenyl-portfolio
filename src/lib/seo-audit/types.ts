@@ -26,6 +26,8 @@ export interface AuditStartResponse {
 	urls: string[];
 	/** One key per URL (same order); /pages only checks a URL sent with its key. */
 	keys: string[];
+	/** Wait between page requests the site needs (strict host or Crawl-delay), in ms; 0 = none. */
+	paceMs: number;
 }
 
 export interface AuditPagesResponse {

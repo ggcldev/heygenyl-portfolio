@@ -230,6 +230,16 @@ No eyebrow, intro text or note under the form (owner removed them).
   sitemaps are parsed only for the first 400 entries per file (`parseSitemap(xml, max)`;
   the rest are counted with indexOf; parsing 50k URLs fully cost ~140 ms). `wrangler dev`
   does NOT enforce CPU limits, so benchmark parsing in Node when changing it.
+  HOSTINGER (incl. heygenyl.com itself): its hCDN sees every Worker request as one client
+  (Cloudflare egress) and answers 429 after ~15 quick requests (or 4 at once), then blocks
+  for ~5 min (measured 2026-10-18 from an edge `wrangler dev --remote` session; 1 request per
+  1.5 s held). So: responses with `x-hcdn-request-id` / `platform: hostinger` mark a strict
+  host → /start reads robots + sitemaps one at a time and returns `paceMs` 1500 (robots.txt
+  Crawl-delay is honoured too, max 5 s) → the browser runs one batch at a time and the
+  Worker spaces pages. Any 429/503 → browser slows down (2.5 s gaps, 8 s pause), stops after
+  2 fully refused batches, and unchecked pages are reported as "Page not checked (site limits
+  fast checks)" (Low) instead of failing. Homepage/robots 429 → clear "try again in about 5
+  minutes" error. Testing against heygenyl.com from the edge can lock it out for ~5 min.
   Only public domain names are fetched (no IPs, internal names, odd ports). CORS:
   production allows no cross-origin callers; `ALLOWED_ORIGINS` for localhost lives only in
   `.dev.vars` (restart `audit:dev` after editing it).

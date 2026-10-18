@@ -9,7 +9,7 @@
 // key is an HMAC of the session + URL, so /pages only fetches pages /start handed out.
 
 import { extractSignals } from "../../../src/lib/seo-audit/extract";
-import { chooseUrls, DEFAULT_SITEMAP_PATHS, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../../../src/lib/seo-audit/sitemap";
+import { chooseUrls, crawlDelayMs, DEFAULT_SITEMAP_PATHS, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../../../src/lib/seo-audit/sitemap";
 import type { AuditErrorResponse, AuditPagesResponse, AuditSite, AuditStartResponse, PageData } from "../../../src/lib/seo-audit/types";
 import { isFetchableUrl, isSameSite, normalizeSiteInput } from "../../../src/lib/seo-audit/url";
 
@@ -37,6 +37,23 @@ const SITEMAP_BYTES = 5_000_000;
 // Sitemap entries parsed per file (the rest are only counted): parsing 50,000 URLs costs
 // about 140 ms of CPU, far over the free-plan budget; a few hundred is plenty to pick 50.
 const MAX_LOCS_PER_FILE = 400;
+// Wait between page requests for hosts that block bursts (see isStrictHost), and the most a
+// visitor's browser may ask for (it only ever slows the audit down).
+const STRICT_HOST_PACE_MS = 1500;
+const MAX_PACE_MS = 5000;
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Runs `fn` over `items`: all at once when `pace` is 0, else one by one `pace` ms apart. */
+async function mapPaced<T, R>(items: T[], fn: (item: T) => Promise<R>, pace: number): Promise<R[]> {
+	if (pace <= 0) return Promise.all(items.map(fn));
+	const out: R[] = [];
+	for (const [index, item] of items.entries()) {
+		if (index > 0) await sleep(pace);
+		out.push(await fn(item));
+	}
+	return out;
+}
+
 const FETCH_TIMEOUT_MS = 12_000;
 // Fetch budget for /start (free plan allows 50 per request; each file may take up to
 // 4 fetches with redirects): Turnstile 1 + homepage 8 + robots 4 + sitemaps 16 + children 16 = 45.
@@ -105,6 +122,8 @@ interface SessionData {
 	exp: number;
 	/** Random id, so page keys from one audit don't work in another. */
 	nonce: string;
+	/** Minimum wait between page requests to this site, in ms (0 = none). */
+	pace: number;
 }
 
 const hmac = async (env: Env, text: string) =>
@@ -168,7 +187,13 @@ interface Fetched {
 	body: string;
 	xRobotsTag: string | null;
 	error: string | null;
+	/** Served through a CDN known to block quick bursts of requests (Hostinger's hCDN). */
+	strictHost: boolean;
 }
+
+/** Hostinger's CDN blocks an IP for minutes after a few quick requests; all Worker
+ * requests share Cloudflare's addresses, so sites behind it must be checked slowly. */
+const isStrictHost = (headers: Headers) => headers.has("x-hcdn-request-id") || headers.get("platform") === "hostinger";
 
 function charsetOf(contentType: string): string {
 	const match = contentType.match(/charset=["']?([\w-]+)/i);
@@ -222,7 +247,7 @@ function resolveLocation(raw: string | null, base: URL): string | null {
 
 /** One request, no redirect following, size and time limited. Never throws. */
 async function fetchOnce(url: string, maxBytes: number, accept: string): Promise<Fetched> {
-	const base: Fetched = { url, status: 0, location: null, contentType: "", ms: 0, bytes: 0, truncated: false, body: "", xRobotsTag: null, error: null };
+	const base: Fetched = { url, status: 0, location: null, contentType: "", ms: 0, bytes: 0, truncated: false, body: "", xRobotsTag: null, error: null, strictHost: false };
 	let parsed: URL;
 	try {
 		parsed = new URL(url);
@@ -246,6 +271,7 @@ async function fetchOnce(url: string, maxBytes: number, accept: string): Promise
 			contentType,
 			ms,
 			xRobotsTag: response.headers.get("X-Robots-Tag"),
+			strictHost: isStrictHost(response.headers),
 		};
 		const wantsBody = response.status >= 200 && response.status < 300;
 		if (!wantsBody) {
@@ -301,10 +327,24 @@ async function readSitemapFile(url: string) {
  * few child sitemaps of any sitemap index. Files are fetched in parallel.
  * `listedTotal` counts every page entry in the page sitemaps read (parsed or not).
  */
-async function readSitemaps(listed: string[], origin: string, host: string): Promise<{ sitemapsRead: string[]; pageLocs: string[]; listedTotal: number }> {
+async function readSitemaps(
+	listed: string[],
+	origin: string,
+	host: string,
+	pace: number,
+): Promise<{ sitemapsRead: string[]; pageLocs: string[]; listedTotal: number }> {
 	let top: Array<Awaited<ReturnType<typeof readSitemapFile>>>;
 	if (listed.length) {
-		top = await Promise.all(listed.slice(0, MAX_LISTED_SITEMAPS).map(readSitemapFile));
+		top = await mapPaced(listed.slice(0, MAX_LISTED_SITEMAPS), readSitemapFile, pace);
+	} else if (pace > 0) {
+		// Polite: try the usual paths one by one, stop at the first that works.
+		let found: Awaited<ReturnType<typeof readSitemapFile>> = null;
+		for (const [index, path] of DEFAULT_SITEMAP_PATHS.entries()) {
+			if (index > 0) await sleep(pace);
+			found = await readSitemapFile(`${origin}${path}`);
+			if (found) break;
+		}
+		top = [found];
 	} else {
 		// Guesses: try them all at once, keep the first that works (in DEFAULT_SITEMAP_PATHS order).
 		const guesses = await Promise.all(DEFAULT_SITEMAP_PATHS.map((path) => readSitemapFile(`${origin}${path}`)));
@@ -321,7 +361,8 @@ async function readSitemaps(listed: string[], origin: string, host: string): Pro
 		.flatMap((file) => orderChildSitemaps(file.locs, host))
 		.filter((url) => !sitemapsRead.includes(url))
 		.slice(0, MAX_CHILD_SITEMAPS);
-	const childFiles = await Promise.all(children.map(readSitemapFile));
+	if (pace > 0 && children.length) await sleep(pace);
+	const childFiles = await mapPaced(children, readSitemapFile, pace);
 	for (const file of childFiles) {
 		if (!file || file.kind !== "urlset") continue;
 		sitemapsRead.push(file.url);
@@ -329,6 +370,38 @@ async function readSitemaps(listed: string[], origin: string, host: string): Pro
 		listedTotal += file.total;
 	}
 	return { sitemapsRead, pageLocs, listedTotal };
+}
+
+/** The homepage at its final address (http → https, www or not), or a clear error. */
+async function fetchHomepage(site: URL): Promise<Fetched> {
+	let homepage = await fetchFollow(site.href, PAGE_BYTES, "text/html,application/xhtml+xml");
+	if (homepage.status === 0 && site.protocol === "https:") {
+		homepage = await fetchFollow(site.href.replace(/^https:/, "http:"), PAGE_BYTES, "text/html,application/xhtml+xml");
+	}
+	if (homepage.status === 0) throw new AuditError("unreachable", `We couldn't reach ${site.hostname}. Check the address and try again.`, 422);
+	if (homepage.status >= 300 && homepage.status < 400 && homepage.location) {
+		const target = new URL(homepage.location);
+		throw new AuditError("other_domain", `${site.hostname} redirects to ${target.hostname}. Enter that address instead.`, 422);
+	}
+	if (homepage.status === 429) throw siteBusy(new URL(homepage.url).hostname);
+	return homepage;
+}
+
+/**
+ * robots.txt: whether it exists, the sitemaps it lists, and the pace for the rest of the
+ * audit (its Crawl-delay, or STRICT_HOST_PACE_MS for hosts that block bursts).
+ */
+async function readRobots(homepage: Fetched, origin: string, host: string): Promise<{ robotsTxtFound: boolean; listed: string[]; pace: number }> {
+	if (homepage.strictHost) await sleep(STRICT_HOST_PACE_MS);
+	const robots = await fetchFollow(`${origin}/robots.txt`, 500_000, "text/plain");
+	if (robots.status === 429) throw siteBusy(host);
+	const robotsTxtFound = robots.status === 200 && !isHtml(robots);
+	const strict = homepage.strictHost || robots.strictHost;
+	return {
+		robotsTxtFound,
+		listed: robotsTxtFound ? sitemapsFromRobots(robots.body, origin).filter((url) => isSameSite(new URL(url).hostname, host)) : [],
+		pace: Math.max(robotsTxtFound ? crawlDelayMs(robots.body, MAX_PACE_MS) : 0, strict ? STRICT_HOST_PACE_MS : 0),
+	};
 }
 
 // --- Routes ---
@@ -345,24 +418,12 @@ async function start(request: Request, env: Env): Promise<AuditStartResponse> {
 	}
 	await verifyTurnstile(env, body.token, ip);
 
-	// Homepage: find the final address (http → https, www or not).
-	let homepage = await fetchFollow(site.href, PAGE_BYTES, "text/html,application/xhtml+xml");
-	if (homepage.status === 0 && site.protocol === "https:") {
-		homepage = await fetchFollow(site.href.replace(/^https:/, "http:"), PAGE_BYTES, "text/html,application/xhtml+xml");
-	}
-	if (homepage.status === 0) throw new AuditError("unreachable", `We couldn't reach ${site.hostname}. Check the address and try again.`, 422);
-	if (homepage.status >= 300 && homepage.status < 400 && homepage.location) {
-		const target = new URL(homepage.location);
-		throw new AuditError("other_domain", `${site.hostname} redirects to ${target.hostname}. Enter that address instead.`, 422);
-	}
+	const homepage = await fetchHomepage(site);
 	const origin = new URL(homepage.url).origin;
 	const host = new URL(origin).hostname;
-
-	// robots.txt, then sitemaps.
-	const robots = await fetchFollow(`${origin}/robots.txt`, 500_000, "text/plain");
-	const robotsTxtFound = robots.status === 200 && !isHtml(robots);
-	const listed = robotsTxtFound ? sitemapsFromRobots(robots.body, origin).filter((url) => isSameSite(new URL(url).hostname, host)) : [];
-	const { sitemapsRead, pageLocs, listedTotal } = await readSitemaps(listed, origin, host);
+	const { robotsTxtFound, listed, pace } = await readRobots(homepage, origin, host);
+	if (pace > 0) await sleep(pace);
+	const { sitemapsRead, pageLocs, listedTotal } = await readSitemaps(listed, origin, host, pace);
 
 	let source: AuditSite["source"] = "sitemap";
 	let chosen = chooseUrls(pageLocs, origin, MAX_PAGES);
@@ -382,11 +443,30 @@ async function start(request: Request, env: Env): Promise<AuditStartResponse> {
 		// Sitemap entries counted (big sitemaps are only partly parsed), else unique links.
 		totalUrls: source === "sitemap" ? Math.max(listedTotal, chosen.urls.length) : chosen.total,
 	};
-	const sessionData: SessionData = { host, exp: Date.now() + SESSION_TTL_MS, nonce: b64url(crypto.getRandomValues(new Uint8Array(9))) };
+	const sessionData: SessionData = { host, exp: Date.now() + SESSION_TTL_MS, nonce: b64url(crypto.getRandomValues(new Uint8Array(9))), pace };
 	const session = await signSession(env, sessionData);
 	const keys = await Promise.all(chosen.urls.map((url) => pageKey(env, sessionData, url)));
-	return { ok: true, session, site: auditSite, urls: chosen.urls, keys };
+	return { ok: true, session, site: auditSite, urls: chosen.urls, keys, paceMs: pace };
 }
+
+const isRefused = (status: number) => status === 429 || status === 503;
+
+/** The site is refusing our checker right now (its block usually lifts within minutes). */
+const siteBusy = (host: string) =>
+	new AuditError("site_busy", `${host} is limiting automated checks right now. Please try again in about 5 minutes.`, 503);
+
+const notChecked = (url: string): PageData => ({
+	url,
+	status: 429,
+	error: "Not checked: the site asked us to slow down.",
+	redirectTo: null,
+	contentType: "",
+	ms: 0,
+	bytes: 0,
+	truncated: false,
+	xRobotsTag: null,
+	html: null,
+});
 
 async function checkPage(url: string, host: string): Promise<PageData> {
 	let parsed: URL | null = null;
@@ -433,17 +513,37 @@ async function pages(request: Request, env: Env): Promise<AuditPagesResponse> {
 		}
 	}
 	const checked = urls as string[];
-	// Two at a time: gentle on small hosts and on sites that rate-limit bots.
-	const results: PageData[] = new Array<PageData>(checked.length);
+	// The browser may ask for a longer gap (after the site pushed back), never a shorter one.
+	const requested = typeof body.gapMs === "number" && Number.isFinite(body.gapMs) ? Math.min(Math.max(body.gapMs, 0), MAX_PACE_MS) : 0;
+	const pace = Math.max(session.pace ?? 0, requested);
+	return { ok: true, pages: await checkBatch(checked, session.host, pace) };
+}
+
+/**
+ * Checks a batch: one at a time with `pace` ms between pages, or two at a time when 0.
+ * Once the site refuses a page, the rest of the batch isn't fetched (it would only extend
+ * the block); those come back as "not checked".
+ */
+async function checkBatch(urls: string[], host: string, pace: number): Promise<PageData[]> {
+	const results: PageData[] = new Array<PageData>(urls.length);
+	let refused = false;
 	let next = 0;
-	const worker = async () => {
-		while (next < checked.length) {
+	const lane = async () => {
+		while (next < urls.length) {
 			const index = next++;
-			results[index] = await checkPage(checked[index] ?? "", session.host);
+			const url = urls[index] ?? "";
+			if (refused) {
+				results[index] = notChecked(url);
+				continue;
+			}
+			if (pace > 0 && index > 0) await sleep(pace);
+			const page = await checkPage(url, host);
+			results[index] = page;
+			if (isRefused(page.status)) refused = true;
 		}
 	};
-	await Promise.all([worker(), worker()]);
-	return { ok: true, pages: results };
+	await Promise.all(pace > 0 ? [lane()] : [lane(), lane()]);
+	return results;
 }
 
 export default {

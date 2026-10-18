@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { extractSignals } from "../src/lib/seo-audit/extract";
 import { createReport, reportFileName, reportSheets } from "../src/lib/seo-audit/report";
 import { auditIssues } from "../src/lib/seo-audit/rules";
-import { chooseUrls, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../src/lib/seo-audit/sitemap";
+import { chooseUrls, crawlDelayMs, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../src/lib/seo-audit/sitemap";
 import type { AuditSite, PageData, PageSignals } from "../src/lib/seo-audit/types";
 import { isPublicHostname, isValidEmail, normalizeSiteInput, urlKey } from "../src/lib/seo-audit/url";
 import { buildXlsx, columnName, crc32, xmlText } from "../src/lib/seo-audit/xlsx";
@@ -59,6 +59,14 @@ describe("sitemaps", () => {
 			"https://example.com/post-sitemap.xml",
 			"https://example.com/category-sitemap.xml",
 		]);
+	});
+
+	it("reads the Crawl-delay that applies to all crawlers", () => {
+		expect(crawlDelayMs("User-agent: *\nCrawl-delay: 2\n", 5000)).toBe(2000);
+		expect(crawlDelayMs("User-agent: Googlebot\nUser-agent: *\nCrawl-delay: 1.5 # slow\n", 5000)).toBe(1500);
+		expect(crawlDelayMs("User-agent: Bingbot\nCrawl-delay: 10\n\nUser-agent: *\nDisallow: /tmp/\n", 5000)).toBe(0);
+		expect(crawlDelayMs("User-agent: *\nCrawl-delay: 30\n", 5000)).toBe(5000);
+		expect(crawlDelayMs("Sitemap: https://example.com/sitemap.xml\n", 5000)).toBe(0);
 	});
 
 	it("parses only the first entries of a big sitemap but counts them all", () => {
@@ -218,7 +226,7 @@ describe("issue rules", () => {
 		expect(find("Page is set to noindex", "https://acme.com/b/")?.severity).toBe("High");
 		expect(find("Redirect listed in sitemap", "https://acme.com/old/")?.detail).toContain("https://acme.com/new/");
 		expect(find("Broken page (404)", "https://acme.com/gone/")?.severity).toBe("High");
-		expect(find("Page blocked our checker (429)", "https://acme.com/busy/")?.severity).toBe("Medium");
+		expect(find("Page not checked (site limits fast checks)", "https://acme.com/busy/")?.severity).toBe("Low");
 		expect(find("Page could not be loaded", "https://acme.com/slow/")?.detail).toContain("12 seconds");
 		// Worst first.
 		expect(issues[0]?.severity).toBe("High");

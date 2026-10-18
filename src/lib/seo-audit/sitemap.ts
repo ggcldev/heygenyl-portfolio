@@ -22,6 +22,30 @@ export function sitemapsFromRobots(robotsTxt: string, origin: string): string[] 
 	return [...new Set(found)];
 }
 
+/**
+ * robots.txt Crawl-delay that applies to all crawlers ("User-agent: *" group), in ms,
+ * capped at `maxMs`; 0 when there is none.
+ */
+export function crawlDelayMs(robotsTxt: string, maxMs: number): number {
+	let groupAgents: string[] = [];
+	let inAgentLines = false;
+	for (const raw of robotsTxt.split(/\r?\n/)) {
+		const line = raw.replace(/#.*/, "").trim();
+		if (!line) continue;
+		const agent = line.match(/^user-agent\s*:\s*(.+)$/i);
+		if (agent) {
+			// Consecutive User-agent lines share one group of rules.
+			groupAgents = inAgentLines ? [...groupAgents, (agent[1] ?? "").trim()] : [(agent[1] ?? "").trim()];
+			inAgentLines = true;
+			continue;
+		}
+		inAgentLines = false;
+		const delay = line.match(/^crawl-delay\s*:\s*([\d.]+)/i);
+		if (delay && groupAgents.includes("*")) return Math.min(Math.round(Number(delay[1]) * 1000) || 0, maxMs);
+	}
+	return 0;
+}
+
 export interface ParsedSitemap {
 	kind: "index" | "urlset" | "unknown";
 	/** The first `maxLocs` entries, in order. */
