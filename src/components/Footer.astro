@@ -1,4 +1,5 @@
 ---
+import LogoMark from "./LogoMark.astro";
 import { siteConfig, activeServicePages } from "../data/site";
 
 const mainNav = [
@@ -15,6 +16,10 @@ const mainNav = [
 	<div class="content-shell site-footer__shell">
 		<div class="site-footer__grid">
 			<div class="site-footer__left">
+				<a class="site-footer__mark" href="/" aria-label="Hey Genyl, home">
+					<LogoMark class="site-footer__mark-svg" />
+				</a>
+
 				<p class="site-footer__statement">
 					I choose <span>audits over assumptions</span> and
 					<span>clarity over jargon</span>, because rankings you cannot
@@ -22,7 +27,7 @@ const mainNav = [
 				</p>
 
 				<p class="site-footer__meta">
-					SEO Specialist &amp; WordPress Designer<br />
+					SEO Specialist &amp; Website Designer<br />
 					Based in the Philippines
 				</p>
 
@@ -32,7 +37,7 @@ const mainNav = [
 					data-ml="hi|heygenyl.com"
 					data-ml-label
 				>
-					Loading...
+					hi [at] heygenyl.com
 				</a>
 			</div>
 

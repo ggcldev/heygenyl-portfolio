@@ -1,0 +1,20 @@
+---
+// Hey Genyl "HG" mark, initials only (src/assets/brand/heygenyl-mark-initials-only.svg),
+// cropped tight so it lines up with text. White part uses currentColor, the green G uses
+// the accent token.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="30 30 161 140"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path style="fill: var(--color-accent)" d="M140 30 H191 V59 H140 Z M140 141 H163 V99 H191 V170 H140 Z" />
+  <path fill="currentColor" d="M30 30 H62 V121 L114 69 V30 H146 V170 H114 V102 L62 154 V170 H30 Z" />
+</svg>

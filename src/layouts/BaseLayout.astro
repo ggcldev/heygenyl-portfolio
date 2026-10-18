@@ -64,7 +64,8 @@ const headProps = {
         const [user, domain] = (a.dataset.ml ?? "").split("|");
         if (user && domain) {
           a.href = `mailto:${user}@${domain}`;
-          if (a.dataset.mlLabel) a.textContent = `${user}@${domain}`;
+          // data-ml-label is a bare attribute (empty string), so check presence, not value.
+          if (a.hasAttribute("data-ml-label")) a.textContent = `${user}@${domain}`;
         }
       });
     </script>

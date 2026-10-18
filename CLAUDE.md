@@ -125,8 +125,13 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   (dark) + `-white.svg`, stacked HG mark over "heygenyl". Header uses `Logo.astro`, a
   side-by-side version built from the same paths (wordmark scaled 2x, centered on the mark;
   ink = currentColor, G = `--color-accent`), height `clamp(1.75rem, 2.25vw, 2.4rem)`.
+  Initials-only "HG" files (`heygenyl-mark-*initials-only.svg`) → `LogoMark.astro`, shown
+  in the footer above the statement (links home, ~52px at 1440).
   Favicon `public/favicon.svg` = HG mark on a #050505 rounded tile; linked as
   `/favicon.svg?v=2` because Hostinger's CDN caches static files ~31 days.
+- Scrolled header (`.site-header.is-scrolled`) stays dark: 94% paper, 6% hairline, black
+  shadow. Never tint shadows/borders with `--color-ink` there (ink is white on this site, the
+  owner called the old white glow "lighted"); padding stays fixed so nothing shifts.
 - CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
 - Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
   blog images downscaled to 1600px cap, 3 font preloads.

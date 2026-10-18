@@ -606,12 +606,12 @@
 		align-items: center;
 	}
 
+	/* Scrolled: stays dark (no light glow), a faint hairline and a soft dark shadow.
+	   Padding does not change, so the logo and links never shift. */
 	.site-header.is-scrolled {
-		background: color-mix(in oklab, var(--color-paper) 88%, transparent);
-		border-bottom-color: color-mix(in oklab, var(--color-ink) 16%, transparent);
-		box-shadow: 0 8px 24px color-mix(in oklab, var(--color-ink) 12%, transparent);
-		padding-left: calc(var(--grid-cell) * 0.42);
-		padding-right: calc(var(--grid-cell) * 0.42);
+		background: color-mix(in oklab, var(--color-paper) 94%, transparent);
+		border-bottom-color: color-mix(in oklab, var(--color-ink) 6%, transparent);
+		box-shadow: 0 12px 28px -14px rgb(0 0 0 / 0.7);
 	}
 
 	@media (max-width: 720px) {
@@ -657,10 +657,6 @@
 			padding: 0.85rem;
 		}
 
-		.site-header.is-scrolled {
-			padding-left: calc(var(--grid-cell) * 0.86);
-			padding-right: calc(var(--grid-cell) * 0.86);
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -2253,6 +2249,24 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+	}
+
+	/* HG initials mark above the statement (LogoMark.astro), links home. */
+	.site-footer__mark {
+		display: inline-flex;
+		margin-bottom: clamp(2rem, 3vw, 2.75rem);
+		color: var(--color-ink);
+		transition: opacity 200ms ease;
+	}
+
+	.site-footer__mark:hover {
+		opacity: 0.72;
+	}
+
+	.site-footer__mark-svg {
+		display: block;
+		height: clamp(2.75rem, 3.6vw, 3.5rem);
+		width: auto;
 	}
 
 	.site-footer__statement {
