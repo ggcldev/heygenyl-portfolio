@@ -66,6 +66,21 @@ export function normalizeSiteInput(raw: string): URL | null {
 	return new URL(`${url.protocol}//${url.host}/`);
 }
 
+/**
+ * Who a daily allowance belongs to: the IPv4 address, or the /64 network of an IPv6 address
+ * (home connections get a whole /64 and can switch addresses within it at will).
+ */
+export function visitorKey(ip: string): string {
+	const value = ip.trim().toLowerCase();
+	if (!value.includes(":")) return value;
+	// Expand "::" so the first four groups are always the network part.
+	const [head = "", tail = ""] = value.split("::");
+	const headGroups = head ? head.split(":") : [];
+	const tailGroups = value.includes("::") && tail ? tail.split(":") : [];
+	const groups = value.includes("::") ? [...headGroups, ...Array(8 - headGroups.length - tailGroups.length).fill("0"), ...tailGroups] : headGroups;
+	return `${groups.slice(0, 4).map((group) => group.replace(/^0+(?=.)/, "")).join(":")}::/64`;
+}
+
 /** Loose email check, enough to catch typos. */
 export function isValidEmail(raw: string): boolean {
 	const email = raw.trim();

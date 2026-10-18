@@ -24,6 +24,11 @@ name = "START_LIMITER"
 namespace_id = "4101"
 simple = { limit = 3, period = 60 }
 
+# Daily audit allowance per visitor (counts survive between requests; free plan: 1k writes/day).
+[[kv_namespaces]]
+binding = "AUDIT_LIMITS"
+id = "3eaf8efddf724932ad96fca75c084df2"
+
 [[ratelimits]]
 name = "PAGES_LIMITER"
 namespace_id = "4102"

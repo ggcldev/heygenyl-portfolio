@@ -11,10 +11,16 @@
 import { extractSignals } from "../../../src/lib/seo-audit/extract";
 import { chooseUrls, crawlDelayMs, DEFAULT_SITEMAP_PATHS, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../../../src/lib/seo-audit/sitemap";
 import type { AuditErrorResponse, AuditPagesResponse, AuditSite, AuditStartResponse, PageData } from "../../../src/lib/seo-audit/types";
-import { isFetchableUrl, isSameSite, normalizeSiteInput } from "../../../src/lib/seo-audit/url";
+import { isFetchableUrl, isSameSite, normalizeSiteInput, visitorKey } from "../../../src/lib/seo-audit/url";
 
 interface RateLimiter {
 	limit(options: { key: string }): Promise<{ success: boolean }>;
+}
+
+/** The slice of Workers KV used for daily allowances. */
+interface KvStore {
+	get(key: string, type: "json"): Promise<unknown>;
+	put(key: string, value: string, options?: { expiration?: number; expirationTtl?: number }): Promise<void>;
 }
 
 export interface Env {
@@ -26,9 +32,14 @@ export interface Env {
 	TURNSTILE_HOSTNAMES?: string;
 	START_LIMITER?: RateLimiter;
 	PAGES_LIMITER?: RateLimiter;
+	/** Audits started per visitor in the last 24 hours. */
+	AUDIT_LIMITS?: KvStore;
 }
 
 const MAX_PAGES = 50;
+// Free audits per visitor (IPv4 address or IPv6 /64) per 24 hours, counted when an audit starts.
+const DAILY_AUDITS = 3;
+const DAY_S = 24 * 60 * 60;
 // 3 pages per request keeps HTML parsing (about 1-4 ms per page) inside the CPU budget.
 const BATCH_SIZE = 3;
 const SESSION_TTL_MS = 20 * 60 * 1000;
@@ -156,7 +167,43 @@ async function pageKey(env: Env, session: SessionData, url: string): Promise<str
 	return b64url((await hmac(env, `page|${session.nonce}|${url}`)).subarray(0, 16));
 }
 
+// --- Daily allowance ---
+
+interface Allowance {
+	count: number;
+	/** When the 24-hour window ends (Unix seconds). */
+	resetAt: number;
+}
+
+/** Throws when this visitor has used today's free audits; otherwise returns their record. */
+async function checkAllowance(env: Env, visitor: string): Promise<Allowance | null> {
+	if (!env.AUDIT_LIMITS) return null;
+	const stored = (await env.AUDIT_LIMITS.get(`audits:${visitor}`, "json")) as Allowance | null;
+	const now = Math.floor(Date.now() / 1000);
+	const current = stored && stored.resetAt > now ? stored : null;
+	if (current && current.count >= DAILY_AUDITS) {
+		const hours = Math.max(1, Math.ceil((current.resetAt - now) / 3600));
+		throw new AuditError(
+			"daily_limit",
+			`You've used your ${DAILY_AUDITS} free audits for today. You can run more in about ${hours} hour${hours > 1 ? "s" : ""}, or get in touch for a full audit.`,
+			429,
+		);
+	}
+	return current;
+}
+
+/** Counts one started audit against the visitor's 24-hour window. */
+async function useAllowance(env: Env, visitor: string, current: Allowance | null): Promise<void> {
+	if (!env.AUDIT_LIMITS) return;
+	const now = Math.floor(Date.now() / 1000);
+	const next: Allowance = current ? { count: current.count + 1, resetAt: current.resetAt } : { count: 1, resetAt: now + DAY_S };
+	// KV needs the expiry at least 60 s ahead.
+	await env.AUDIT_LIMITS.put(`audits:${visitor}`, JSON.stringify(next), { expiration: Math.max(next.resetAt, now + 60) });
+}
+
 // --- Turnstile ---
+
+const TURNSTILE_ACTION = "seo-audit";
 
 async function verifyTurnstile(env: Env, token: unknown, ip: string): Promise<void> {
 	if (!env.TURNSTILE_SECRET) throw new AuditError("not_configured", "The audit tool is not set up yet.", 503);
@@ -166,8 +213,12 @@ async function verifyTurnstile(env: Env, token: unknown, ip: string): Promise<vo
 	form.append("response", token);
 	if (ip !== "unknown") form.append("remoteip", ip);
 	const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
-	const result = (await response.json().catch(() => ({}))) as { success?: boolean; hostname?: string };
+	const result = (await response.json().catch(() => ({}))) as { success?: boolean; hostname?: string; action?: string };
 	if (!result.success) throw new AuditError("captcha", "The security check failed. Please try again.", 400);
+	// Tokens from other forms on the site don't count (Cloudflare's test keys report no action).
+	if (result.action && result.action !== TURNSTILE_ACTION) {
+		throw new AuditError("captcha", "The security check failed. Please try again.", 400);
+	}
 	const hostnames = (env.TURNSTILE_HOSTNAMES ?? "").split(",").map((value) => value.trim()).filter(Boolean);
 	if (hostnames.length && result.hostname && !hostnames.includes(result.hostname)) {
 		throw new AuditError("captcha", "The security check failed. Please try again.", 400);
@@ -417,6 +468,8 @@ async function start(request: Request, env: Env): Promise<AuditStartResponse> {
 		if (!success) throw new AuditError("rate_limited", "Too many audits from your connection. Please wait a minute.", 429);
 	}
 	await verifyTurnstile(env, body.token, ip);
+	const visitor = visitorKey(ip);
+	const allowance = await checkAllowance(env, visitor);
 
 	const homepage = await fetchHomepage(site);
 	const origin = new URL(homepage.url).origin;
@@ -446,6 +499,8 @@ async function start(request: Request, env: Env): Promise<AuditStartResponse> {
 	const sessionData: SessionData = { host, exp: Date.now() + SESSION_TTL_MS, nonce: b64url(crypto.getRandomValues(new Uint8Array(9))), pace };
 	const session = await signSession(env, sessionData);
 	const keys = await Promise.all(chosen.urls.map((url) => pageKey(env, sessionData, url)));
+	// Counted only now: a site that couldn't be reached doesn't use up a free audit.
+	await useAllowance(env, visitor, allowance);
 	return { ok: true, session, site: auditSite, urls: chosen.urls, keys, paceMs: pace };
 }
 

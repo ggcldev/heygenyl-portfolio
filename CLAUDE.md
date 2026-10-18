@@ -240,6 +240,14 @@ No eyebrow, intro text or note under the form (owner removed them).
   2 fully refused batches, and unchecked pages are reported as "Page not checked (site limits
   fast checks)" (Low) instead of failing. Homepage/robots 429 → clear "try again in about 5
   minutes" error. Testing against heygenyl.com from the edge can lock it out for ~5 min.
+  ANTI-SPAM (owner, 2026-10-18): 3 audits per visitor per 24 h (IPv4 address or IPv6 /64,
+  `visitorKey`), stored in Workers KV `AUDIT_LIMITS` (id in wrangler.toml), checked after
+  Turnstile and counted only when /start succeeds; 4th → "You've used your 3 free audits for
+  today…" (`daily_limit`). Plus the 3/min `START_LIMITER`. The owner's own IP is limited too.
+  Turnstile is now VISIBLE (`appearance: "always"`), shown only after "Get my free audit" is
+  clicked; the scan starts once it passes; tokens must carry action `seo-audit`. Local
+  `audit:dev` keeps its own KV copy in `workers/seo-audit/.wrangler/state` (delete the `kv`
+  folder to reset local counts).
   Only public domain names are fetched (no IPs, internal names, odd ports). CORS:
   production allows no cross-origin callers; `ALLOWED_ORIGINS` for localhost lives only in
   `.dev.vars` (restart `audit:dev` after editing it).

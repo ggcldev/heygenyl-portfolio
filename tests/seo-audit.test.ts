@@ -4,7 +4,7 @@ import { createReport, reportFileName, reportSheets } from "../src/lib/seo-audit
 import { auditIssues } from "../src/lib/seo-audit/rules";
 import { chooseUrls, crawlDelayMs, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../src/lib/seo-audit/sitemap";
 import type { AuditSite, PageData, PageSignals } from "../src/lib/seo-audit/types";
-import { isPublicHostname, isValidEmail, normalizeSiteInput, urlKey } from "../src/lib/seo-audit/url";
+import { isPublicHostname, isValidEmail, normalizeSiteInput, urlKey, visitorKey } from "../src/lib/seo-audit/url";
 import { buildXlsx, columnName, crc32, xmlText } from "../src/lib/seo-audit/xlsx";
 
 describe("site address checks", () => {
@@ -21,6 +21,14 @@ describe("site address checks", () => {
 		expect(isPublicHostname("my-shop.com.au")).toBe(true);
 		expect(isPublicHostname("xn--mnchen-3ya.de")).toBe(true);
 		expect(isPublicHostname("site.test")).toBe(false);
+	});
+
+	it("groups visitors by IPv4 address or IPv6 /64 network for the daily limit", () => {
+		expect(visitorKey("203.0.113.7")).toBe("203.0.113.7");
+		expect(visitorKey("2001:db8:85a3:12:8a2e:370:7334:1")).toBe("2001:db8:85a3:12::/64");
+		expect(visitorKey("2001:0DB8:85A3:0012:ffff::9")).toBe("2001:db8:85a3:12::/64");
+		expect(visitorKey("2001:db8::1")).toBe("2001:db8:0:0::/64");
+		expect(visitorKey("::1")).toBe("0:0:0:0::/64");
 	});
 
 	it("checks emails loosely", () => {

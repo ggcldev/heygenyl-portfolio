@@ -175,15 +175,26 @@ export function initSeoAudit(form: HTMLFormElement): void {
 	};
 
 	// --- Turnstile (security check) ---
+	// Shown after "Get my free audit" is clicked; the scan only starts once it's passed.
+	// Each token is used once, so the next audit runs a fresh check.
+
+	let tokenUsed = false;
 
 	const ensureWidget = async () => {
-		if (widgetId !== null || !siteKey) return;
+		if (!siteKey) return;
 		const turnstile = await loadTurnstile();
-		if (widgetId !== null) return;
+		widgetBox.hidden = false;
+		if (widgetId !== null) {
+			if (tokenUsed) {
+				tokenUsed = false;
+				turnstile.reset(widgetId);
+			}
+			return;
+		}
 		widgetId = turnstile.render(widgetBox, {
 			sitekey: siteKey,
 			theme: "dark",
-			appearance: "interaction-only",
+			appearance: "always",
 			size: "flexible",
 			action: "seo-audit",
 			callback: (value: string) => {
@@ -241,11 +252,13 @@ export function initSeoAudit(form: HTMLFormElement): void {
 
 	const useUpToken = () => {
 		token = null;
-		if (widgetId !== null) window.turnstile?.reset(widgetId);
+		tokenUsed = true;
+		widgetBox.hidden = true;
 	};
 
-	// Load the security check as soon as someone shows interest in the form.
-	const warmUp = () => void ensureWidget().catch(() => undefined);
+	// Download the security check's script as soon as someone shows interest in the form
+	// (it's only shown once they click the button).
+	const warmUp = () => void loadTurnstile().catch(() => undefined);
 	form.addEventListener("focusin", warmUp, { once: true });
 	form.addEventListener("pointerenter", warmUp, { once: true });
 
@@ -362,11 +375,13 @@ export function initSeoAudit(form: HTMLFormElement): void {
 	};
 
 	const runAudit = async (current: Job, site: URL) => {
-		progress(current, "Running a quick security check…");
+		progress(current, "Quick check that you’re human, then your audit starts…");
 		const turnstileToken = await getToken(() => {
 			if (job === current && step !== "site") setStatus("Tick the “Verify you are human” box to start your audit.", "running");
 		});
 
+		// The visitor moved on to another site while the check ran: leave the token for that run.
+		if (job !== current) return;
 		progress(current, `Finding the sitemap for ${site.hostname}…`);
 		const start = await postJson(`${endpoint}/start`, { url: site.href, token: turnstileToken });
 		useUpToken();
@@ -506,6 +521,7 @@ export function initSeoAudit(form: HTMLFormElement): void {
 		job = null; // the running audit, if any, is ignored from now on
 		email = null;
 		status.hidden = true;
+		widgetBox.hidden = true;
 		showStep("site");
 	});
 }
