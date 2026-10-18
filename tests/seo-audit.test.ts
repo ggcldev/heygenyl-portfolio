@@ -46,7 +46,11 @@ describe("sitemaps", () => {
 			<url><loc>https://example.com/</loc><image:image><image:loc>https://example.com/a.jpg</image:loc></image:image></url>
 			<url><loc><![CDATA[https://example.com/a?x=1&amp;y=2]]></loc></url>
 			<url><loc> https://example.com/b?x=1&amp;y=2 </loc></url></urlset>`;
-		expect(parseSitemap(urlset)).toEqual({ kind: "urlset", locs: ["https://example.com/", "https://example.com/a?x=1&y=2", "https://example.com/b?x=1&y=2"] });
+		expect(parseSitemap(urlset)).toEqual({
+			kind: "urlset",
+			locs: ["https://example.com/", "https://example.com/a?x=1&y=2", "https://example.com/b?x=1&y=2"],
+			total: 3,
+		});
 		const index = `<sitemapindex><sitemap><loc>https://example.com/category-sitemap.xml</loc></sitemap><sitemap><loc>https://example.com/post-sitemap.xml</loc></sitemap><sitemap><loc>https://example.com/page-sitemap.xml</loc></sitemap><sitemap><loc>https://other.com/page-sitemap.xml</loc></sitemap></sitemapindex>`;
 		const parsed = parseSitemap(index);
 		expect(parsed.kind).toBe("index");
@@ -55,6 +59,14 @@ describe("sitemaps", () => {
 			"https://example.com/post-sitemap.xml",
 			"https://example.com/category-sitemap.xml",
 		]);
+	});
+
+	it("parses only the first entries of a big sitemap but counts them all", () => {
+		const xml = `<urlset>${Array.from({ length: 1000 }, (_, i) => `<url><loc>https://example.com/p${i}/</loc></url>`).join("")}</urlset>`;
+		const parsed = parseSitemap(xml, 400);
+		expect(parsed.locs).toHaveLength(400);
+		expect(parsed.locs[399]).toBe("https://example.com/p399/");
+		expect(parsed.total).toBe(1000);
 	});
 
 	it("chooses pages: same site, no files, no duplicates, homepage first, capped", () => {

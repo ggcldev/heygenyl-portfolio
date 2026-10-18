@@ -105,6 +105,8 @@ const robots = noIndex
         function gtag() {
           dataLayer.push(arguments);
         }
+        // Global, so page scripts can send events (e.g. the free SEO audit).
+        window.gtag = gtag;
         gtag("js", new Date());
         gtag("config", gaMeasurementId);
       };

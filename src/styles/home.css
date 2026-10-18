@@ -27,15 +27,16 @@
 		z-index: 0;
 	}
 
-	/* Smoky silk background (src/scripts/hero-shader.ts): full-bleed behind the hero content,
-	   drawn small and stretched, fades in once the first frame is ready. */
+	/* Wave background (src/scripts/hero-shader.ts): full-bleed behind the hero content and
+	   reaching up behind the header (height set by hero-header.ts), drawn small and stretched,
+	   fades in once the first frame is ready. */
 	.hero-shader {
 		position: absolute;
-		top: 0;
+		top: calc(-1 * var(--site-header-h, 0px));
 		left: 50%;
 		z-index: 0;
 		width: 100vw;
-		height: 100%;
+		height: calc(100% + var(--site-header-h, 0px));
 		transform: translateX(-50%);
 		opacity: 0;
 		pointer-events: none;
@@ -44,6 +45,17 @@
 
 	.hero-shader.is-ready {
 		opacity: 1;
+	}
+
+	/* Header over the hero (hero-header.ts): no bar, no blur, no line, so the waves run up
+	   seamlessly behind the menu like Kudos. It fades back to the dark bar once the next
+	   section slides under it. (header.… for specificity: global.css loads after this file.) */
+	header.site-header.is-over-hero {
+		background-color: transparent;
+		border-bottom-color: transparent;
+		box-shadow: none;
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
 	}
 
 	.home-page > section:not(.hero-shell) {
@@ -563,7 +575,7 @@
 	}
 
 	.insights-title__accent {
-		color: color-mix(in oklab, var(--color-ink) 42%, transparent);
+		color: color-mix(in oklab, var(--color-ink) 47%, transparent);
 	}
 
 	.insights-intro {
@@ -1067,7 +1079,7 @@
 		border-right: 1px solid var(--color-border);
 		padding: 0.76rem 0.82rem 0.84rem;
 		background: transparent;
-		color: color-mix(in oklab, var(--color-ink) 55%, transparent);
+		color: color-mix(in oklab, var(--color-ink) 64%, transparent);
 		cursor: pointer;
 		transition:
 			color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -1089,7 +1101,7 @@
 	}
 
 	.testimonial-tab[aria-selected="true"] .testimonial-tab__role {
-		color: var(--color-accent);
+		color: color-mix(in oklab, var(--color-accent) 52%, #000);
 	}
 
 	.testimonial-tab__logo {
@@ -1113,7 +1125,7 @@
 	.testimonial-tab__role {
 		font-size: clamp(0.66rem, 0.82vw, 0.74rem);
 		line-height: 1.25;
-		color: color-mix(in oklab, currentColor 84%, transparent);
+		color: color-mix(in oklab, currentColor 92%, transparent);
 	}
 
 	@media (max-width: 767px) {
@@ -1445,7 +1457,8 @@
 		/* Heading pins a little higher on desktop to leave room for the
 		   cards below it. */
 		.featured-projects-scroll {
-			--featured-stick-top: clamp(4.5rem, 9vh, 12rem);
+			/* Never closer than 1rem under the (taller) header. */
+			--featured-stick-top: max(clamp(4.5rem, 9vh, 12rem), calc(var(--site-header-h) + 1rem));
 		}
 
 		/* Cards grow with the screen height while the pinned row (heading,

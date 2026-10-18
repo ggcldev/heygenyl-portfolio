@@ -421,7 +421,7 @@ const homeSchema = [
               const isActive = index === 0;
 
               return (
-                <article
+                <div
                   id={panelId}
                   class={`testimonial-panel${isActive ? " is-active" : ""}`}
                   role="tabpanel"
@@ -431,7 +431,7 @@ const homeSchema = [
                   hidden={!isActive}
                 >
                   <p class="testimonial-panel__quote">"{item.quote}"</p>
-                </article>
+                </div>
               );
             })}
           </div>

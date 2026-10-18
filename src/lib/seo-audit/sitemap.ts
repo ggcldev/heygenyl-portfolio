@@ -24,7 +24,17 @@ export function sitemapsFromRobots(robotsTxt: string, origin: string): string[] 
 
 export interface ParsedSitemap {
 	kind: "index" | "urlset" | "unknown";
+	/** The first `maxLocs` entries, in order. */
 	locs: string[];
+	/** How many <loc> entries the file holds in total (counted cheaply, not parsed). */
+	total: number;
+}
+
+/** Counts plain <loc> tags (XML is case-sensitive) without regex or allocation per match. */
+function countLocs(xml: string): number {
+	let count = 0;
+	for (let at = xml.indexOf("<loc>"); at !== -1; at = xml.indexOf("<loc>", at + 5)) count += 1;
+	return count;
 }
 
 function decodeXmlText(text: string): string {
@@ -40,16 +50,19 @@ function decodeXmlText(text: string): string {
 
 /**
  * Page or child-sitemap URLs in a sitemap. Only plain <loc> tags count, so
- * <image:loc> and <video:loc> entries are ignored.
+ * <image:loc> and <video:loc> entries are ignored. Parses at most `maxLocs` entries
+ * (the audit only needs a few hundred; big sitemaps would blow the Worker's CPU budget)
+ * and counts the rest cheaply.
  */
-export function parseSitemap(xml: string): ParsedSitemap {
+export function parseSitemap(xml: string, maxLocs = Number.POSITIVE_INFINITY): ParsedSitemap {
 	const kind = /<sitemapindex[\s>]/i.test(xml) ? "index" : /<urlset[\s>]/i.test(xml) ? "urlset" : "unknown";
 	const locs: string[] = [];
 	for (const match of xml.matchAll(/<loc>\s*(?:<!\[CDATA\[\s*)?([\s\S]*?)(?:\s*\]\]>)?\s*<\/loc>/gi)) {
+		if (locs.length >= maxLocs) break;
 		const value = decodeXmlText((match[1] ?? "").trim());
 		if (value) locs.push(value);
 	}
-	return { kind, locs };
+	return { kind, locs, total: Math.max(countLocs(xml), locs.length) };
 }
 
 /**

@@ -8,6 +8,8 @@ import tailwindcss from "@tailwindcss/vite";
 // so it is deliberately kept out of the sitemap to avoid a noindex/sitemap
 // conflict in Search Console.
 const allowedServicePaths = new Set(["/services/seo/"]);
+// Other noindex pages, also kept out of the sitemap.
+const excludedPaths = new Set(["/contact/thanks/"]);
 
 export default defineConfig({
   site: "https://heygenyl.com",
@@ -33,7 +35,7 @@ export default defineConfig({
         if (path.startsWith("/services/")) {
           return allowedServicePaths.has(path);
         }
-        return true;
+        return !excludedPaths.has(path);
       },
     }),
   ],

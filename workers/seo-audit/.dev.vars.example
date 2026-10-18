@@ -3,3 +3,6 @@
 TURNSTILE_SECRET=1x0000000000000000000000000000000AA
 # Test tokens report hostname "example.com", so don't check hostnames locally.
 TURNSTILE_HOSTNAMES=
+
+# The dev site (astro dev) calls the local Worker cross-origin.
+ALLOWED_ORIGINS=http://localhost:4321

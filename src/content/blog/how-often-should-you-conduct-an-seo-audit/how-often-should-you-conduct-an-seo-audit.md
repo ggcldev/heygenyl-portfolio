@@ -1,6 +1,6 @@
 ---
 title: "How Often Should You Conduct an SEO Audit"
-metaTitle: "Most businesses guess how often to conduct an SEO audit. The answer depends on site size, content volume, and goals. Book a free SEO audit and get a clear plan"
+metaTitle: "How Often Should You Conduct an SEO Audit? | Hey Genyl"
 slug: "how-often-should-you-conduct-an-seo-audit"
 description: "Learn how often to run an SEO audit based on your site type, triggers, and goals. Stop guessing and start auditing with a plan."
 excerpt: "Audit frequency depends on site size, content volume, and how often your site changes, but acting on audit findings matters more than audit cadence."

@@ -24,6 +24,8 @@ export interface AuditStartResponse {
 	site: AuditSite;
 	/** Pages to check, at most 50, homepage first. */
 	urls: string[];
+	/** One key per URL (same order); /pages only checks a URL sent with its key. */
+	keys: string[];
 }
 
 export interface AuditPagesResponse {

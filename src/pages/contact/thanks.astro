@@ -15,20 +15,20 @@ const schema = [
 
 <BaseLayout
   title="Inquiry Received | Hey Genyl"
-  description="Thank-you page for portfolio inquiries submitted through the contact form."
+  description="Thanks for getting in touch. Your project details have been sent to Hey Genyl."
   schema={schema}
+  noIndex
 >
   <PageHero
     eyebrow="Inquiry received"
     title="Thanks. Your project details are on the way."
-    intro="If the submission completed successfully, it has already been routed to your inbox. Use the links below if you want to add context or keep browsing."
-    chips={["Static-hosting friendly", "Browser-based submit", "Email fallback still available"]}
+    intro="Your message has been sent. I'll read it and reply by email. Use the links below if you want to add more context or keep browsing."
     actions={[
       { label: "Back to services", href: "/services/" },
       { label: "Email directly", href: "#", dataMl: "hi|heygenyl.com", variant: "secondary" },
     ]}
     noteTitle="What happens next"
-    noteCopy="Reply windows depend on your inbox workflow. If you need to add screenshots or a longer brief, send a direct email and reference the inquiry you just submitted."
+    noteCopy="If you'd like to add screenshots or a longer brief, email me directly and mention the inquiry you just sent."
   />
 
   <section class="content-shell">

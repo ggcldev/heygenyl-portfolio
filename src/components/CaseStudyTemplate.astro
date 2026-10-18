@@ -47,7 +47,7 @@ const schema = [
           </p>
         </div>
 
-        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
           {study.snapshot.map((item) => (
             <article class="card">
               <p class="eyebrow">{item.label}</p>
@@ -64,7 +64,7 @@ const schema = [
           <h2>Challenge and strategy</h2>
         </div>
 
-        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-8">
           <article class="card">
             <p class="eyebrow">Challenge</p>
             <h3 class="text-sm 2xl:text-xl font-bold uppercase m-0">{study.challengeTitle}</h3>
@@ -94,7 +94,7 @@ const schema = [
           <h2>Proof points</h2>
         </div>
 
-        <div class="lg:col-span-2 grid grid-cols-1 gap-y-8">
+        <div class="md:col-span-2 grid grid-cols-1 gap-y-8">
           {study.proofPoints.map((item) => (
             <article class="card">
               <p class="eyebrow">{item.title}</p>

@@ -114,6 +114,9 @@
 		--content-width: calc(var(--grid-cell) * var(--content-columns));
 		/* Global page width cap (header, services, case studies, contact, blog, home) */
 		--page-max: 1920px;
+		/* Header height, shared by the header, the blog reading bar and the homepage hero.
+		   Roomy so the logo and menu don't sit tight against the top edge. */
+		--site-header-h: clamp(4rem, calc(var(--grid-cell) * 0.95), 5.75rem);
 	}
 
 	:root[data-theme="dark"] {
@@ -242,14 +245,6 @@
 @layer components {
 	.text-muted {
 		color: var(--color-muted);
-	}
-
-	.text-subtle {
-		color: color-mix(in oklab, var(--color-ink) 72%, transparent);
-	}
-
-	.hover\:text-ink:hover {
-		color: var(--color-ink);
 	}
 
 	.nav-link {
@@ -437,18 +432,9 @@
 		font-weight: 700;
 	}
 
-	.site-shell {
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-		border: 1px solid var(--color-border);
-		border-radius: 28px;
-		background: var(--color-surface);
-	}
-
 	.site-header {
-		height: calc(var(--grid-cell) * 0.72);
-		min-height: calc(var(--grid-cell) * 0.72);
+		height: var(--site-header-h);
+		min-height: var(--site-header-h);
 		display: flex;
 		align-items: center;
 		padding-top: clamp(0.24rem, 0.62vh, 0.46rem);
@@ -621,8 +607,12 @@
 	}
 
 	@media (max-width: 720px) {
+		:root {
+			--site-header-h: calc(var(--grid-cell) * 2.9);
+		}
+
 		.site-header {
-			min-height: calc(var(--grid-cell) * 2.35);
+			min-height: var(--site-header-h);
 			padding-top: 0.42rem;
 			padding-bottom: 0.42rem;
 			padding-left: calc(var(--grid-cell) / 1);
@@ -1191,27 +1181,11 @@
 		transform: translate3d(1.5px, -1.5px, 0);
 	}
 
-	.card,
-	.post-card {
+	.card {
 		border: 1px solid var(--color-border);
 		background: var(--color-surface);
 		border-radius: var(--radius-card);
 		padding: 1.25rem;
-	}
-
-	.flat-panel {
-		border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
-		background: transparent;
-		border-radius: 0;
-		padding: 1.4rem;
-		min-height: 100%;
-		display: grid;
-		gap: 0.75rem;
-		transition: border-color 150ms ease;
-	}
-
-	.flat-panel:hover {
-		border-color: color-mix(in oklab, var(--color-ink) 28%, transparent);
 	}
 
 	.flat-panel__kicker {
@@ -1234,25 +1208,6 @@
 		margin: 0;
 		font-size: 0.98rem;
 		color: var(--color-muted);
-	}
-
-	.flat-panel-grid {
-		display: grid;
-		gap: 0;
-	}
-
-	.flat-panel-grid > .flat-panel {
-		margin-left: -1px;
-		margin-top: -1px;
-	}
-
-
-	.post-card {
-		transition: transform 150ms ease;
-	}
-
-	.post-card:hover {
-		transform: translateY(-2px);
 	}
 
 	.blog-story-grid {
@@ -1391,7 +1346,6 @@
 		transform: translateY(-1px);
 	}
 
-	.post-card-date,
 	.post-meta {
 		color: var(--color-muted);
 		font-size: 0.9rem;
@@ -1399,6 +1353,8 @@
 
 	.section-heading {
 		display: grid;
+		/* One column that never grows past its container (long words/tags wrap instead). */
+		grid-template-columns: minmax(0, 1fr);
 		gap: 0.4rem;
 	}
 
@@ -1444,7 +1400,7 @@
 	.post-reading-progress {
 		position: fixed;
 		left: 0;
-		top: calc(var(--grid-cell) * 0.72 - 0.08rem);
+		top: calc(var(--site-header-h) - 0.08rem);
 		width: 100%;
 		height: 0.34rem;
 		z-index: 115;
@@ -1479,6 +1435,7 @@
 
 	.post-page {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2rem;
 		width: 100%;
 		max-width: min(100%, 40rem);
@@ -1487,6 +1444,8 @@
 
 	.post-layout {
 		display: grid;
+		/* One column that never grows past the screen; wide tables scroll inside it. */
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2rem;
 		align-items: start;
 	}
@@ -1618,18 +1577,6 @@
 			gap: clamp(1rem, 2vw, 1.75rem);
 		}
 
-		.post-layout--toc-sm {
-			grid-template-columns: minmax(0, 13.5rem) minmax(0, 40rem);
-		}
-
-		.post-layout--toc-md {
-			grid-template-columns: minmax(0, 16rem) minmax(0, 40rem);
-		}
-
-		.post-layout--toc-lg {
-			grid-template-columns: minmax(0, 18rem) minmax(0, 40rem);
-		}
-
 		.post-toc {
 			position: sticky;
 			top: 6.5rem;
@@ -1646,7 +1593,7 @@
 
 	@media (max-width: 720px) {
 		.post-reading-progress {
-			top: calc(var(--grid-cell) * 2.35 - 0.08rem);
+			top: calc(var(--site-header-h) - 0.08rem);
 			height: 0.28rem;
 		}
 	}
@@ -1782,8 +1729,17 @@
 
 	.post-article {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 1.25rem;
 		color: var(--color-ink);
+	}
+
+	/* Wide data tables scroll sideways inside the post on small phones. */
+	.post-article .prose table {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.post-article p {
@@ -1907,78 +1863,6 @@
 		transform: none;
 	}
 
-	.tool-output {
-		margin: 0;
-		border: 1px solid var(--color-border);
-		border-radius: 18px;
-		padding: 1rem;
-		background: color-mix(in oklab, var(--color-ink) 3%, var(--color-surface));
-		font-family: var(--font-mono);
-		font-size: 0.88rem;
-		line-height: 1.55;
-		overflow: auto;
-		white-space: pre-wrap;
-		word-break: break-word;
-	}
-
-	.result-table {
-		overflow: auto;
-		border: 1px solid var(--color-border);
-		border-radius: 18px;
-	}
-
-	.result-table table {
-		width: 100%;
-		border-collapse: collapse;
-	}
-
-	.result-table th,
-	.result-table td {
-		padding: 0.9rem 1rem;
-		text-align: left;
-		vertical-align: top;
-		font-size: 0.95rem;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.result-table th {
-		font-size: 0.72rem;
-		font-weight: 700;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-	}
-
-	.result-table tbody tr:last-child td {
-		border-bottom: 0;
-	}
-
-	.status-pill {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.28rem 0.7rem;
-		border-radius: 0;
-		border: 1px solid var(--color-border);
-		font-size: 0.7rem;
-		font-weight: 700;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		background: transparent;
-	}
-
-	.status-pill.good {
-		color: #0a8f55;
-	}
-
-	.status-pill.warn {
-		color: #b76c00;
-	}
-
-	.status-pill.bad {
-		color: #b42318;
-	}
-
 	.box-tag {
 		display: inline-flex;
 		align-items: center;
@@ -2043,8 +1927,7 @@
 
 	.blog-page-view .text-muted,
 	.blog-page-view .post-meta,
-	.blog-page-view .eyebrow,
-	.blog-page-view .text-subtle {
+	.blog-page-view .eyebrow {
 		color: #fff;
 	}
 
@@ -2100,7 +1983,7 @@
 		gap: 0;
 		border-radius: 999px;
 		border-color: color-mix(in oklab, #fff 60%, transparent);
-		background: color-mix(in oklab, #fff 46%, transparent);
+		background: color-mix(in oklab, #fff 40%, transparent);
 		color: #fff;
 		padding: 0.36rem 0.78rem;
 	}
@@ -2286,7 +2169,7 @@
 	}
 
 	.site-footer__statement span {
-		color: color-mix(in oklab, var(--color-ink) 45%, transparent);
+		color: color-mix(in oklab, var(--color-ink) 50%, transparent);
 	}
 
 	.site-footer__meta {

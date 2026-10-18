@@ -13,8 +13,8 @@ routes = [
 ]
 
 [vars]
-# Same-origin in production; only local dev calls cross-origin.
-ALLOWED_ORIGINS = "http://localhost:4321"
+# Production is same-origin, so no cross-origin callers (local dev sets ALLOWED_ORIGINS in .dev.vars).
+ALLOWED_ORIGINS = ""
 # Turnstile tokens must come from the live site.
 TURNSTILE_HOSTNAMES = "heygenyl.com"
 

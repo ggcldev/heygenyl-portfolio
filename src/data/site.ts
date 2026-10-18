@@ -507,8 +507,6 @@ export const activeServiceOrder = [
   "web-design/wordpress-web-design",
 ] as const;
 
-export const activeServiceSlugSet = new Set<string>(activeServiceOrder);
-
 export const activeServicePages = activeServiceOrder.map((slug) => {
   const service = servicePages.find((item) => item.slug === slug);
   if (!service) {

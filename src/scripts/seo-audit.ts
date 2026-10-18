@@ -9,7 +9,10 @@ import type { AuditReport } from "../lib/seo-audit/report";
 import type { AuditErrorResponse, AuditPagesResponse, AuditStartResponse, PageData } from "../lib/seo-audit/types";
 import { isValidEmail, normalizeSiteInput } from "../lib/seo-audit/url";
 
-const BATCH_SIZE = 5;
+// Matches the Worker's per-request limit (3 pages keeps it inside its CPU budget);
+// two batches run at once so a 50-page audit takes about as long as before.
+const BATCH_SIZE = 3;
+const PARALLEL_BATCHES = 2;
 const RETRY_BATCH_SIZE = 2;
 const RETRY_DELAY_MS = 4000;
 const RETRY_STATUSES = new Set([429, 503]);
@@ -267,21 +270,40 @@ export function initSeoAudit(form: HTMLFormElement): void {
 
 	// --- Audit run ---
 
-	const checkBatches = async (session: string, urls: string[], size: number, onProgress: (done: number) => void) => {
-		const results: PageData[] = [];
-		for (let i = 0; i < urls.length; i += size) {
-			const batch = urls.slice(i, i + size);
-			let data = await postJson(`${endpoint}/pages`, { session, urls: batch }).catch(() => null);
-			if (!data || !data.ok) {
-				if (data && !data.ok && data.code === "expired") throw new AuditFailure(data.error);
-				await sleep(1500);
-				data = await postJson(`${endpoint}/pages`, { session, urls: batch }).catch(() => null);
+	/** Checks pages in batches, `parallel` batches at a time; results keep the input order. */
+	const checkBatches = async (
+		session: string,
+		urls: string[],
+		keyOf: Map<string, string>,
+		size: number,
+		parallel: number,
+		onProgress: (done: number) => void,
+	) => {
+		const batches: string[][] = [];
+		for (let i = 0; i < urls.length; i += size) batches.push(urls.slice(i, i + size));
+		const results: PageData[][] = new Array<PageData[]>(batches.length);
+		let next = 0;
+		let done = 0;
+		const send = (batch: string[]) =>
+			postJson(`${endpoint}/pages`, { session, urls: batch, keys: batch.map((url) => keyOf.get(url) ?? "") }).catch(() => null);
+		const lane = async () => {
+			while (next < batches.length) {
+				const index = next++;
+				const batch = batches[index] ?? [];
+				let data = await send(batch);
+				if (!data || !data.ok) {
+					if (data && !data.ok && data.code === "expired") throw new AuditFailure(data.error);
+					await sleep(1500);
+					data = await send(batch);
+				}
+				results[index] =
+					data && data.ok && "pages" in data ? data.pages : batch.map((url) => failedPage(url, "Our checker had a problem with this page."));
+				done += batch.length;
+				onProgress(done);
 			}
-			if (data && data.ok && "pages" in data) results.push(...data.pages);
-			else results.push(...batch.map((url) => failedPage(url, "Our checker had a problem with this page.")));
-			onProgress(results.length);
-		}
-		return results;
+		};
+		await Promise.all(Array.from({ length: Math.min(parallel, batches.length) }, lane));
+		return results.flat();
 	};
 
 	/** Shows the run's progress, unless the visitor already moved on to another run. */
@@ -303,22 +325,23 @@ export function initSeoAudit(form: HTMLFormElement): void {
 		if (!start.ok) throw new AuditFailure(start.error);
 		if (!("session" in start)) throw new AuditFailure("The audit service had a problem. Please try again.");
 
-		const { session, site: auditSite, urls } = start;
+		const { session, site: auditSite, urls, keys } = start;
+		const keyOf = new Map(urls.map((url, index) => [url, keys[index] ?? ""]));
 		current.host = auditSite.host;
 		current.pagesFound = auditSite.totalUrls;
 		const total = urls.length;
 		progress(current, `Checking ${total} pages on ${auditSite.host}…`, 0.04);
 
-		let pages = await checkBatches(session, urls, BATCH_SIZE, (done) =>
+		let pages = await checkBatches(session, urls, keyOf, BATCH_SIZE, PARALLEL_BATCHES, (done) =>
 			progress(current, `Checked ${done} of ${total} pages on ${auditSite.host}…`, 0.04 + (done / total) * 0.9),
 		);
 
-		// Pages the site refused for "too many requests": one gentler retry.
+		// Pages the site refused for "too many requests": one gentler retry, one batch at a time.
 		const refused = pages.filter((page) => RETRY_STATUSES.has(page.status)).map((page) => page.url);
 		if (refused.length) {
 			progress(current, `The site asked me to slow down. Retrying ${refused.length} pages…`, 0.95);
 			await sleep(RETRY_DELAY_MS);
-			const retried = await checkBatches(session, refused, RETRY_BATCH_SIZE, () => undefined).catch(() => []);
+			const retried = await checkBatches(session, refused, keyOf, RETRY_BATCH_SIZE, 1, () => undefined).catch(() => []);
 			const byUrl = new Map(retried.filter((page) => page.status !== 0).map((page) => [page.url, page]));
 			pages = pages.map((page) => byUrl.get(page.url) ?? page);
 		}

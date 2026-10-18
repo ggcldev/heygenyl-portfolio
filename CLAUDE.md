@@ -133,6 +133,29 @@ needs the owner's explicit go. Done:
 - Scrolled header (`.site-header.is-scrolled`) stays dark: 94% paper, 6% hairline, black
   shadow. Never tint shadows/borders with `--color-ink` there (ink is white on this site, the
   owner called the old white glow "lighted"); padding stays fixed so nothing shifts.
+- Homepage only (`src/scripts/hero-header.ts`, 2026-10-18): while the hero is behind the
+  header, `.is-over-hero` removes the bar, blur and line so the hero waves run seamlessly
+  behind the menu (Kudos does the same); the wave canvas reaches up by `--site-header-h`.
+  The dark bar returns once the next section slides under the header. Kudos also hides its
+  nav on scroll-down; we don't (not asked).
+- Header height is one token, `--site-header-h` (global.css :root): clamp(4rem, 0.95 grid
+  cell, 5.75rem) on desktop (64px at 1280, 68 at 1440, 91 at 1920), 2.9 grid cells on phones
+  (owner: logo/menu were too tight to the top). Used by the header, blog reading bar, hero
+  min-height, wave canvas, and Featured's pin (`--featured-stick-top` ≥ header + 1rem).
+- Full-site QA 2026-10-18 (owner asked: security, bugs, dead code, all devices). Fixed: blog
+  post grid on phones (`.post-layout` needs `minmax(0, 1fr)`, an `auto` column grew past the
+  screen), case-study card areas squeezed on iPad (`md:col-span-2`, not `lg:`), `window.gtag`
+  now global (audit GA event never fired), CSP connect-src allows `*.google-analytics.com` +
+  `*.analytics.google.com` (GA regional endpoints), /contact/thanks/ noindex + out of the
+  sitemap + dev-speak copy removed, a blog metaTitle that held a description, contrast
+  bumps (footer statement 50%, two-tone headings 47%, testimonial tabs, blog tag pills),
+  tabpanel on a div, "Menu" button label, 2x author photo, robots.txt `Disallow: /api/`,
+  starter-theme leftovers deleted (public/SS-*.png demo screenshots were live, AI faces,
+  ~2.5 KB dead CSS for the removed /tools page). Astro 6.0.3 → 6.4.8 (+ mdx 5.0.6, sitemap
+  3.7.4, check 0.9.10) + `npm audit fix`: 18 advisories → 6, the rest need Astro 7 / sharp
+  0.35 (majors) and don't apply to a static build. Device sweep tool: 13 viewports
+  (Galaxy Fold 280 → 1920). Known/intentional: 10.4px mono eyebrows, decorative RANK/BUILD
+  watermarks and step numbers below contrast minimums.
 - CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
 - Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
   blog images downscaled to 1600px cap, 3 font preloads.
@@ -199,12 +222,19 @@ No eyebrow, intro text or note under the form (owner removed them).
 - **Worker** `workers/seo-audit/` (Cloudflare Worker, route `heygenyl.com/api/seo-audit/*`,
   owner picked it over PHP on Hostinger). `/start` {url, token}: Turnstile check, homepage +
   robots.txt + sitemaps (index children, .gz), picks up to 50 pages homepage-first, falls
-  back to homepage links; returns a signed 20-min session (HMAC keyed off the secret).
-  `/pages` {session, urls<=5}: checks pages 2 at a time, same site only. Free-plan limits
-  shape it: 50 fetches per request (budget comment in index.ts), small CPU, so batches.
-  Only public domain names are fetched (no IPs, internal names, odd ports).
+  back to homepage links; returns a signed 20-min session (HMAC keyed off the secret, with a
+  random nonce) plus one HMAC key per page URL. `/pages` {session, urls<=3, keys}: refuses
+  any URL without its key (403), so a session can't be used to fetch arbitrary paths; checks
+  pages 2 at a time. FREE-PLAN LIMITS shape it: 50 fetches/request (budget comment in
+  index.ts) and ~10 ms CPU/request: HTML parsing is ~1-4 ms/page (so 3 per batch), and
+  sitemaps are parsed only for the first 400 entries per file (`parseSitemap(xml, max)`;
+  the rest are counted with indexOf; parsing 50k URLs fully cost ~140 ms). `wrangler dev`
+  does NOT enforce CPU limits, so benchmark parsing in Node when changing it.
+  Only public domain names are fetched (no IPs, internal names, odd ports). CORS:
+  production allows no cross-origin callers; `ALLOWED_ORIGINS` for localhost lives only in
+  `.dev.vars` (restart `audit:dev` after editing it).
 - **Browser** `src/scripts/seo-audit.ts` + `SeoAuditForm.astro` (slot in `Hero.astro`):
-  batches, one slower retry of 429/503 pages, builds issues + Excel locally (report code is
+  batches of 3, two in flight, one slower retry of 429/503 pages, builds issues + Excel locally (report code is
   a lazy chunk), downloads it, then emails the lead via FormSubmit AJAX to hi@ (dev logs it
   to the console instead). The email never goes to the Worker.
 - **Shared, unit-tested** `src/lib/seo-audit/` (url, sitemap, extract, rules, xlsx, report),

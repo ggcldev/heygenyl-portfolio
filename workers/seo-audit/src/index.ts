@@ -1,10 +1,12 @@
 // Free SEO audit API (Cloudflare Worker), served at heygenyl.com/api/seo-audit/*.
 //
-// POST /api/seo-audit/start  { url, token }         -> finds the sitemap, returns up to 50 pages + a session
-// POST /api/seo-audit/pages  { session, urls[<=5] } -> checks those pages
+// POST /api/seo-audit/start  { url, token }                -> finds the sitemap, returns up to 50
+//                                                              pages, a key per page and a session
+// POST /api/seo-audit/pages  { session, urls[<=3], keys }  -> checks those pages
 //
-// The browser calls /pages in small batches (Workers free plan: 50 fetches and
-// little CPU per request), then builds the issue list and Excel file itself.
+// The browser calls /pages in small batches (Workers free plan: 50 fetches and about
+// 10 ms of CPU per request), then builds the issue list and Excel file itself. Each page
+// key is an HMAC of the session + URL, so /pages only fetches pages /start handed out.
 
 import { extractSignals } from "../../../src/lib/seo-audit/extract";
 import { chooseUrls, DEFAULT_SITEMAP_PATHS, linksFromHtml, orderChildSitemaps, parseSitemap, sitemapsFromRobots } from "../../../src/lib/seo-audit/sitemap";
@@ -27,10 +29,14 @@ export interface Env {
 }
 
 const MAX_PAGES = 50;
-const BATCH_SIZE = 5;
+// 3 pages per request keeps HTML parsing (about 1-4 ms per page) inside the CPU budget.
+const BATCH_SIZE = 3;
 const SESSION_TTL_MS = 20 * 60 * 1000;
 const PAGE_BYTES = 1_500_000;
 const SITEMAP_BYTES = 5_000_000;
+// Sitemap entries parsed per file (the rest are only counted): parsing 50,000 URLs costs
+// about 140 ms of CPU, far over the free-plan budget; a few hundred is plenty to pick 50.
+const MAX_LOCS_PER_FILE = 400;
 const FETCH_TIMEOUT_MS = 12_000;
 // Fetch budget for /start (free plan allows 50 per request; each file may take up to
 // 4 fetches with redirects): Turnstile 1 + homepage 8 + robots 4 + sitemaps 16 + children 16 = 45.
@@ -97,12 +103,16 @@ async function sessionKey(env: Env): Promise<CryptoKey> {
 interface SessionData {
 	host: string;
 	exp: number;
+	/** Random id, so page keys from one audit don't work in another. */
+	nonce: string;
 }
+
+const hmac = async (env: Env, text: string) =>
+	new Uint8Array(await crypto.subtle.sign("HMAC", await sessionKey(env), new TextEncoder().encode(text)));
 
 async function signSession(env: Env, data: SessionData): Promise<string> {
 	const payload = b64url(new TextEncoder().encode(JSON.stringify(data)));
-	const signature = await crypto.subtle.sign("HMAC", await sessionKey(env), new TextEncoder().encode(payload));
-	return `${payload}.${b64url(new Uint8Array(signature))}`;
+	return `${payload}.${b64url(await hmac(env, payload))}`;
 }
 
 async function readSession(env: Env, token: unknown): Promise<SessionData> {
@@ -115,11 +125,16 @@ async function readSession(env: Env, token: unknown): Promise<SessionData> {
 		valid = false;
 	}
 	if (!valid) throw new AuditError("bad_session", "Audit session is not valid.", 401);
-	const data = JSON.parse(new TextDecoder().decode(fromB64url(payload))) as SessionData;
-	if (typeof data.host !== "string" || typeof data.exp !== "number" || data.exp < Date.now()) {
+	const data = JSON.parse(new TextDecoder().decode(fromB64url(payload))) as Partial<SessionData>;
+	if (typeof data.host !== "string" || typeof data.nonce !== "string" || typeof data.exp !== "number" || data.exp < Date.now()) {
 		throw new AuditError("expired", "This audit took too long. Please start it again.", 401);
 	}
-	return data;
+	return data as SessionData;
+}
+
+/** Short key that lets /pages fetch this one URL for this one audit. */
+async function pageKey(env: Env, session: SessionData, url: string): Promise<string> {
+	return b64url((await hmac(env, `page|${session.nonce}|${url}`)).subarray(0, 16));
 }
 
 // --- Turnstile ---
@@ -277,15 +292,16 @@ const SITEMAP_ACCEPT = "application/xml,text/xml,*/*";
 
 async function readSitemapFile(url: string) {
 	const fetched = await fetchFollow(url, SITEMAP_BYTES, SITEMAP_ACCEPT);
-	const parsed = fetched.status === 200 && fetched.body ? parseSitemap(fetched.body) : null;
+	const parsed = fetched.status === 200 && fetched.body ? parseSitemap(fetched.body, MAX_LOCS_PER_FILE) : null;
 	return parsed && parsed.kind !== "unknown" ? { url: fetched.url, ...parsed } : null;
 }
 
 /**
  * Reads the sitemaps listed in robots.txt (or the usual guesses), plus up to a
  * few child sitemaps of any sitemap index. Files are fetched in parallel.
+ * `listedTotal` counts every page entry in the page sitemaps read (parsed or not).
  */
-async function readSitemaps(listed: string[], origin: string, host: string): Promise<{ sitemapsRead: string[]; pageLocs: string[] }> {
+async function readSitemaps(listed: string[], origin: string, host: string): Promise<{ sitemapsRead: string[]; pageLocs: string[]; listedTotal: number }> {
 	let top: Array<Awaited<ReturnType<typeof readSitemapFile>>>;
 	if (listed.length) {
 		top = await Promise.all(listed.slice(0, MAX_LISTED_SITEMAPS).map(readSitemapFile));
@@ -296,7 +312,9 @@ async function readSitemaps(listed: string[], origin: string, host: string): Pro
 	}
 	const found = top.filter((file): file is NonNullable<typeof file> => file !== null);
 	const sitemapsRead = found.map((file) => file.url);
-	const pageLocs = found.filter((file) => file.kind === "urlset").flatMap((file) => file.locs);
+	const pageFiles = found.filter((file) => file.kind === "urlset");
+	const pageLocs = pageFiles.flatMap((file) => file.locs);
+	let listedTotal = pageFiles.reduce((sum, file) => sum + file.total, 0);
 
 	const children = found
 		.filter((file) => file.kind === "index")
@@ -308,8 +326,9 @@ async function readSitemaps(listed: string[], origin: string, host: string): Pro
 		if (!file || file.kind !== "urlset") continue;
 		sitemapsRead.push(file.url);
 		pageLocs.push(...file.locs);
+		listedTotal += file.total;
 	}
-	return { sitemapsRead, pageLocs };
+	return { sitemapsRead, pageLocs, listedTotal };
 }
 
 // --- Routes ---
@@ -343,13 +362,13 @@ async function start(request: Request, env: Env): Promise<AuditStartResponse> {
 	const robots = await fetchFollow(`${origin}/robots.txt`, 500_000, "text/plain");
 	const robotsTxtFound = robots.status === 200 && !isHtml(robots);
 	const listed = robotsTxtFound ? sitemapsFromRobots(robots.body, origin).filter((url) => isSameSite(new URL(url).hostname, host)) : [];
-	const { sitemapsRead, pageLocs } = await readSitemaps(listed, origin, host);
+	const { sitemapsRead, pageLocs, listedTotal } = await readSitemaps(listed, origin, host);
 
 	let source: AuditSite["source"] = "sitemap";
 	let chosen = chooseUrls(pageLocs, origin, MAX_PAGES);
 	if (pageLocs.length === 0) {
 		source = "homepage-links";
-		chosen = chooseUrls(isHtml(homepage) ? linksFromHtml(homepage.body, homepage.url) : [], origin, MAX_PAGES);
+		chosen = chooseUrls(isHtml(homepage) ? linksFromHtml(homepage.body, homepage.url).slice(0, 2000) : [], origin, MAX_PAGES);
 	}
 
 	const auditSite: AuditSite = {
@@ -360,10 +379,13 @@ async function start(request: Request, env: Env): Promise<AuditStartResponse> {
 		sitemaps: sitemapsRead,
 		sitemapMissingFromRobots: source === "sitemap" && listed.length === 0,
 		source,
-		totalUrls: chosen.total,
+		// Sitemap entries counted (big sitemaps are only partly parsed), else unique links.
+		totalUrls: source === "sitemap" ? Math.max(listedTotal, chosen.urls.length) : chosen.total,
 	};
-	const session = await signSession(env, { host, exp: Date.now() + SESSION_TTL_MS });
-	return { ok: true, session, site: auditSite, urls: chosen.urls };
+	const sessionData: SessionData = { host, exp: Date.now() + SESSION_TTL_MS, nonce: b64url(crypto.getRandomValues(new Uint8Array(9))) };
+	const session = await signSession(env, sessionData);
+	const keys = await Promise.all(chosen.urls.map((url) => pageKey(env, sessionData, url)));
+	return { ok: true, session, site: auditSite, urls: chosen.urls, keys };
 }
 
 async function checkPage(url: string, host: string): Promise<PageData> {
@@ -400,15 +422,24 @@ async function pages(request: Request, env: Env): Promise<AuditPagesResponse> {
 		const { success } = await env.PAGES_LIMITER.limit({ key: `${clientIp(request)}:${session.host}` });
 		if (!success) throw new AuditError("rate_limited", "Too many requests. Please wait a moment.", 429);
 	}
-	const urls = Array.isArray(body.urls) ? body.urls.filter((url): url is string => typeof url === "string").slice(0, BATCH_SIZE) : [];
+	const urls = Array.isArray(body.urls) ? body.urls.slice(0, BATCH_SIZE) : [];
+	const keys = Array.isArray(body.keys) ? body.keys : [];
 	if (!urls.length) throw new AuditError("bad_request", "No pages to check.");
+	// Only pages this audit's /start handed out (each carries its own key).
+	for (const [index, url] of urls.entries()) {
+		const key = keys[index];
+		if (typeof url !== "string" || typeof key !== "string" || key !== (await pageKey(env, session, url))) {
+			throw new AuditError("bad_page", "That page isn't part of this audit.", 403);
+		}
+	}
+	const checked = urls as string[];
 	// Two at a time: gentle on small hosts and on sites that rate-limit bots.
-	const results: PageData[] = new Array<PageData>(urls.length);
+	const results: PageData[] = new Array<PageData>(checked.length);
 	let next = 0;
 	const worker = async () => {
-		while (next < urls.length) {
+		while (next < checked.length) {
 			const index = next++;
-			results[index] = await checkPage(urls[index] ?? "", session.host);
+			results[index] = await checkPage(checked[index] ?? "", session.host);
 		}
 	};
 	await Promise.all([worker(), worker()]);
