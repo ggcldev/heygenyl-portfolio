@@ -14,6 +14,7 @@ const RETRY_BATCH_SIZE = 2;
 const RETRY_DELAY_MS = 4000;
 const RETRY_STATUSES = new Set([429, 503]);
 const TOKEN_WAIT_MS = 20_000;
+const TICK_WAIT_MS = 180_000;
 const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 const CONTACT = { name: "Hey Genyl", website: "https://heygenyl.com" };
 
@@ -177,10 +178,22 @@ export function initSeoAudit(form: HTMLFormElement): void {
 			"error-callback": () => {
 				token = null;
 			},
+			// Cloudflare wants a human click ("Verify you are human"): wait for it.
+			"before-interactive-callback": () => {
+				needsTick = true;
+				onNeedsTick?.();
+			},
+			"after-interactive-callback": () => {
+				needsTick = false;
+			},
 		});
 	};
 
-	const getToken = async (): Promise<string> => {
+	let needsTick = false;
+	let onNeedsTick: (() => void) | null = null;
+
+	/** A Turnstile token. Waits 20 s for the invisible check, or 3 min once the visitor has to tick the box. */
+	const getToken = async (whenTickNeeded: () => void): Promise<string> => {
 		if (!siteKey) throw new AuditFailure("The audit tool isn't set up yet. Please email me instead.");
 		try {
 			await ensureWidget();
@@ -189,8 +202,20 @@ export function initSeoAudit(form: HTMLFormElement): void {
 		}
 		if (token) return token;
 		return new Promise<string>((resolve, reject) => {
-			tokenWaiters.push(resolve);
-			setTimeout(() => reject(new AuditFailure("Please complete the security check, then try again.")), TOKEN_WAIT_MS);
+			const fail = () => reject(new AuditFailure("Please tick the security check box, then try again."));
+			let timer = setTimeout(fail, needsTick ? TICK_WAIT_MS : TOKEN_WAIT_MS);
+			const tickNeeded = () => {
+				clearTimeout(timer);
+				timer = setTimeout(fail, TICK_WAIT_MS);
+				whenTickNeeded();
+			};
+			onNeedsTick = tickNeeded;
+			if (needsTick) whenTickNeeded();
+			tokenWaiters.push((value) => {
+				clearTimeout(timer);
+				onNeedsTick = null;
+				resolve(value);
+			});
 		});
 	};
 
@@ -233,7 +258,8 @@ export function initSeoAudit(form: HTMLFormElement): void {
 	};
 
 	window.addEventListener("pagehide", () => {
-		if (job && email && !leadSent) {
+		// Only runs that passed the security check (they have a page count) count as leads.
+		if (job && email && !leadSent && job.pagesFound !== null) {
 			leadSent = true;
 			sendLead(leadFor(job, "Left the page before the audit finished"));
 		}
@@ -267,7 +293,9 @@ export function initSeoAudit(form: HTMLFormElement): void {
 
 	const runAudit = async (current: Job, site: URL) => {
 		progress(current, "Running a quick security check…");
-		const turnstileToken = await getToken();
+		const turnstileToken = await getToken(() => {
+			if (job === current && step !== "site") setStatus("Tick the “Verify you are human” box to start your audit.", "running");
+		});
 
 		progress(current, `Finding the sitemap for ${site.hostname}…`);
 		const start = await postJson(`${endpoint}/start`, { url: site.href, token: turnstileToken });
@@ -317,7 +345,8 @@ export function initSeoAudit(form: HTMLFormElement): void {
 	const settle = (current: Job) => {
 		if (job !== current || step === "site") return;
 		if (current.error) {
-			if (email && !leadSent) {
+			// No lead email for runs that never passed the security check (bots, typos).
+			if (email && !leadSent && current.pagesFound !== null) {
 				leadSent = true;
 				sendLead(leadFor(current, `Failed: ${current.error}`));
 			}
