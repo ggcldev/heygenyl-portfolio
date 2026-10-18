@@ -121,6 +121,12 @@ in 40+ LOCAL commits on `main`, **deliberately not pushed yet** (push = live dep
   Rock Star + InnoVision taglines cropped, Dig Designs white PNG recolored to their site
   colors (their SVG needs an unembedded font). Lifted + Tech Pro are svgo-optimized SVGs;
   the rest are PNGs (Astro ships small WebP). Dealers United is only a 171px PNG.
+- Brand logo (owner's own, 2026-10-18): source files `src/assets/brand/heygenyl-logo.svg`
+  (dark) + `-white.svg`, stacked HG mark over "heygenyl". Header uses `Logo.astro`, a
+  side-by-side version built from the same paths (wordmark scaled 2x, centered on the mark;
+  ink = currentColor, G = `--color-accent`), height `clamp(1.75rem, 2.25vw, 2.4rem)`.
+  Favicon `public/favicon.svg` = HG mark on a #050505 rounded tile; linked as
+  `/favicon.svg?v=2` because Hostinger's CDN caches static files ~31 days.
 - CtaArrow = 3 dots morphing to arrow on hover (no circle fill) + green underline sweep.
 - Perf pass done: external CSS (inlineStylesheets "never"), ~715 lines dead CSS purged,
   blog images downscaled to 1600px cap, 3 font preloads.

@@ -1,15 +1,13 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import Logo from "./Logo.astro";
 import { topLevelServicePages, getChildServices } from "../data/site";
 ---
 
 <header class="site-header">
   <nav class="site-header__inner relative h-full w-full flex items-center justify-between">
-    <a
-      href="/"
-      class="site-header__brand text-base-900 hover:text-base-500 font-bold uppercase"
-    >
-      Hey Genyl
+    <a href="/" class="site-header__brand text-base-900" aria-label="Hey Genyl, home">
+      <Logo class="site-header__logo" />
     </a>
 
     <button

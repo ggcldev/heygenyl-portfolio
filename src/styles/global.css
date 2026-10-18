@@ -477,6 +477,23 @@
 		line-height: 1.1;
 	}
 
+	/* Logo: HG mark + "heygenyl" side by side (Logo.astro). */
+	.site-header__brand {
+		display: inline-flex;
+		align-items: center;
+		transition: opacity 200ms ease;
+	}
+
+	.site-header__brand:hover {
+		opacity: 0.72;
+	}
+
+	.site-header__logo {
+		display: block;
+		height: clamp(1.75rem, 2.25vw, 2.4rem);
+		width: auto;
+	}
+
 	.site-header__menu-toggle {
 		display: inline-flex;
 		align-items: center;
